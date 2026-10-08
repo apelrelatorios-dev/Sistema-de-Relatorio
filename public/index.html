@@ -376,64 +376,96 @@
       padding-top: 38px;
     }
 
+    /* ---------- Parecer técnico (A4 retrato, 793 x 1122 px) ---------- */
     .parecer-page {
-      font-family: 'Inter', Arial, sans-serif;
+      font-family: Arial, Helvetica, 'Liberation Sans', sans-serif;
       color: #111;
-      font-size: 13px;
-      line-height: 1.5;
+      font-size: 14.5px;
+      line-height: 1.45;
       position: relative;
-      min-height: 900px;
-      padding-bottom: 90px;
+      width: 793px;
+      height: 1122px;
+      overflow: hidden;
       box-sizing: border-box;
+      background: #fff;
     }
 
-    .parecer-page .header-img { display: block; width: 100%; margin-bottom: 6px; }
+    .parecer-page .header-img {
+      display: block;
+      width: 793px;
+      height: auto;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
 
-    .parecer-page .footer-img { display: block; width: 100%; position: absolute; left: 0; bottom: 0; }
+    .parecer-page .footer-img {
+      display: block;
+      width: 793px;
+      height: auto;
+      position: absolute;
+      left: 0;
+      bottom: 0;
+    }
+
+    .parecer-body {
+      position: absolute;
+      top: 128px;
+      left: 0;
+      right: 0;
+      bottom: 100px;
+      padding: 0 62px;
+      box-sizing: border-box;
+    }
 
     .parecer-title {
       text-align: center;
       font-weight: 700;
-      font-size: 14px;
-      margin-bottom: 18px;
+      font-size: 20px;
+      margin: 14px 0 26px;
     }
 
     .parecer-subtitle {
       text-align: center;
       font-weight: 700;
-      font-size: 16px;
-      margin-bottom: 20px;
+      font-size: 17px;
+      margin-bottom: 18px;
     }
 
     .parecer-dest {
       text-align: center;
-      font-size: 13px;
+      font-size: 14.5px;
       margin-bottom: 22px;
     }
 
     .parecer-section {
-      margin-bottom: 16px;
-      padding: 0 8px;
+      margin-bottom: 14px;
     }
 
-    .parecer-section b {
+    .parecer-section > b {
       display: block;
-      font-size: 14px;
+      font-size: 16.5px;
       margin-bottom: 6px;
     }
 
     .parecer-section p {
-      margin: 4px 0 8px;
+      margin: 3px 0 6px;
+      text-align: justify;
     }
 
     .parecer-section > div {
-      margin: 2px 0;
+      margin: 3px 0;
+    }
+
+    .parecer-section .bullet {
+      padding-left: 18px;
+      text-indent: -14px;
     }
 
     .parecer-sign {
       text-align: center;
-      margin-top: 40px;
-      font-size: 13.5px;
+      margin-top: 30px;
+      font-size: 14px;
     }
 
     /* .brand-mark{
@@ -1775,6 +1807,12 @@
       clearTimeout(toast._t);
       toast._t = setTimeout(() => t.classList.remove('show'), 2200);
     }
+    function fmtDateLong(iso) {
+      if (!iso) return '';
+      const meses = ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'];
+      const [y, m, d] = iso.split('-');
+      return `${parseInt(d, 10)} de ${meses[parseInt(m, 10) - 1]} de ${y}`;
+    }
     function fmtDate(iso) {
       if (!iso) return '—';
       const [y, m, d] = iso.split('-');
@@ -2269,10 +2307,21 @@
       // Renderiza fora da tela, mas em tamanho real (px equivalente a A4 a 96dpi)
       const w = orientation === 'portrait' ? 793 : 1122;
       const h = orientation === 'portrait' ? 1122 : 793;
-      printArea.style.cssText = `display:block; position:fixed; top:0; left:-99999px; width:${w}px; min-height:${h}px; box-sizing:border-box; background:#ffffff; padding:26px; overflow:hidden;`;
+      const pad = orientation === 'portrait' ? 0 : 26;
+      printArea.style.cssText = `display:block; position:fixed; top:0; left:-99999px; width:${w}px; min-height:${h}px; box-sizing:border-box; background:#ffffff; padding:${pad}px; overflow:hidden;`;
 
       // dá tempo da imagem da logo (se houver) carregar
       await new Promise((resolve) => setTimeout(resolve, 120));
+
+      // parecer longo: reduz a fonte até o texto caber entre o cabeçalho e o rodapé
+      const pbody = printArea.querySelector('.parecer-body');
+      if (pbody) {
+        let fs = 14.5;
+        while (pbody.scrollHeight > pbody.clientHeight + 1 && fs > 10) {
+          fs -= 0.5;
+          pbody.style.fontSize = fs + 'px';
+        }
+      }
 
       try {
         const canvas = await html2canvas(printArea, {
@@ -2907,34 +2956,40 @@
         `<div>${String(i + 1).padStart(2, '0')} – ${escapeHtml(c.descricao)}</div>`
       ).join('');
 
-      const obsHtml = (rec.observacao_itens || []).map((o) => `<div>• ${escapeHtml(o)}</div>`).join('');
+      const obsHtml = (rec.observacao_itens || []).map((o) => `<div class="bullet">• ${escapeHtml(o)}</div>`).join('');
+
+      const cidade = (rec.cidade || '').replace(/[\s.,;]+$/, '');
+      const dataExtenso = fmtDateLong(rec.data_documento);
+      const linhaData = [cidade, dataExtenso].filter(Boolean).join(', ');
 
       const html = `
         <div class="parecer-page">
           <img class="header-img" src="img/parecer-header.png" alt="" crossorigin="anonymous">
 
-          <div class="parecer-title">${escapeHtml(rec.cidade || '')}, ${fmtDate(rec.data_documento)}</div>
-          <div class="parecer-subtitle">PARECER TÉCNICO</div>
-          ${(rec.cliente_nome || rec.cliente_cnpj) ? `<div class="parecer-dest">Á ${escapeHtml(rec.cliente_nome || '')}${rec.cliente_cnpj ? `<br>CNPJ: ${escapeHtml(rec.cliente_cnpj)}` : ''}</div>` : ''}
+          <div class="parecer-body">
+            <div class="parecer-title">${escapeHtml(linhaData)}</div>
+            <div class="parecer-subtitle">PARECER TÉCNICO</div>
+            ${(rec.cliente_nome || rec.cliente_cnpj) ? `<div class="parecer-dest">Á ${escapeHtml(rec.cliente_nome || '')}${rec.cliente_cnpj ? `<br>CNPJ: ${escapeHtml(rec.cliente_cnpj)}` : ''}</div>` : ''}
 
-          <div class="parecer-section"><b>1. OBJETIVO.</b>${rec.equipamento_descricao ? `<p style="margin-top:-4px; margin-bottom:6px;">Equipamento: ${escapeHtml(rec.equipamento_descricao)}</p>` : ''}<p>${escapeHtml(rec.objetivo || '')}</p></div>
+            <div class="parecer-section"><b>1. OBJETIVO.</b>${rec.equipamento_descricao ? `<p>Equipamento: ${escapeHtml(rec.equipamento_descricao)}</p>` : ''}<p>${escapeHtml(rec.objetivo || '')}</p></div>
 
-          <div class="parecer-section">
-            <b>2. PROCEDIMENTO.</b>
-            ${rec.procedimento_intro ? `<p>${escapeHtml(rec.procedimento_intro)}</p>` : ''}
-            ${testesHtml}
+            <div class="parecer-section">
+              <b>2. PROCEDIMENTO.</b>
+              ${rec.procedimento_intro ? `<p>${escapeHtml(rec.procedimento_intro)}</p>` : ''}
+              ${testesHtml}
+            </div>
+
+            ${componentesHtml ? `<div class="parecer-section"><b>3. Lista de componentes.</b>${componentesHtml}</div>` : ''}
+
+            ${(rec.observacao_intro || obsHtml) ? `
+            <div class="parecer-section">
+              <b>4. Observação:</b>
+              ${rec.observacao_intro ? `<p>${escapeHtml(rec.observacao_intro)}</p>` : ''}
+              ${obsHtml}
+            </div>` : ''}
+
+            <div class="parecer-sign">Responsável Técnico: ${escapeHtml(rec.responsavel_tecnico || '')}.</div>
           </div>
-
-          ${componentesHtml ? `<div class="parecer-section"><b>3. Lista de componentes.</b>${componentesHtml}</div>` : ''}
-
-          ${(rec.observacao_intro || obsHtml) ? `
-          <div class="parecer-section">
-            <b>4. Observação:</b>
-            ${rec.observacao_intro ? `<p>${escapeHtml(rec.observacao_intro)}</p>` : ''}
-            ${obsHtml}
-          </div>` : ''}
-
-          <div class="parecer-sign">Responsável Técnico: ${escapeHtml(rec.responsavel_tecnico || '')}.</div>
 
           <img class="footer-img" src="img/parecer-footer.png" alt="" crossorigin="anonymous">
         </div>
