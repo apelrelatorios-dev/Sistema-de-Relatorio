@@ -382,12 +382,14 @@
       font-size: 13px;
       line-height: 1.5;
       position: relative;
-      min-height: 900px;
-      padding-bottom: 90px;
+      min-height: 1120px;
+      padding-bottom: 96px;
       box-sizing: border-box;
     }
 
-    .parecer-page .header-img { display: block; width: 100%; margin-bottom: 6px; }
+    .parecer-page .header-img { display: block; width: 100%; margin: 0 0 4px; }
+
+    .parecer-page .parecer-body { padding: 0 54px; }
 
     .parecer-page .footer-img { display: block; width: 100%; position: absolute; left: 0; bottom: 0; }
 
@@ -2266,7 +2268,7 @@
       gerarPDFDireto(html, `relatorio-${rec.data || 'sttp'}-${escapeHtml(rec.sistemaKey || '')}`.replace(/[^a-zA-Z0-9-_]/g, '_'));
     }
 
-    async function gerarPDFDireto(html, filename, orientation) {
+    async function gerarPDFDireto(html, filename, orientation, fullBleed) {
       orientation = orientation || 'landscape';
       const btn = document.querySelector('#modal-pdf, #pt-modal-pdf');
       const originalText = btn ? btn.textContent : null;
@@ -2277,7 +2279,7 @@
       // Renderiza fora da tela, mas em tamanho real (px equivalente a A4 a 96dpi)
       const w = orientation === 'portrait' ? 793 : 1122;
       const h = orientation === 'portrait' ? 1122 : 793;
-      printArea.style.cssText = `display:block; position:fixed; top:0; left:-99999px; width:${w}px; min-height:${h}px; box-sizing:border-box; background:#ffffff; padding:26px; overflow:hidden;`;
+      printArea.style.cssText = `display:block; position:fixed; top:0; left:-99999px; width:${w}px; min-height:${h}px; box-sizing:border-box; background:#ffffff; padding:${fullBleed ? 0 : 26}px; overflow:hidden;`;
 
       // dá tempo da imagem da logo (se houver) carregar
       await new Promise((resolve) => setTimeout(resolve, 120));
@@ -2921,6 +2923,7 @@
         <div class="parecer-page">
           <img class="header-img" src="img/parecer-header.png" alt="" crossorigin="anonymous">
 
+          <div class="parecer-body">
           <div class="parecer-title">${escapeHtml(rec.cidade || '')}, ${fmtDate(rec.data_documento)}</div>
           <div class="parecer-subtitle">PARECER TÉCNICO</div>
           ${(rec.cliente_nome || rec.cliente_cnpj) ? `<div class="parecer-dest">Á ${escapeHtml(rec.cliente_nome || '')}${rec.cliente_cnpj ? `<br>CNPJ: ${escapeHtml(rec.cliente_cnpj)}` : ''}</div>` : ''}
@@ -2943,6 +2946,7 @@
           </div>` : ''}
 
           <div class="parecer-sign">Responsável Técnico: ${escapeHtml(rec.responsavel_tecnico || '')}.</div>
+          </div>
 
           <img class="footer-img" src="img/parecer-footer.png" alt="" crossorigin="anonymous">
         </div>
@@ -2951,7 +2955,8 @@
       gerarPDFDireto(
         html,
         `parecer-${rec.data_documento || 'tecnico'}-${escapeHtml(rec.cliente_nome || '')}`.replace(/[^a-zA-Z0-9-_]/g, '_'),
-        'portrait'
+        'portrait',
+        true
       );
     }
 
