@@ -38,7 +38,7 @@
 
     body {
       margin: 0;
-      background-image: url('WhatsApp%20Image%202026-01-09%20at%2015.01.00.jpeg');
+      background-image: url('img/WhatsApp%20Image%202026-01-09%20at%2015.01.00.jpeg');
       /* background: var(--bg);*/
       color: var(--text);
       font-family: 'Inter', system-ui, sans-serif;
@@ -194,6 +194,25 @@
       font-weight: 600;
       font-size: 12px;
       text-transform: uppercase;
+    }
+
+    .audit-pager {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+
+    .audit-pager .btn-sm:disabled {
+      opacity: .4;
+      cursor: not-allowed;
+    }
+
+    .audit-pager .btn-sm:disabled:hover {
+      background: #fff;
+      color: var(--ink);
     }
 
     .badge-admin {
@@ -1617,7 +1636,7 @@
           <h2><span class="num">B</span>Usuários do sistema</h2>
           <div class="hint">
             Criar/remover login no painel do Supabase (Authentication → Users).
-            <a href="https://supabase.com/dashboard/project/wayxssxwjfjamvdhejeo/auth/users" target="_blank"
+            <a href="https://supabase.com/dashboard/project/dfzubdomocxjukhkqfgh/auth/users" target="_blank"
               rel="noopener" style="color:var(--cyan);">Abrir painel de usuários ↗</a>
             Aqui embaixo dá pra definir o que cada um pode fazer no sistema.
           </div>
@@ -1642,7 +1661,7 @@
 
         <div class="card" id="audit-card" style="margin-top:14px; display:none;">
           <h2><span class="num">C</span>Histórico de alterações</h2>
-          <div class="hint">Últimas 50 edições e exclusões de relatórios, registradas automaticamente pelo banco de dados.</div>
+          <div class="hint">Edições e exclusões de relatórios, registradas automaticamente pelo banco de dados. Mostrando as mais recentes primeiro.</div>
           <div class="userstable-wrap">
             <table class="userstable">
               <thead>
@@ -1655,6 +1674,13 @@
               </thead>
               <tbody id="audit-tbody"></tbody>
             </table>
+          </div>
+          <div class="audit-pager" id="audit-pager" style="display:none;">
+            <button class="btn-sm" id="audit-first" title="Primeira página">« Primeira</button>
+            <button class="btn-sm" id="audit-prev">‹ Anterior</button>
+            <span id="audit-info" class="hint"></span>
+            <button class="btn-sm" id="audit-next">Próxima ›</button>
+            <button class="btn-sm" id="audit-last" title="Última página">Última »</button>
           </div>
         </div>
       </div>
@@ -2648,16 +2674,42 @@
     /* ------------------------------------------------------------------ */
     /* Histórico de alterações (auditoria)                                 */
     /* ------------------------------------------------------------------ */
-    async function loadAuditLog() {
+    const AUDIT_PAGE_SIZE = 10;
+    let auditPage = 1;
+    let auditTotal = 0;
+
+    async function loadAuditLog(page) {
       const tbody = document.getElementById('audit-tbody');
       if (!tbody) return;
-      const { data: logs, error } = await sb
+      if (page) auditPage = page;
+
+      const from = (auditPage - 1) * AUDIT_PAGE_SIZE;
+      const to = from + AUDIT_PAGE_SIZE - 1;
+      const { data: logs, error, count } = await sb
         .from('report_audit_log')
-        .select('*')
+        .select('*', { count: 'exact' })
         .order('changed_at', { ascending: false })
-        .limit(50);
-      if (error) { tbody.innerHTML = '<tr><td colspan="4">Erro ao carregar histórico.</td></tr>'; return; }
-      if (!logs || logs.length === 0) { tbody.innerHTML = '<tr><td colspan="4">Nenhuma alteração registrada ainda.</td></tr>'; return; }
+        .range(from, to);
+
+      const pager = document.getElementById('audit-pager');
+      if (error) {
+        tbody.innerHTML = '<tr><td colspan="4">Erro ao carregar histórico.</td></tr>';
+        pager.style.display = 'none';
+        return;
+      }
+
+      auditTotal = count || 0;
+      const totalPages = Math.max(1, Math.ceil(auditTotal / AUDIT_PAGE_SIZE));
+
+      // se a página atual ficou além do fim (ex.: registros apagados), volta para a última
+      if (auditPage > totalPages) { auditPage = totalPages; return loadAuditLog(); }
+
+      if (!logs || logs.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4">Nenhuma alteração registrada ainda.</td></tr>';
+        pager.style.display = 'none';
+        return;
+      }
+
       tbody.innerHTML = logs.map((l) => {
         const ref = l.new_data || l.old_data || {};
         const label = [ref.sistema_label, ref.tecnico, ref.data].filter(Boolean).join(' · ') || l.report_id;
@@ -2670,7 +2722,20 @@
           <td>${escapeHtml(label)}</td>
         </tr>`;
       }).join('');
+
+      pager.style.display = totalPages > 1 ? '' : 'none';
+      document.getElementById('audit-info').textContent =
+        `Página ${auditPage} de ${totalPages} · ${auditTotal} registro(s)`;
+      document.getElementById('audit-first').disabled = auditPage <= 1;
+      document.getElementById('audit-prev').disabled = auditPage <= 1;
+      document.getElementById('audit-next').disabled = auditPage >= totalPages;
+      document.getElementById('audit-last').disabled = auditPage >= totalPages;
     }
+
+    document.getElementById('audit-first').addEventListener('click', () => loadAuditLog(1));
+    document.getElementById('audit-prev').addEventListener('click', () => loadAuditLog(auditPage - 1));
+    document.getElementById('audit-next').addEventListener('click', () => loadAuditLog(auditPage + 1));
+    document.getElementById('audit-last').addEventListener('click', () => loadAuditLog(Math.max(1, Math.ceil(auditTotal / AUDIT_PAGE_SIZE))));
 
     /* ------------------------------------------------------------------ */
     /* Parecer Técnico                                                     */
