@@ -122,13 +122,15 @@
       color: #ffffff;
       text-align: center;
     }
-  h6{  
-        color: #ffffff;
-        text-align: center;
-        margin-bottom: 25px;
-        font-size: 16px;
-        letter-spacing: 1px;
+
+    h6 {
+      color: #ffffff;
+      text-align: center;
+      margin-bottom: 25px;
+      font-size: 16px;
+      letter-spacing: 1px;
     }
+
     .auth-card p.sub {
       margin: 0 0 18px;
       font-size: 13px;
@@ -412,11 +414,53 @@
       box-sizing: border-box;
     }
 
-    .parecer-page .header-img { display: block; width: 100%; margin: 0 0 4px; }
+    .parecer-page .header-img {
+      display: block;
+      width: 100%;
+      margin: 0 0 4px;
+    }
 
-    .parecer-page .parecer-body { padding: 0 54px; }
+    .parecer-page .parecer-body {
+      padding: 0 54px;
+    }
 
-    .parecer-page .footer-img { display: block; width: 100%; position: absolute; left: 0; bottom: 0; }
+    .parecer-page .footer-img {
+      display: block;
+      width: 100%;
+      position: absolute;
+      left: 0;
+      bottom: 0;
+    }
+
+    .parecer-fotos {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 6px;
+    }
+
+    .parecer-foto .imgbox {
+      height: 300px;
+      background: #f2f2f2;
+      border: 1px solid #ccc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .parecer-foto .imgbox img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+
+    .parecer-foto .cap {
+      font-size: 11.5px;
+      text-align: center;
+      margin-top: 4px;
+      color: #333;
+    }
 
     .parecer-title {
       text-align: center;
@@ -453,7 +497,7 @@
       margin: 4px 0 8px;
     }
 
-    .parecer-section > div {
+    .parecer-section>div {
       margin: 2px 0;
     }
 
@@ -527,7 +571,9 @@
 
     .card {
       background: var(--card);
-      border: 3px solid #a1a1a1;/*var(--line)*/;
+      border: 3px solid #a1a1a1;
+      /*var(--line)*/
+      ;
       border-radius: var(--radius);
       padding: 20px 22px;
       margin-bottom: 18px;
@@ -553,7 +599,7 @@
       font-size: 11px;
       margin-right: 8px;
       font-family: 'IBM Plex Mono', monospace;
-       border: 1px solid #000000;
+      border: 1px solid #000000;
     }
 
 
@@ -561,7 +607,7 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 14px;
-      
+
     }
 
     .grid3 {
@@ -744,7 +790,7 @@
       margin-bottom: 5px;
       text-transform: uppercase;
       letter-spacing: .3px;
-     
+
     }
 
     input[type=text],
@@ -1121,7 +1167,9 @@
     }
 
     .rcard:hover {
-      border-color: /*var(--cyan)*/ #0fdb20;
+      border-color:
+        /*var(--cyan)*/
+        #0fdb20;
       box-shadow: 0 1px 6px rgba(21, 154, 163, 0.12);
     }
 
@@ -1254,6 +1302,236 @@
       margin-bottom: 16px;
     }
 
+    /* ---------- Relatório preventivo: formulário ---------- */
+    .pv-h {
+      margin: 24px 0 8px;
+      font-size: 14px;
+      color: var(--ink);
+      text-transform: uppercase;
+      letter-spacing: .3px;
+    }
+
+    .pv-block {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+      margin: 10px 0;
+      background: #fcfdfe;
+    }
+
+    .pv-grp-box {
+      border: 1px dashed var(--line);
+      border-radius: 8px;
+      padding: 10px;
+      margin: 10px 0;
+      background: #fff;
+    }
+
+    .pv-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin: 5px 0;
+    }
+
+    .pv-row input[type=text] {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .pv-row input.pv-sm {
+      flex: none;
+      width: 130px;
+    }
+
+    .pv-row .pv-n {
+      flex: none;
+      width: 26px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .pv-row .statusbtn {
+      flex: none;
+      width: 82px;
+      min-height: 36px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+    }
+
+    .pv-row .rm {
+      flex: none;
+      background: none;
+      border: none;
+      color: #B7C0C8;
+      cursor: pointer;
+      font-size: 20px;
+      line-height: 1;
+      padding: 0 4px;
+    }
+
+    .pv-row .rm:hover {
+      color: var(--nok);
+    }
+
+    @media (max-width: 640px) {
+      .pv-row {
+        flex-wrap: wrap;
+      }
+
+      .pv-row input.pv-sm {
+        width: 100px;
+      }
+    }
+
+    /* ---------- Relatório preventivo: páginas do PDF ---------- */
+    .pv-pageno {
+      position: absolute;
+      right: 54px;
+      bottom: 92px;
+      font-size: 11.5px;
+      color: #333;
+    }
+
+    .pv-title {
+      text-align: center;
+      font-weight: 700;
+      font-size: 14px;
+      margin: 12px 0 4px;
+    }
+
+    .pv-sub {
+      text-align: center;
+      font-weight: 700;
+      font-size: 12.5px;
+      margin-bottom: 10px;
+    }
+
+    .pv-cover-title {
+      text-align: center;
+      font-weight: 700;
+      font-size: 16px;
+      margin: 40px 0 30px;
+    }
+
+    .pv-cover-l {
+      text-align: center;
+      font-weight: 700;
+      font-size: 14px;
+      margin-bottom: 18px;
+    }
+
+    .pv-cover-s {
+      text-align: center;
+      font-weight: 700;
+      font-size: 14px;
+      margin: 34px 0 24px;
+    }
+
+    .pv-box {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+
+    .pv-box td {
+      border: 1px solid #444;
+      padding: 5px 8px;
+    }
+
+    .pv-tipos span {
+      margin-right: 14px;
+      white-space: nowrap;
+    }
+
+    .pv-sys {
+      font-size: 12.5px;
+      font-weight: 700;
+      margin: 6px 0;
+    }
+
+    .pv-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+
+    .pv-table th,
+    .pv-table td {
+      border: 1px solid #444;
+      padding: 3.5px 8px;
+    }
+
+    .pv-table th {
+      background: #eee;
+    }
+
+    .pv-table .n {
+      width: 46px;
+      text-align: center;
+    }
+
+    .pv-table .q {
+      width: 56px;
+      text-align: center;
+    }
+
+    .pv-table .st {
+      width: 76px;
+      white-space: nowrap;
+    }
+
+    .pv-grp {
+      text-align: center;
+      font-weight: 700;
+      font-size: 12.5px;
+      margin: 8px 0 3px;
+    }
+
+    .pv-line {
+      display: inline-block;
+      min-width: 62px;
+      border-bottom: 1px solid #111;
+      text-align: center;
+      font-weight: 700;
+    }
+
+    .pv-obs {
+      border: 1px solid #444;
+      min-height: 64px;
+      padding: 6px 8px;
+      font-size: 12px;
+      white-space: pre-wrap;
+      margin-bottom: 8px;
+    }
+
+    .pv-sign {
+      display: flex;
+      border: 1px solid #444;
+      margin-top: 6px;
+    }
+
+    .pv-sign div {
+      flex: 1;
+      text-align: center;
+      padding: 40px 8px 6px;
+      font-size: 12px;
+    }
+
+    .pv-sign div+div {
+      border-left: 1px solid #444;
+    }
+
+    .pv-sign div b {
+      display: block;
+      font-weight: 400;
+      font-size: 13px;
+      margin-bottom: 4px;
+    }
+
     .toast {
       position: fixed;
       bottom: 22px;
@@ -1272,9 +1550,10 @@
 
     .toast.show {
       opacity: 1;
-      .titulo{
-       color: #ffffff;
-        
+
+      .titulo {
+        color: #ffffff;
+
       }
     }
   </style>
@@ -1327,14 +1606,32 @@
       <div class="panel active" id="panel-novo">
 
         <div class="card">
-          <h2><span class="num">1</span>Identificação</h2>
-          <div class="staticinfo">
-            <b>Contratante:</b> <span id="info-contratante">Superintendência de Trânsito e Transportes Públicos de
-              Campina Grande (STTP) — CNPJ
-              35.576.651/0001-09</span> &nbsp;·&nbsp;
-            <b>Contratada:</b> <span id="info-contratada">Apel Aplicações Eletrônicas Ind. e Com. LTDA — CNPJ
-              08.991.515/0001-02</span>
+          <h2><span class="num">0</span>Tipo de relatório</h2>
+          <div class="grid2">
+            <div class="field" style="margin-bottom:0;">
+              <label>Estrutura</label>
+              <select id="f-tipo-rel">
+                <option value="paineis">Checklist por pontos (painéis)</option>
+                <option value="preventiva">Preventiva: equipamentos, rotinas e testes</option>
+              </select>
+              <div class="hint">Cada tipo tem seu formulário. Monte a estrutura e use "Salvar estrutura como modelo" para reaproveitar depois.</div>
+            </div>
           </div>
+        </div>
+
+        <div class="card">
+          <h2><span class="num">1</span>Identificação</h2>
+          <div class="grid2">
+            <div class="field">
+              <label>Contratante (cliente)</label>
+              <input type="text" id="f-contratante" placeholder="Nome da empresa contratante — CNPJ">
+            </div>
+            <div class="field">
+              <label>Contratada</label>
+              <input type="text" id="f-contratada" placeholder="Nome da empresa contratada — CNPJ">
+            </div>
+          </div>
+          <div class="hint">Altere aqui para fazer o relatório de outro contrato. O padrão vem de Configurações → Identificação do contrato.</div>
           <div class="grid3" style="margin-top:14px;">
             <div class="field">
               <label>Contrato nº</label>
@@ -1368,6 +1665,7 @@
           </div>
         </div>
 
+        <div id="grp-paineis">
         <div class="card">
           <h2><span class="num">2</span>Sistema de painéis</h2>
           <div class="grid2">
@@ -1381,6 +1679,10 @@
               </select>
               <div class="hint">Selecionar um modelo carrega os itens de checklist e pontos padrão — ambos podem ser
                 ajustados abaixo.</div>
+              <div class="btn-row" style="margin-top:8px;">
+                <button type="button" class="btn-sm" id="modelo-save-btn">Salvar estrutura como modelo</button>
+                <button type="button" class="btn-sm" id="modelo-del-btn" style="display:none;">Excluir este modelo</button>
+              </div>
             </div>
           </div>
 
@@ -1406,6 +1708,49 @@
             <table class="chk" id="chk-table"></table>
           </div>
           <div class="hint">Clique na célula para alternar entre — · OK · NOK.</div>
+        </div>
+
+        </div>
+
+        <div id="grp-prev" style="display:none;">
+          <div class="card">
+            <h2><span class="num">2</span>Estrutura da preventiva</h2>
+            <div class="hint">Monte o relatório: relação de equipamentos, rotinas de visita (OK / FALHA) e testes de circuitos. Depois de montar, use "Salvar estrutura como modelo" para reaproveitar em outros relatórios ou contratos.</div>
+
+            <div class="grid2" style="margin-top:14px;">
+              <div class="field">
+                <label>Modelo</label>
+                <select id="pv-modelo">
+                  <option value="pf">Sonorização — Polícia Federal PB</option>
+                  <option value="branco">Em branco</option>
+                </select>
+                <div class="btn-row" style="margin-top:8px;">
+                  <button type="button" class="btn-sm" id="pv-modelo-save-btn">Salvar estrutura como modelo</button>
+                  <button type="button" class="btn-sm" id="pv-modelo-del-btn" style="display:none;">Excluir este modelo</button>
+                </div>
+              </div>
+              <div class="field">
+                <label>Obra / local</label>
+                <input type="text" id="pv-obra" placeholder="Ex: Sede da Polícia Federal da Paraíba">
+              </div>
+              <div class="field" style="grid-column:1 / -1;">
+                <label>Endereço</label>
+                <input type="text" id="pv-endereco" placeholder="Rua, número, bairro, cidade - UF, CEP">
+              </div>
+            </div>
+
+            <h3 class="pv-h">Relação de equipamentos instalados</h3>
+            <div id="pv-equip"></div>
+
+            <h3 class="pv-h">Rotinas de manutenção (relatório de visita)</h3>
+            <div class="hint">Clique no botão de cada item para alternar entre — · OK · FALHA.</div>
+            <div id="pv-rotinas"></div>
+            <button type="button" class="btn-sm" data-act="add" data-kind="rotina" data-path="rotinas">+ Adicionar rotina</button>
+
+            <h3 class="pv-h">Testes de circuitos (impedância, pressão sonora...)</h3>
+            <div id="pv-testes"></div>
+            <button type="button" class="btn-sm" data-act="add" data-kind="teste" data-path="testes">+ Adicionar teste</button>
+          </div>
         </div>
 
         <div class="card">
@@ -1459,6 +1804,7 @@
                 <option value="AP-PMV01">AP-PMV01</option>
                 <option value="AP-PMV05">AP-PMV05</option>
                 <option value="P10">P10</option>
+                <option value="preventiva">Preventiva</option>
                 <option value="custom">Personalizado</option>
               </select>
             </div>
@@ -1485,12 +1831,13 @@
         <div class="reportlist" id="report-list"></div>
       </div>
 
-      <!-- ================= PANEL: PARECER TÉCNICO ================= -->
+      <!-- ======= PANEL: PARECER TÉCNICO ========= -->
       <div class="panel" id="panel-parecer">
 
         <div class="card" id="parecer-form-card">
           <h2><span class="num">P</span>Novo parecer técnico</h2>
-          <div class="hint">Cabeçalho, "PARECER TÉCNICO" e os itens 1 a 4 são fixos — só o conteúdo de cada campo muda por parecer.</div>
+          <div class="hint">Cabeçalho, "PARECER TÉCNICO" e os itens 1 a 4 são fixos — só o conteúdo de cada campo muda
+            por parecer.</div>
 
           <div class="grid3" style="margin-top:14px;">
             <div class="field">
@@ -1521,7 +1868,8 @@
 
           <div class="field" style="margin-top:4px;">
             <label>Equipamento (descrição, modelo, nº de série)</label>
-            <input type="text" id="pt-equipamento" placeholder="01 Painel de intercomunicação, modelo AP-6712. Número de série: (SEM)">
+            <input type="text" id="pt-equipamento"
+              placeholder="01 Painel de intercomunicação, modelo AP-6712. Número de série: (SEM)">
           </div>
 
           <div class="field" style="margin-top:14px;">
@@ -1568,10 +1916,19 @@
             </div>
           </div>
 
+          <div class="field">
+            <label>5. Fotos (opcional)</label>
+            <div class="hint">Anexe fotos do equipamento, peças trocadas, defeitos etc. Elas saem em páginas de anexo no final do PDF. As fotos são reduzidas automaticamente antes de enviar, para economizar espaço.</div>
+            <input type="file" id="pt-photos-input" accept="image/*" multiple style="margin-top:8px;">
+            <div id="pt-photos-status" class="hint" style="display:none;"></div>
+            <div id="pt-photos-grid" class="photos-grid"></div>
+          </div>
+
           <div class="btn-row">
             <button class="btn-primary" id="pt-save-btn">Salvar parecer</button>
             <button class="btn-ghost" id="pt-clear-btn">Limpar formulário</button>
-            <span class="hint" id="pt-edit-flag" style="display:none;">Editando parecer existente — salvar irá atualizar o registro.</span>
+            <span class="hint" id="pt-edit-flag" style="display:none;">Editando parecer existente — salvar irá atualizar
+              o registro.</span>
           </div>
         </div>
 
@@ -1582,7 +1939,7 @@
         </div>
       </div>
 
-      <!-- ================= PANEL: CONFIGURAÇÕES ================= -->
+      <!-- ========= PANEL: CONFIGURAÇÕES =========== -->
       <div class="panel" id="panel-config">
 
         <div class="card">
@@ -1667,7 +2024,8 @@
 
         <div class="card" id="audit-card" style="margin-top:14px; display:none;">
           <h2><span class="num">C</span>Histórico de alterações</h2>
-          <div class="hint">Edições e exclusões de relatórios, registradas automaticamente pelo banco de dados. Mostrando as mais recentes primeiro.</div>
+          <div class="hint">Edições e exclusões de relatórios, registradas automaticamente pelo banco de dados.
+            Mostrando as mais recentes primeiro.</div>
           <div class="userstable-wrap">
             <table class="userstable">
               <thead>
@@ -1729,6 +2087,7 @@
         vistoTecnico: row.visto_tecnico,
         vistoCliente: row.visto_cliente,
         fotos: row.fotos || [],
+        extras: row.extras || {},
         createdAt: row.created_at ? new Date(row.created_at).getTime() : null,
         updatedAt: row.updated_at ? new Date(row.updated_at).getTime() : null,
       };
@@ -1752,18 +2111,27 @@
         visto_tecnico: d.vistoTecnico || '',
         visto_cliente: d.vistoCliente || '',
         fotos: d.fotos || [],
+        // "extras" só é enviado quando existe (contrato alterado ou relatório preventivo)
+        ...(d.extras ? { extras: d.extras } : {}),
       };
     }
 
     function summaryFromRecord(rec) {
+      if (isPrev(rec)) {
+        let okCount = 0, nokCount = 0;
+        const conta = (st) => { if (st === 'OK') okCount++; else if (st === 'FALHA') nokCount++; };
+        (rec.extras.rotinas || []).forEach(r => (r.itens || []).forEach(i => conta(i.status)));
+        (rec.extras.testes || []).forEach(t => (t.grupos || []).forEach(g => (g.linhas || []).forEach(l => conta(l.status))));
+        return { ...rec, okCount, nokCount };
+      }
       const okCount = Object.values(rec.checklist || {}).filter(v => v === 'OK').length;
       const nokCount = Object.values(rec.checklist || {}).filter(v => v === 'NOK').length;
       return { ...rec, okCount, nokCount };
     }
 
-    /* ------------------------------------------------------------------ */
-    /* Config / presets                                                    */
-    /* ------------------------------------------------------------------ */
+    /* ------------------ */
+    /* Config / presets   */
+    /* ------------------ */
     const PRESETS = {
       'AP-PMV01': {
         label: 'AP-PMV01 (Modelo P4, 192 x 32 pixels)',
@@ -1807,9 +2175,9 @@
 
     let state = { items: [], locais: [], checklist: {}, editingId: null, photos: [], photoFolderId: null };
 
-    /* ------------------------------------------------------------------ */
-    /* Helpers                                                             */
-    /* ------------------------------------------------------------------ */
+    /* ----------------- */
+    /* Helpers            */
+    /* ------------------- */
     function uid() { return 'r' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
     function toast(msg) {
       const t = document.getElementById('toast');
@@ -1823,9 +2191,9 @@
       return `${d}/${m}/${y}`;
     }
 
-    /* ------------------------------------------------------------------ */
-    /* Tabs                                                                */
-    /* ------------------------------------------------------------------ */
+
+    /* Tabs        */
+    /* ------------------- */
     document.querySelectorAll('.tab-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -1841,13 +2209,6 @@
     /* ------------------------------------------------------------------ */
     /* Sistema preset loading                                              */
     /* ------------------------------------------------------------------ */
-    document.getElementById('f-sistema').addEventListener('change', (e) => {
-      const p = PRESETS[e.target.value];
-      state.items = [...p.items];
-      state.locais = [...p.locais];
-      state.checklist = {};
-      renderChips(); renderTable();
-    });
 
     function renderChips() {
       const wrap = document.getElementById('local-chips');
@@ -1959,7 +2320,9 @@
     /* ------------------------------------------------------------------ */
     function collectForm() {
       const tipo = Array.from(document.querySelectorAll('#f-tipo input:checked')).map(c => c.value);
-      const sistemaKey = document.getElementById('f-sistema').value;
+      const selSistema = document.getElementById('f-sistema').value;
+      const modeloSel = selSistema.startsWith('modelo:') ? modelos.find(m => m.id === selSistema.slice(7)) : null;
+      const sistemaKey = modeloSel ? 'custom' : selSistema;
       return {
         contrato: document.getElementById('f-contrato').value.trim(),
         data: document.getElementById('f-data').value,
@@ -1968,7 +2331,7 @@
         tecnico: document.getElementById('f-tecnico').value.trim(),
         tipoManutencao: tipo,
         sistemaKey,
-        sistemaLabel: PRESETS[sistemaKey] ? PRESETS[sistemaKey].label : sistemaKey,
+        sistemaLabel: modeloSel ? modeloSel.nome : (PRESETS[sistemaKey] ? PRESETS[sistemaKey].label : sistemaKey),
         items: [...state.items],
         locais: [...state.locais],
         checklist: { ...state.checklist },
@@ -1992,7 +2355,12 @@
       document.getElementById('f-visto-cli').value = '';
       state = { items: [...PRESETS['AP-PMV01'].items], locais: [...PRESETS['AP-PMV01'].locais], checklist: {}, editingId: null, photos: [], photoFolderId: crypto.randomUUID() };
       document.getElementById('edit-flag').style.display = 'none';
+      formExtras = null;
+      document.getElementById('f-tipo-rel').disabled = false;
+      document.getElementById('f-contratante').value = identificacao.contratante;
+      document.getElementById('f-contratada').value = identificacao.contratada;
       renderChips(); renderTable(); renderPhotos();
+      if (currentTipoRel() === 'preventiva') pvAfterClear(); else atualizarBotaoExcluirModelo();
     }
     document.getElementById('clear-btn').addEventListener('click', clearForm);
 
@@ -2059,24 +2427,43 @@
     });
 
     document.getElementById('save-btn').addEventListener('click', async () => {
+      const isPv = currentTipoRel() === 'preventiva';
       const data = collectForm();
       if (!data.tecnico) { toast('Informe o responsável técnico da visita.'); return; }
       if (!data.data) { toast('Informe a data da visita.'); return; }
-      if (state.items.length === 0 || state.locais.length === 0) { toast('Adicione itens e pontos ao checklist.'); return; }
+      if (isPv) {
+        if (!pvState.rotinas.length && !pvState.testes.length && !pvState.equipamentos.length) { toast('Adicione equipamentos, rotinas ou testes.'); return; }
+        data.sistemaKey = 'preventiva';
+        data.sistemaLabel = pvNomeModelo || 'Manutenção preventiva';
+        data.items = []; data.locais = []; data.checklist = {};
+      } else if (state.items.length === 0 || state.locais.length === 0) {
+        toast('Adicione itens e pontos ao checklist.'); return;
+      }
+      data.extras = formExtrasForSave() || undefined;
 
       try {
         const editing = !!state.editingId;
         const payload = recToDbPayload(data);
-        let error;
-        if (editing) {
-          ({ error } = await sb.from('reports').update(payload).eq('id', state.editingId));
-        } else {
+        if (!editing) {
           const { data: { user } } = await sb.auth.getUser();
           payload.created_by = user ? user.id : null;
-          ({ error } = await sb.from('reports').insert(payload));
+        }
+        const gravar = (p) => editing
+          ? sb.from('reports').update(p).eq('id', state.editingId)
+          : sb.from('reports').insert(p);
+        let { error } = await gravar(payload);
+        let aviso = '';
+        const faltaColuna = error && /extras|PGRST204|schema cache/i.test(`${error.code || ''} ${error.message || ''}`);
+        if (faltaColuna && !isPv && payload.extras) {
+          delete payload.extras;
+          ({ error } = await gravar(payload));
+          aviso = 'Relatório salvo, mas o contratante/contratada alterados não foram guardados: rode o SQL de atualização no Supabase.';
+        } else if (faltaColuna && isPv) {
+          toast('Para salvar relatórios preventivos, rode o SQL de atualização no Supabase.');
+          return;
         }
         if (error) throw error;
-        toast(editing ? 'Relatório atualizado.' : 'Relatório salvo no banco de dados.');
+        toast(aviso || (editing ? 'Relatório atualizado.' : 'Relatório salvo no banco de dados.'));
         clearForm();
       } catch (e) {
         toast('Erro ao salvar. Tente novamente.');
@@ -2115,7 +2502,7 @@
         if (status === 'nok' && r.nokCount === 0) return false;
         if (status === 'ok' && r.nokCount > 0) return false;
         if (text) {
-          const hay = [r.contrato, r.tecnico, ...(r.locais || []), ...(r.tipoManutencao || [])].join(' ').toLowerCase();
+          const hay = [r.contrato, r.tecnico, r.extras && r.extras.obra, r.extras && r.extras.contratante, ...(r.locais || []), ...(r.tipoManutencao || [])].join(' ').toLowerCase();
           if (!hay.includes(text)) return false;
         }
         return true;
@@ -2137,11 +2524,11 @@
         card.innerHTML = `
       <div class="left">
         <div class="title">${fmtDate(r.data)} · ${escapeHtml(r.contrato || '—')} · ${escapeHtml(r.tecnico || '—')}</div>
-        <div class="sub">${escapeHtml(r.sistemaLabel)} — ${escapeHtml((r.locais || []).join(', '))}</div>
+        <div class="sub">${escapeHtml(r.sistemaLabel)} — ${escapeHtml(isPrev(r) ? ((r.extras && r.extras.obra) || '') : (r.locais || []).join(', '))}</div>
       </div>
       <div class="right">
         ${(r.tipoManutencao || []).map(t => `<span class="badge tipo">${escapeHtml(t)}</span>`).join('')}
-        ${r.nokCount > 0 ? `<span class="badge nok">${r.nokCount} NOK</span>` : `<span class="badge ok">tudo OK</span>`}
+        ${r.nokCount > 0 ? `<span class="badge nok">${r.nokCount} ${isPrev(r) ? 'FALHA' : 'NOK'}</span>` : `<span class="badge ok">tudo OK</span>`}
       </div>
     `;
         card.addEventListener('click', () => openDetail(r.id));
@@ -2164,6 +2551,7 @@
         rec = error ? null : dbRowToRec(data);
       } catch (e) { rec = null; }
       if (!rec) { toast('Não foi possível carregar o relatório.'); return; }
+      if (isPrev(rec)) { openPrevDetail(rec); return; }
 
       let tableHtml = '<div class="table-wrap"><table class="chk"><thead><tr><th class="itemcol">Item</th>';
       rec.locais.forEach(loc => tableHtml += `<th>${escapeHtml(loc)}</th>`);
@@ -2231,6 +2619,7 @@
     /* Exportar PDF (impressão paisagem A4)                                */
     /* ------------------------------------------------------------------ */
     function exportReportPDF(rec) {
+      if (isPrev(rec)) { exportPrevPDF(rec); return; }
       let tableHtml = '<table class="print-table"><thead><tr><th style="text-align:left;">Item</th>';
       rec.locais.forEach((loc) => tableHtml += `<th>${escapeHtml(loc)}</th>`);
       tableHtml += '</tr></thead><tbody>';
@@ -2257,14 +2646,14 @@
           <div class="print-header">
             ${logoHtml}
             <div class="titles">
-              <h1>Relatório de Manutenção — Contrato STTP</h1>
+              <h1>Relatório de Manutenção${(rec.extras && rec.extras.contratante && rec.extras.contratante !== identificacao.contratante) ? '' : ' — Contrato STTP'}</h1>
               <p>${escapeHtml(rec.sistemaLabel || '')} · Contrato ${escapeHtml(rec.contrato || '—')} · ${fmtDate(rec.data)}</p>
             </div>
             ${clientLogoHtml}
           </div>
           <div class="print-static">
-            <b>Contratante:</b> Superintendência de Trânsito e Transportes Públicos de Campina Grande (STTP) — CNPJ 35.576.651/0001-09
-            &nbsp;·&nbsp; <b>Contratada:</b> Apel Aplicações Eletrônicas Ind. e Com. LTDA — CNPJ 08.991.515/0001-02
+            <b>Contratante:</b> ${escapeHtml((rec.extras && rec.extras.contratante) || identificacao.contratante)}
+            &nbsp;·&nbsp; <b>Contratada:</b> ${escapeHtml((rec.extras && rec.extras.contratada) || identificacao.contratada)}
           </div>
           <div class="print-kv">
             <div><b>Técnico responsável</b>${escapeHtml(rec.tecnico || '—')}</div>
@@ -2300,44 +2689,59 @@
       gerarPDFDireto(html, `relatorio-${rec.data || 'sttp'}-${escapeHtml(rec.sistemaKey || '')}`.replace(/[^a-zA-Z0-9-_]/g, '_'));
     }
 
+    // espera as imagens (logo, fotos) carregarem antes de "fotografar" a página
+    function aguardarImagens(root, timeout) {
+      const imgs = Array.from(root.querySelectorAll('img'));
+      const todas = Promise.all(imgs.map((im) => im.complete ? Promise.resolve()
+        : new Promise((r) => { im.onload = im.onerror = r; })));
+      return Promise.race([todas, new Promise((r) => setTimeout(r, timeout || 10000))])
+        .then(() => new Promise((r) => setTimeout(r, 120)));
+    }
+
+    // html pode ser um texto (1 página) ou uma lista de textos (várias páginas)
     async function gerarPDFDireto(html, filename, orientation, fullBleed) {
       orientation = orientation || 'landscape';
+      const pages = Array.isArray(html) ? html : [html];
       const btn = document.querySelector('#modal-pdf, #pt-modal-pdf');
       const originalText = btn ? btn.textContent : null;
       if (btn) { btn.textContent = 'Gerando PDF...'; btn.disabled = true; }
 
       const printArea = document.getElementById('print-area');
-      printArea.innerHTML = html;
       // Renderiza fora da tela, mas em tamanho real (px equivalente a A4 a 96dpi)
       const w = orientation === 'portrait' ? 793 : 1122;
       const h = orientation === 'portrait' ? 1122 : 793;
-      printArea.style.cssText = `display:block; position:fixed; top:0; left:-99999px; width:${w}px; min-height:${h}px; box-sizing:border-box; background:#ffffff; padding:${fullBleed ? 0 : 26}px; overflow:hidden;`;
-
-      // dá tempo da imagem da logo (se houver) carregar
-      await new Promise((resolve) => setTimeout(resolve, 120));
+      const areaCss = `display:block; position:fixed; top:0; left:-99999px; width:${w}px; min-height:${h}px; box-sizing:border-box; background:#ffffff; padding:${fullBleed ? 0 : 26}px; overflow:hidden;`;
 
       try {
-        const canvas = await html2canvas(printArea, {
-          scale: 2,
-          backgroundColor: '#ffffff',
-          useCORS: true,
-        });
-        const imgData = canvas.toDataURL('image/jpeg', 0.95);
         const { jsPDF } = window.jspdf;
         const pdf = new jsPDF({ orientation, unit: 'mm', format: 'a4' });
         const pageWidth = pdf.internal.pageSize.getWidth();
         const pageHeight = pdf.internal.pageSize.getHeight();
-        const imgWidth = pageWidth;
-        const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
-        if (imgHeight <= pageHeight) {
-          const yOffset = (pageHeight - imgHeight) / 2;
-          pdf.addImage(imgData, 'JPEG', 0, yOffset, imgWidth, imgHeight);
-        } else {
-          const scaledHeight = pageHeight;
-          const scaledWidth = (canvas.width * scaledHeight) / canvas.height;
-          const xOffset = (pageWidth - scaledWidth) / 2;
-          pdf.addImage(imgData, 'JPEG', xOffset, 0, scaledWidth, scaledHeight);
+        for (let i = 0; i < pages.length; i++) {
+          printArea.innerHTML = pages[i];
+          printArea.style.cssText = areaCss;
+          await aguardarImagens(printArea);
+
+          const canvas = await html2canvas(printArea, {
+            scale: 2,
+            backgroundColor: '#ffffff',
+            useCORS: true,
+          });
+          const imgData = canvas.toDataURL('image/jpeg', 0.92);
+          if (i > 0) pdf.addPage();
+
+          const imgWidth = pageWidth;
+          const imgHeight = (canvas.height * imgWidth) / canvas.width;
+          if (imgHeight <= pageHeight) {
+            const yOffset = (pageHeight - imgHeight) / 2;
+            pdf.addImage(imgData, 'JPEG', 0, yOffset, imgWidth, imgHeight);
+          } else {
+            const scaledHeight = pageHeight;
+            const scaledWidth = (canvas.width * scaledHeight) / canvas.height;
+            const xOffset = (pageWidth - scaledWidth) / 2;
+            pdf.addImage(imgData, 'JPEG', xOffset, 0, scaledWidth, scaledHeight);
+          }
         }
 
         pdf.save(`${filename}.pdf`);
@@ -2354,13 +2758,22 @@
 
     function loadIntoForm(rec) {
       document.querySelector('.tab-btn[data-tab="novo"]').click();
+      // tipo de relatório e contrato (contratante/contratada)
+      document.getElementById('f-tipo-rel').value = isPrev(rec) ? 'preventiva' : 'paineis';
+      document.getElementById('f-tipo-rel').disabled = true;
+      aplicarTipoRel();
+      formExtras = (rec.extras && Object.keys(rec.extras).length) ? pvClone(rec.extras) : null;
+      document.getElementById('f-contratante').value = (rec.extras && rec.extras.contratante) || identificacao.contratante;
+      document.getElementById('f-contratada').value = (rec.extras && rec.extras.contratada) || identificacao.contratada;
+      if (isPrev(rec)) pvLoadFromRec(rec);
       document.getElementById('f-contrato').value = rec.contrato || '';
       document.getElementById('f-data').value = rec.data || '';
       document.getElementById('f-chegada').value = rec.horaChegada || '';
       document.getElementById('f-saida').value = rec.horaSaida || '';
       document.getElementById('f-tecnico').value = rec.tecnico || '';
       document.querySelectorAll('#f-tipo input').forEach(c => { c.checked = (rec.tipoManutencao || []).includes(c.value); });
-      document.getElementById('f-sistema').value = rec.sistemaKey || 'custom';
+      const modeloDoRel = (rec.sistemaKey === 'custom') ? modelos.find(m => m.tipo === 'paineis' && m.nome === rec.sistemaLabel) : null;
+      document.getElementById('f-sistema').value = modeloDoRel ? 'modelo:' + modeloDoRel.id : (rec.sistemaKey || 'custom');
       document.getElementById('f-obs').value = rec.observacoes || '';
       document.getElementById('f-visto-tec').value = rec.vistoTecnico || '';
       document.getElementById('f-visto-cli').value = rec.vistoCliente || '';
@@ -2478,6 +2891,7 @@
       loadHeaderLogo();
       loadClientLogo();
       loadIdentificacao();
+      loadModelos();
     }
 
     /* ------------------------------------------------------------------ */
@@ -2490,10 +2904,10 @@
     };
 
     function applyIdentificacaoToForm() {
-      document.getElementById('info-contratante').textContent = identificacao.contratante;
-      document.getElementById('info-contratada').textContent = identificacao.contratada;
-      const contratoField = document.getElementById('f-contrato');
-      if (!state.editingId) contratoField.value = identificacao.contratoPadrao;
+      if (state.editingId) return;
+      document.getElementById('f-contratante').value = identificacao.contratante;
+      document.getElementById('f-contratada').value = identificacao.contratada;
+      document.getElementById('f-contrato').value = identificacao.contratoPadrao;
     }
 
     async function loadIdentificacao() {
@@ -2746,7 +3160,7 @@
     /* ------------------------------------------------------------------ */
     /* Parecer Técnico                                                     */
     /* ------------------------------------------------------------------ */
-    const ptState = { editingId: null, testes: [], componentes: [], observacoes: [] };
+    const ptState = { editingId: null, testes: [], componentes: [], observacoes: [], fotos: [], photoFolderId: null, savedPaths: new Set(), removedPaths: [], hadFotos: false };
 
     function renderPtTestes() {
       const box = document.getElementById('pt-testes-list');
@@ -2829,20 +3243,121 @@
         observacao_intro: document.getElementById('pt-observacao-intro').value.trim(),
         observacao_itens: ptState.observacoes,
         responsavel_tecnico: document.getElementById('pt-responsavel').value.trim(),
+        // só envia "fotos" quando há fotos (ou havia antes), assim nada quebra se a coluna ainda não existir
+        ...((ptState.fotos.length > 0 || ptState.hadFotos) ? { fotos: ptState.fotos } : {}),
       };
     }
 
-    function clearPtForm() {
+    /* ---- fotos do parecer ---- */
+    function compressImage(file, maxSide, quality) {
+      maxSide = maxSide || 1600; quality = quality || 0.82;
+      return new Promise((resolve) => {
+        const img = new Image();
+        const url = URL.createObjectURL(file);
+        img.onload = () => {
+          try {
+            const scale = Math.min(1, maxSide / Math.max(img.width, img.height));
+            const c = document.createElement('canvas');
+            c.width = Math.round(img.width * scale);
+            c.height = Math.round(img.height * scale);
+            const ctx = c.getContext('2d');
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, c.width, c.height);
+            ctx.drawImage(img, 0, 0, c.width, c.height);
+            c.toBlob((blob) => {
+              URL.revokeObjectURL(url);
+              resolve(blob && blob.size < file.size ? blob : file);
+            }, 'image/jpeg', quality);
+          } catch (e) { URL.revokeObjectURL(url); resolve(file); }
+        };
+        img.onerror = () => { URL.revokeObjectURL(url); resolve(file); };
+        img.src = url;
+      });
+    }
+
+    function renderPtPhotos() {
+      const grid = document.getElementById('pt-photos-grid');
+      grid.innerHTML = ptState.fotos.map((p, i) => `
+        <div class="photo-card">
+          <img src="${p.url}" alt="Foto ${i + 1}" onclick="window.open('${p.url}', '_blank')">
+          <input type="text" placeholder="Legenda (opcional)" value="${escapeHtml(p.legenda || '')}" data-idx="${i}" class="pt-photo-caption">
+          <button type="button" class="remove-photo pt-remove-photo" data-idx="${i}" title="Remover">✕</button>
+        </div>
+      `).join('');
+
+      grid.querySelectorAll('.pt-remove-photo').forEach((btn) => {
+        btn.addEventListener('click', async () => {
+          const i = Number(btn.dataset.idx);
+          const photo = ptState.fotos[i];
+          ptState.fotos.splice(i, 1);
+          renderPtPhotos();
+          if (photo && photo.path) {
+            if (ptState.savedPaths.has(photo.path)) {
+              // já estava salva no parecer: só apaga do Storage depois que salvar
+              ptState.removedPaths.push(photo.path);
+            } else {
+              try { await sb.storage.from(PHOTOS_BUCKET).remove([photo.path]); } catch (e) { /* órfã, sem problema */ }
+            }
+          }
+        });
+      });
+
+      grid.querySelectorAll('.pt-photo-caption').forEach((inp) => {
+        inp.addEventListener('input', () => {
+          const i = Number(inp.dataset.idx);
+          if (ptState.fotos[i]) ptState.fotos[i].legenda = inp.value;
+        });
+      });
+    }
+
+    document.getElementById('pt-photos-input').addEventListener('change', async (e) => {
+      const files = Array.from(e.target.files || []);
+      if (files.length === 0) return;
+      if (!ptState.photoFolderId) ptState.photoFolderId = crypto.randomUUID();
+
+      const statusBox = document.getElementById('pt-photos-status');
+      statusBox.style.display = '';
+
+      for (const file of files) {
+        statusBox.textContent = `Enviando ${file.name}...`;
+        try {
+          const blob = await compressImage(file);
+          const isJpeg = blob.type === 'image/jpeg';
+          const baseName = file.name.replace(/\.[^.]+$/, '').replace(/[^a-zA-Z0-9._-]/g, '_') || 'foto';
+          const ext = isJpeg ? 'jpg' : ((file.name.split('.').pop() || 'jpg').replace(/[^a-zA-Z0-9]/g, '') || 'jpg');
+          const path = `pareceres/${ptState.photoFolderId}/${Date.now()}-${baseName}.${ext}`;
+          const { error: upErr } = await sb.storage.from(PHOTOS_BUCKET).upload(path, blob, { upsert: false, contentType: blob.type || file.type });
+          if (upErr) throw upErr;
+          const { data: pub } = sb.storage.from(PHOTOS_BUCKET).getPublicUrl(path);
+          ptState.fotos.push({ path, url: pub.publicUrl, legenda: '' });
+          renderPtPhotos();
+        } catch (err) {
+          console.error(err);
+          toast('Erro ao enviar ' + file.name + '. Verifique se o bucket "fotos-relatorios" existe no Supabase.');
+        }
+      }
+      statusBox.style.display = 'none';
+      e.target.value = '';
+    });
+
+    function clearPtForm(discardPhotos) {
       ['pt-cidade', 'pt-data', 'pt-referencia', 'pt-cliente-nome', 'pt-cliente-cnpj', 'pt-responsavel', 'pt-equipamento', 'pt-objetivo', 'pt-procedimento-intro', 'pt-observacao-intro']
         .forEach(id => document.getElementById(id).value = '');
+      // "Limpar formulário" num parecer novo: apaga do Storage as fotos que não foram salvas
+      if (discardPhotos === true && !ptState.editingId && ptState.fotos.length) {
+        const paths = ptState.fotos.map((f) => f.path).filter(Boolean);
+        if (paths.length) sb.storage.from(PHOTOS_BUCKET).remove(paths).catch(() => { });
+      }
       ptState.testes = []; ptState.componentes = []; ptState.observacoes = [];
-      renderPtTestes(); renderPtComponentes(); renderPtObservacoes();
+      ptState.fotos = []; ptState.savedPaths = new Set(); ptState.removedPaths = [];
+      ptState.hadFotos = false; ptState.photoFolderId = crypto.randomUUID();
+      renderPtTestes(); renderPtComponentes(); renderPtObservacoes(); renderPtPhotos();
       ptState.editingId = null;
       document.getElementById('pt-edit-flag').style.display = 'none';
       if (currentUser) document.getElementById('pt-responsavel').value = currentUser.username || '';
     }
 
-    document.getElementById('pt-clear-btn').addEventListener('click', clearPtForm);
+    document.getElementById('pt-clear-btn').addEventListener('click', () => clearPtForm(true));
 
     document.getElementById('pt-save-btn').addEventListener('click', async () => {
       const data = collectPtForm();
@@ -2860,6 +3375,9 @@
           ({ error } = await sb.from('pareceres_tecnicos').insert(data));
         }
         if (error) throw error;
+        if (ptState.removedPaths.length) {
+          try { await sb.storage.from(PHOTOS_BUCKET).remove(ptState.removedPaths); } catch (e) { /* órfãs, sem problema */ }
+        }
         toast(editing ? 'Parecer atualizado.' : 'Parecer salvo.');
         clearPtForm();
         loadAndRenderPareceres();
@@ -2929,6 +3447,18 @@
         <div style="margin-top:16px;"><b style="display:block; font-size:11px; text-transform:uppercase; color:var(--muted); margin-bottom:4px;">2. Procedimento</b><div class="obs-box">${escapeHtml(rec.procedimento_intro || '')}${testesHtml}</div></div>
         <div style="margin-top:16px;"><b style="display:block; font-size:11px; text-transform:uppercase; color:var(--muted); margin-bottom:4px;">3. Lista de componentes</b><div class="obs-box">${componentesHtml}</div></div>
         <div style="margin-top:16px;"><b style="display:block; font-size:11px; text-transform:uppercase; color:var(--muted); margin-bottom:4px;">4. Observação</b><div class="obs-box">${escapeHtml(rec.observacao_intro || '')}${obsHtml}</div></div>
+        ${(rec.fotos && rec.fotos.length) ? `
+        <div style="margin-top:16px;">
+          <b style="display:block; font-size:11px; text-transform:uppercase; color:var(--muted); margin-bottom:4px;">Fotos</b>
+          <div class="photos-grid">
+            ${rec.fotos.map(f => `
+              <div class="photo-card">
+                <img src="${f.url}" alt="Foto" onclick="window.open('${f.url}', '_blank')">
+                ${f.legenda ? `<div style="padding:6px 8px; font-size:12px; color:#cfe9ec;">${escapeHtml(f.legenda)}</div>` : ''}
+              </div>
+            `).join('')}
+          </div>
+        </div>` : ''}
         <div class="btn-row">
           ${currentUser && currentUser.canEditReports ? '<button class="btn-primary" id="pt-modal-edit">Editar</button>' : ''}
           <button class="btn-primary" id="pt-modal-pdf">Exportar PDF</button>
@@ -2959,7 +3489,12 @@
       ptState.testes = [...(rec.procedimento_testes || [])];
       ptState.componentes = [...(rec.componentes || [])];
       ptState.observacoes = [...(rec.observacao_itens || [])];
-      renderPtTestes(); renderPtComponentes(); renderPtObservacoes();
+      ptState.fotos = (rec.fotos || []).map((f) => ({ ...f }));
+      ptState.savedPaths = new Set(ptState.fotos.map((f) => f.path).filter(Boolean));
+      ptState.removedPaths = [];
+      ptState.hadFotos = ptState.fotos.length > 0;
+      ptState.photoFolderId = rec.id;
+      renderPtTestes(); renderPtComponentes(); renderPtObservacoes(); renderPtPhotos();
       ptState.editingId = rec.id;
       document.getElementById('pt-edit-flag').style.display = '';
       window.scrollTo(0, 0);
@@ -2968,6 +3503,11 @@
     async function deleteParecer(id) {
       if (!confirm('Tem certeza que deseja excluir este parecer? Esta ação não pode ser desfeita.')) return;
       try {
+        const { data: prev } = await sb.from('pareceres_tecnicos').select('fotos').eq('id', id).maybeSingle();
+        const paths = ((prev && prev.fotos) || []).map((f) => f.path).filter(Boolean);
+        if (paths.length) {
+          try { await sb.storage.from(PHOTOS_BUCKET).remove(paths); } catch (e) { /* segue mesmo se falhar */ }
+        }
         const { error } = await sb.from('pareceres_tecnicos').delete().eq('id', id);
         if (error) throw error;
         toast('Parecer excluído.');
@@ -3023,13 +3563,537 @@
         </div>
       `;
 
+      // páginas de anexo com as fotos (4 por página)
+      const paginas = [html];
+      const fotos = rec.fotos || [];
+      const POR_PAGINA = 4;
+      for (let i = 0; i < fotos.length; i += POR_PAGINA) {
+        const grupo = fotos.slice(i, i + POR_PAGINA);
+        paginas.push(`
+          <div class="parecer-page">
+            <img class="header-img" src="img/parecer-header.png" alt="" crossorigin="anonymous">
+            <div class="parecer-body">
+              <div class="parecer-subtitle">ANEXO — REGISTRO FOTOGRÁFICO</div>
+              <div class="parecer-fotos">
+                ${grupo.map((f, k) => `
+                  <div class="parecer-foto">
+                    <div class="imgbox"><img src="${f.url}" alt="" crossorigin="anonymous"></div>
+                    <div class="cap">Foto ${i + k + 1}${f.legenda ? ' — ' + escapeHtml(f.legenda) : ''}</div>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+            <img class="footer-img" src="img/parecer-footer.png" alt="" crossorigin="anonymous">
+          </div>
+        `);
+      }
+
       gerarPDFDireto(
-        html,
+        paginas,
         `parecer-${rec.data_documento || 'tecnico'}-${escapeHtml(rec.cliente_nome || '')}`.replace(/[^a-zA-Z0-9-_]/g, '_'),
         'portrait',
         true
       );
     }
+
+    /* ------------------------------------------------------------------ */
+    /* Tipos de relatório, modelos salvos e relatório preventivo           */
+    /* ------------------------------------------------------------------ */
+    let modelos = [];        // modelos salvos (tabela modelos_relatorio)
+    let formExtras = null;   // "extras" do relatório que está sendo editado
+    let pvNomeModelo = 'Manutenção preventiva';
+
+    const currentTipoRel = () => document.getElementById('f-tipo-rel').value;
+    const isPrev = (rec) => !!(rec && rec.extras && rec.extras.estrutura === 'preventiva');
+    const pvEl = (id) => document.getElementById(id);
+    const pvClone = (o) => JSON.parse(JSON.stringify(o));
+    const fval = (id) => (document.getElementById(id).value || '').trim();
+
+    const TIPOS_PAINEIS = [['Instalação', 'Instalação'], ['Manutenção Preventiva', 'Preventiva'], ['Manutenção Corretiva', 'Corretiva'], ['Outros', 'Outros']];
+    const TIPOS_PREV = [['Instalação', 'Instalação'], ['Manutenção', 'Manutenção'], ['Vistoria', 'Vistoria'], ['Substituição de Equipamento', 'Substituição de Equipamento'], ['Outros', 'Outros']];
+
+    function renderTipos(lista, marcados) {
+      const box = document.getElementById('f-tipo');
+      const sel = marcados || Array.from(box.querySelectorAll('input:checked')).map(c => c.value);
+      box.innerHTML = lista.map(([v, l]) =>
+        `<label class="checkitem"><input type="checkbox" value="${escapeHtml(v)}" ${sel.includes(v) ? 'checked' : ''}> ${escapeHtml(l)}</label>`).join('');
+    }
+
+    function aplicarTipoRel() {
+      const prev = currentTipoRel() === 'preventiva';
+      document.getElementById('grp-paineis').style.display = prev ? 'none' : '';
+      document.getElementById('grp-prev').style.display = prev ? '' : 'none';
+      renderTipos(prev ? TIPOS_PREV : TIPOS_PAINEIS);
+      atualizarBotaoExcluirModelo();
+    }
+
+    document.getElementById('f-tipo-rel').addEventListener('change', () => {
+      aplicarTipoRel();
+      if (currentTipoRel() === 'preventiva') {
+        renderTipos(TIPOS_PREV, ['Manutenção']);
+        pvLoadModelo(pvEl('pv-modelo').value);
+      }
+    });
+
+    /* ---------------- modelos salvos ---------------- */
+    async function loadModelos() {
+      try {
+        const { data, error } = await sb.from('modelos_relatorio').select('*').order('nome');
+        if (error) throw error;
+        modelos = data || [];
+      } catch (e) { modelos = []; }
+      renderModeloOptions();
+    }
+
+    function renderModeloOptions() {
+      const preencher = (selectId, tipo) => {
+        const sel = document.getElementById(selectId);
+        const atual = sel.value;
+        sel.querySelectorAll('optgroup').forEach(g => g.remove());
+        const lista = modelos.filter(m => m.tipo === tipo);
+        if (lista.length) {
+          const g = document.createElement('optgroup');
+          g.label = 'Modelos salvos';
+          lista.forEach(m => {
+            const o = document.createElement('option');
+            o.value = 'modelo:' + m.id;
+            o.textContent = m.nome;
+            g.appendChild(o);
+          });
+          sel.appendChild(g);
+        }
+        if (Array.from(sel.options).some(o => o.value === atual)) sel.value = atual;
+      };
+      preencher('f-sistema', 'paineis');
+      preencher('pv-modelo', 'preventiva');
+      atualizarBotaoExcluirModelo();
+    }
+
+    function atualizarBotaoExcluirModelo() {
+      const pode = !!(currentUser && (currentUser.isAdmin || currentUser.canEditSettings));
+      [['f-sistema', 'modelo-del-btn'], ['pv-modelo', 'pv-modelo-del-btn']].forEach(([s, b]) => {
+        document.getElementById(b).style.display = (pode && document.getElementById(s).value.startsWith('modelo:')) ? '' : 'none';
+      });
+    }
+
+    function aplicarIdentModelo(est) {
+      est = est || {};
+      document.getElementById('f-contratante').value = est.contratante || identificacao.contratante;
+      document.getElementById('f-contratada').value = est.contratada || identificacao.contratada;
+      if (est.contrato !== undefined) document.getElementById('f-contrato').value = est.contrato;
+    }
+
+    async function salvarModelo(tipo, estrutura, selectId) {
+      const sel = document.getElementById(selectId);
+      const atualModelo = sel.value.startsWith('modelo:') ? modelos.find(m => m.id === sel.value.slice(7)) : null;
+      const nome = (prompt('Nome do modelo (ex.: Sonorização — Hospital X):', atualModelo ? atualModelo.nome : '') || '').trim();
+      if (!nome) return;
+      const existente = modelos.find(m => m.tipo === tipo && m.nome.toLowerCase() === nome.toLowerCase());
+      if (existente && !confirm(`Já existe o modelo "${existente.nome}". Substituir a estrutura dele?`)) return;
+      let error, id;
+      if (existente) {
+        ({ error } = await sb.from('modelos_relatorio').update({ estrutura }).eq('id', existente.id));
+        id = existente.id;
+      } else {
+        const { data: { user } } = await sb.auth.getUser();
+        const res = await sb.from('modelos_relatorio').insert({ nome, tipo, estrutura, created_by: user ? user.id : null }).select().single();
+        error = res.error; id = res.data && res.data.id;
+      }
+      if (error) { toast('Erro ao salvar o modelo. Rode o SQL de atualização no Supabase.'); console.error(error); return; }
+      await loadModelos();
+      if (id) { sel.value = 'modelo:' + id; atualizarBotaoExcluirModelo(); }
+      toast('Modelo salvo. Ele aparece em "Modelos salvos".');
+    }
+
+    async function excluirModelo(selectId, valorPadrao) {
+      const sel = document.getElementById(selectId);
+      const m = modelos.find(x => 'modelo:' + x.id === sel.value);
+      if (!m) return;
+      if (!confirm(`Excluir o modelo "${m.nome}"? Os relatórios já feitos com ele não são afetados.`)) return;
+      const { error } = await sb.from('modelos_relatorio').delete().eq('id', m.id);
+      if (error) { toast('Erro ao excluir o modelo.'); return; }
+      await loadModelos();
+      sel.value = valorPadrao;
+      atualizarBotaoExcluirModelo();
+      toast('Modelo excluído.');
+    }
+
+    document.getElementById('f-sistema').addEventListener('change', (e) => {
+      const v = e.target.value;
+      if (v.startsWith('modelo:')) {
+        const m = modelos.find(x => x.id === v.slice(7));
+        const est = (m && m.estrutura) || {};
+        state.items = [...(est.items || [])];
+        state.locais = [...(est.locais || [])];
+        aplicarIdentModelo(est);
+      } else {
+        const p = PRESETS[v];
+        state.items = [...p.items];
+        state.locais = [...p.locais];
+        aplicarIdentModelo({});
+      }
+      state.checklist = {};
+      renderChips(); renderTable(); atualizarBotaoExcluirModelo();
+    });
+
+    document.getElementById('modelo-save-btn').addEventListener('click', () => {
+      if (!state.items.length || !state.locais.length) { toast('Monte os itens e os pontos antes de salvar o modelo.'); return; }
+      salvarModelo('paineis', {
+        items: [...state.items], locais: [...state.locais],
+        contratante: fval('f-contratante'), contratada: fval('f-contratada'), contrato: fval('f-contrato'),
+      }, 'f-sistema');
+    });
+    document.getElementById('modelo-del-btn').addEventListener('click', () => excluirModelo('f-sistema', 'custom'));
+    document.getElementById('pv-modelo-del-btn').addEventListener('click', () => excluirModelo('pv-modelo', 'branco'));
+
+    /* ---------------- preventiva: estrutura ---------------- */
+    const pvState = { equipamentos: [], rotinas: [], testes: [] };
+
+    const PV_CIRCUITOS = [
+      ['Circuito 01', 'SS/ CIRCULAÇÃO'], ['Circuito 02', 'TÉRREO'], ['Circuito 03', 'TÉRREO'], ['Circuito 04', 'TÉRREO'],
+      ['Circuito 05', '1º PAVIMENTO'], ['Circuito 06', '1º PAVIMENTO'], ['Circuito 07', '1º PAVIMENTO'],
+      ['Circuito 08', '2º PAVIMENTO'], ['Circuito 09', '2º PAVIMENTO'], ['Circuito 10', '3º PAVIMENTO'],
+      ['Circuito 11', '3º PAVIMENTO'], ['Circuito 12', '4º PAVIMENTO'], ['Circuito 13', '4º PAVIMENTO'],
+      ['Circuito 14', '2º PAV/ ACADEMIA'],
+    ];
+    const pvLinhas = (arr) => arr.map(([circuito, setor]) => ({ circuito, setor, valor: '', status: '' }));
+    const pvGrupos = (prefixo) => [
+      { nome: prefixo + ' SOM GERAL', linhas: pvLinhas(PV_CIRCUITOS) },
+      { nome: prefixo + ' SOM AUDITÓRIO', linhas: pvLinhas([['Circuito 01', 'ESQUERDO'], ['Circuito 02', 'DIREITO']]) },
+    ];
+    const pvItens = (arr) => arr.map((descricao) => ({ descricao, status: '' }));
+
+    const PV_PF = () => ({
+      obra: 'SEDE DA POLICIA FEDERAL DA PARAIBA',
+      endereco: 'R. Aviador Mário Vieira de Melo, 1350 - João Agripino, João Pessoa - PB, 58034-045',
+      contratante: 'ENGEAR ENGENHARIA DE AQUECIMENTO E REFRIGERAÇÃO LTDA',
+      contrato: '',
+      equipamentos: [
+        ['Amplificador de Potência Digital, 2 Canais (2 x 300 Wrms), Linha de 70V, com Saída', '8'],
+        ['Reprodutor de CD/MP3 Player', '2'],
+        ['Sonofletor Flush Mount, Linha de 70V, 6"', '314'],
+        ['Matriz de Comutação 4 x 3, VOX, Painel de seleção e Mic. Gooseneck', '1'],
+        ['Caixa Acústica, 100Wrms, Branca', '4'],
+        ['Painel de chamada com tecla APF e Microfone Gooseneck', '2'],
+        ['Equalizador Gráfico, 15 bandas, Estéreo', '2'],
+        ['Caixa de Retorno de Palco (Ativo)', '2'],
+        ['Microfone com Fio de Mão Padrão Dinâmico Cardióide (voz)', '4'],
+        ['Microfone sem Fio, Shure', '3'],
+        ['Mixer Dig. X-air Xr16 Ios/pc/android, 16in/6out', '1'],
+      ].map(([descricao, qtd]) => ({ descricao, qtd })),
+      rotinas: [
+        { nome: 'SOM GERAL', observacoes: '', itens: pvItens([
+          'Inspeção Visual (Sala Técnica)', 'Inspeção Visual (Áreas Sonorizadas/Sonofletores)',
+          'Difusão de Música Ambiente (Fonte Geradora)', 'Difusão de Emissão de Gongo e Avisos (Microfone)',
+          'Rede Elétrica 220 Volts +,- 10 %', 'Níveis de sinais de áudio (Verificar níveis configurados)',
+          'Inteligibilidade Sonora (Equalização)', 'Verificar Comunicação entre matriz e microfones',
+          'Amplificadores (Verificar funcionamento)', 'Matriz de Áudio (Verificar Comunicação)',
+          'Equalizadores (Verificar funcionamento)', 'Fiação']) },
+        { nome: 'AUDITÓRIO', observacoes: '', itens: pvItens([
+          'Inspeção Visual (Sala Técnica)', 'Rede Elétrica 220 Volts +,- 10 %', 'Difusão de Música Ambiente',
+          'Teste dos microfones', 'Níveis de sinais de áudio (Verificar níveis configurados)',
+          'Inteligibilidade Sonora (Equalização)', 'Microfones (Verificar funcionamento)',
+          'Mesa de som (Verificar funcionamento)', 'Caixas acústicas (Verificar funcionamento)',
+          'Amplificadores (Verificar funcionamento)', 'Fiação']) },
+      ],
+      testes: [
+        { titulo: 'TESTE DE IMPEDÂNCIA DOS CIRCUITOS', unidade: 'Ohms (Ω)', grupos: pvGrupos('CIRCUITOS'), observacoes: '' },
+        { titulo: 'TESTE DE PRESSÃO SONORA (SPL)', unidade: '(dB)', grupos: pvGrupos('NÍVEL DE PRESSÃO SONORA'), observacoes: '' },
+      ],
+    });
+
+    function pvResolverModelo(v) {
+      if (v.startsWith('modelo:')) {
+        const m = modelos.find(x => x.id === v.slice(7));
+        if (m) return { nome: m.nome, est: pvClone(m.estrutura || {}) };
+      }
+      if (v === 'pf') return { nome: 'Sonorização — Polícia Federal PB', est: PV_PF() };
+      return { nome: 'Manutenção preventiva', est: {} };
+    }
+
+    function pvLoadModelo(v) {
+      const { nome, est } = pvResolverModelo(v);
+      pvNomeModelo = nome;
+      pvState.equipamentos = est.equipamentos || [];
+      pvState.rotinas = est.rotinas || [];
+      pvState.testes = est.testes || [];
+      pvEl('pv-obra').value = est.obra || '';
+      pvEl('pv-endereco').value = est.endereco || '';
+      aplicarIdentModelo(est);
+      pvRender();
+      atualizarBotaoExcluirModelo();
+    }
+
+    function pvTemDados() {
+      return pvState.rotinas.some(r => r.itens.some(i => i.status)) ||
+        pvState.testes.some(t => t.grupos.some(g => g.linhas.some(l => l.valor || l.status)));
+    }
+
+    pvEl('pv-modelo').addEventListener('change', (e) => {
+      if (pvTemDados() && !confirm('Trocar o modelo substitui a estrutura e apaga o que já foi marcado. Continuar?')) {
+        e.target.value = Array.from(e.target.options).find(o => o.textContent === pvNomeModelo)?.value || e.target.value;
+        return;
+      }
+      pvLoadModelo(e.target.value);
+    });
+
+    pvEl('pv-modelo-save-btn').addEventListener('click', () => {
+      if (!pvState.rotinas.length && !pvState.testes.length && !pvState.equipamentos.length) { toast('Monte a estrutura antes de salvar o modelo.'); return; }
+      const c = pvClone({ equipamentos: pvState.equipamentos, rotinas: pvState.rotinas, testes: pvState.testes });
+      c.rotinas.forEach(r => { r.observacoes = ''; r.itens.forEach(i => { i.status = ''; }); });
+      c.testes.forEach(t => { t.observacoes = ''; t.grupos.forEach(g => g.linhas.forEach(l => { l.valor = ''; l.status = ''; })); });
+      salvarModelo('preventiva', {
+        ...c, obra: fval('pv-obra'), endereco: fval('pv-endereco'),
+        contratante: fval('f-contratante'), contratada: fval('f-contratada'), contrato: fval('f-contrato'),
+      }, 'pv-modelo');
+    });
+
+    function pvExtras() {
+      return {
+        estrutura: 'preventiva',
+        contratante: fval('f-contratante'), contratada: fval('f-contratada'),
+        obra: fval('pv-obra'), endereco: fval('pv-endereco'), modeloNome: pvNomeModelo,
+        equipamentos: pvState.equipamentos, rotinas: pvState.rotinas, testes: pvState.testes,
+      };
+    }
+
+    function formExtrasForSave() {
+      if (currentTipoRel() === 'preventiva') return pvExtras();
+      const ct = fval('f-contratante'), cd = fval('f-contratada');
+      const mudou = ct !== identificacao.contratante || cd !== identificacao.contratada;
+      if (!mudou && !formExtras) return null;
+      return { ...(formExtras || {}), contratante: ct, contratada: cd };
+    }
+
+    /* ---------------- preventiva: formulário (edição em lista) ---------------- */
+    const pvIn = (path, val, ph, cls) => `<input type="text" class="${cls || ''}" data-path="${path}" value="${escapeHtml(val || '')}" placeholder="${escapeHtml(ph || '')}">`;
+    const pvBtnStatus = (path, st) => `<button type="button" class="statusbtn ${st === 'OK' ? 'ok' : st === 'FALHA' ? 'nok' : ''}" data-act="cycle" data-path="${path}">${st || '—'}</button>`;
+    const pvBtnDel = (path, i) => `<button type="button" class="rm" data-act="del" data-path="${path}" data-i="${i}" title="Remover">×</button>`;
+    const pvBtnAdd = (path, kind, label) => `<button type="button" class="btn-sm" data-act="add" data-kind="${kind}" data-path="${path}">${label}</button>`;
+    const pvNum = (i) => String(i + 1).padStart(2, '0');
+
+    function pvRender() {
+      pvEl('pv-equip').innerHTML = pvState.equipamentos.map((e, i) => `
+        <div class="pv-row"><span class="pv-n">${pvNum(i)}</span>
+          ${pvIn(`equipamentos.${i}.descricao`, e.descricao, 'Descrição do equipamento')}
+          ${pvIn(`equipamentos.${i}.qtd`, e.qtd, 'Qtde', 'pv-sm')}
+          ${pvBtnDel('equipamentos', i)}</div>`).join('') + pvBtnAdd('equipamentos', 'equip', '+ Equipamento');
+
+      pvEl('pv-rotinas').innerHTML = pvState.rotinas.map((r, i) => `
+        <div class="pv-block">
+          <div class="pv-row"><b>Sistema</b>${pvIn(`rotinas.${i}.nome`, r.nome, 'Ex.: SOM GERAL')}
+            <button type="button" class="btn-sm" data-act="del" data-path="rotinas" data-i="${i}">Remover rotina</button></div>
+          ${r.itens.map((it, j) => `
+            <div class="pv-row"><span class="pv-n">${pvNum(j)}</span>
+              ${pvIn(`rotinas.${i}.itens.${j}.descricao`, it.descricao, 'Item de verificação')}
+              ${pvBtnStatus(`rotinas.${i}.itens.${j}.status`, it.status)}
+              ${pvBtnDel(`rotinas.${i}.itens`, j)}</div>`).join('')}
+          ${pvBtnAdd(`rotinas.${i}.itens`, 'item', '+ Item')}
+          <label style="margin-top:10px;">Observações desta rotina</label>
+          <textarea data-path="rotinas.${i}.observacoes" placeholder="Observações...">${escapeHtml(r.observacoes || '')}</textarea>
+        </div>`).join('');
+
+      pvEl('pv-testes').innerHTML = pvState.testes.map((t, i) => `
+        <div class="pv-block">
+          <div class="pv-row"><b>Teste</b>${pvIn(`testes.${i}.titulo`, t.titulo, 'Ex.: TESTE DE IMPEDÂNCIA DOS CIRCUITOS')}
+            ${pvIn(`testes.${i}.unidade`, t.unidade, 'Unidade (Ω, dB)', 'pv-sm')}
+            <button type="button" class="btn-sm" data-act="del" data-path="testes" data-i="${i}">Remover teste</button></div>
+          ${t.grupos.map((g, j) => `
+            <div class="pv-grp-box">
+              <div class="pv-row"><b>Grupo</b>${pvIn(`testes.${i}.grupos.${j}.nome`, g.nome, 'Ex.: CIRCUITOS SOM GERAL')}
+                <button type="button" class="btn-sm" data-act="del" data-path="testes.${i}.grupos" data-i="${j}">Remover grupo</button></div>
+              ${g.linhas.map((l, k) => `
+                <div class="pv-row">
+                  ${pvIn(`testes.${i}.grupos.${j}.linhas.${k}.circuito`, l.circuito, 'Circuito', 'pv-sm')}
+                  ${pvIn(`testes.${i}.grupos.${j}.linhas.${k}.setor`, l.setor, 'Setor')}
+                  ${pvIn(`testes.${i}.grupos.${j}.linhas.${k}.valor`, l.valor, t.unidade || 'Valor', 'pv-sm')}
+                  ${pvBtnStatus(`testes.${i}.grupos.${j}.linhas.${k}.status`, l.status)}
+                  ${pvBtnDel(`testes.${i}.grupos.${j}.linhas`, k)}</div>`).join('')}
+              ${pvBtnAdd(`testes.${i}.grupos.${j}.linhas`, 'linha', '+ Circuito')}
+            </div>`).join('')}
+          ${pvBtnAdd(`testes.${i}.grupos`, 'grupo', '+ Grupo de circuitos')}
+          <label style="margin-top:10px;">Observações deste teste</label>
+          <textarea data-path="testes.${i}.observacoes" placeholder="Observações...">${escapeHtml(t.observacoes || '')}</textarea>
+        </div>`).join('');
+    }
+
+    const PV_NOVO = {
+      equip: () => ({ descricao: '', qtd: '' }),
+      rotina: () => ({ nome: '', itens: [], observacoes: '' }),
+      item: () => ({ descricao: '', status: '' }),
+      teste: () => ({ titulo: '', unidade: '', grupos: [], observacoes: '' }),
+      grupo: () => ({ nome: '', linhas: [] }),
+      linha: () => ({ circuito: '', setor: '', valor: '', status: '' }),
+    };
+    const pvGet = (path) => path.split('.').reduce((o, k) => o[k], pvState);
+    const pvSet = (path, val) => { const ks = path.split('.'); const last = ks.pop(); ks.reduce((o, k) => o[k], pvState)[last] = val; };
+
+    const pvRoot = pvEl('grp-prev');
+    pvRoot.addEventListener('input', (e) => {
+      const p = e.target.dataset && e.target.dataset.path;
+      if (p) pvSet(p, e.target.value);
+    });
+    pvRoot.addEventListener('click', (e) => {
+      const b = e.target.closest('[data-act]');
+      if (!b) return;
+      const { act, path, kind, i } = b.dataset;
+      if (act === 'cycle') { const cur = pvGet(path); pvSet(path, cur === '' ? 'OK' : cur === 'OK' ? 'FALHA' : ''); }
+      else if (act === 'del') { pvGet(path).splice(Number(i), 1); }
+      else if (act === 'add') { pvGet(path).push(PV_NOVO[kind]()); }
+      pvRender();
+    });
+
+    // depois de "Limpar formulário" na preventiva
+    function pvAfterClear() {
+      renderTipos(TIPOS_PREV, ['Manutenção']);
+      pvLoadModelo(pvEl('pv-modelo').value);
+    }
+
+    // carrega um relatório preventivo salvo no formulário
+    function pvLoadFromRec(rec) {
+      const ex = rec.extras || {};
+      pvNomeModelo = rec.sistemaLabel || 'Manutenção preventiva';
+      pvEl('pv-obra').value = ex.obra || '';
+      pvEl('pv-endereco').value = ex.endereco || '';
+      pvState.equipamentos = pvClone(ex.equipamentos || []);
+      pvState.rotinas = pvClone(ex.rotinas || []);
+      pvState.testes = pvClone(ex.testes || []);
+      pvRender();
+    }
+
+    /* ---------------- preventiva: detalhe e PDF ---------------- */
+    function openPrevDetail(rec) {
+      const ex = rec.extras || {};
+      const E = escapeHtml;
+      const st = (s) => s === 'OK' ? '<span class="badge ok">OK</span>' : s === 'FALHA' ? '<span class="badge nok">FALHA</span>' : '<span class="badge">—</span>';
+      const linha = (a, b) => `<div style="display:flex;justify-content:space-between;gap:10px;padding:3px 0;border-bottom:1px solid var(--line);font-size:13px;"><span>${a}</span>${b}</div>`;
+      const secao = (titulo, corpo) => `<div style="margin-top:16px;"><b style="display:block;font-size:11px;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">${titulo}</b>${corpo}</div>`;
+
+      const equip = (ex.equipamentos || []).map((e, i) => linha(`${pvNum(i)} · ${E(e.descricao)}`, `<b>${E(e.qtd)}</b>`)).join('') || '<div>—</div>';
+      const rot = (ex.rotinas || []).map(r => `<div style="margin-top:10px;"><b>${E(r.nome || '')}</b>${(r.itens || []).map((it, j) => linha(`${pvNum(j)} · ${E(it.descricao)}`, st(it.status))).join('')}${r.observacoes ? `<div class="obs-box" style="margin-top:6px;">${E(r.observacoes)}</div>` : ''}</div>`).join('') || '<div>—</div>';
+      const tst = (ex.testes || []).map(t => `<div style="margin-top:10px;"><b>${E(t.titulo || '')}</b>${(t.grupos || []).map(g => `<div style="margin-top:6px;font-weight:600;font-size:12.5px;">${E(g.nome || '')}</div>${(g.linhas || []).map(l => linha(`${E(l.circuito)} · ${E(l.setor)} — <b>${E(l.valor || '')}</b> ${E(t.unidade || '')}`, st(l.status))).join('')}`).join('')}${t.observacoes ? `<div class="obs-box" style="margin-top:6px;">${E(t.observacoes)}</div>` : ''}</div>`).join('') || '<div>—</div>';
+      const fotos = (rec.fotos && rec.fotos.length) ? secao('Fotos', `<div class="photos-grid">${rec.fotos.map(p => `<div class="photo-card"><img src="${p.url}" alt="Foto" onclick="window.open('${p.url}', '_blank')">${p.legenda ? `<div style="padding:6px 8px;font-size:12px;color:#cfe9ec;">${E(p.legenda)}</div>` : ''}</div>`).join('')}</div>`) : '';
+
+      const modal = document.getElementById('modal-content');
+      modal.innerHTML = `
+        <button class="close" id="modal-close">&times;</button>
+        <h3>Relatório preventivo de ${fmtDate(rec.data)}</h3>
+        <div class="meta">${E(rec.sistemaLabel || '')} · Contrato ${E(rec.contrato || '—')}</div>
+        <div class="kv">
+          <div><b>Cliente</b>${E(ex.contratante || '—')}</div>
+          <div><b>Obra</b>${E(ex.obra || '—')}</div>
+          <div><b>Endereço</b>${E(ex.endereco || '—')}</div>
+          <div><b>Técnico responsável</b>${E(rec.tecnico || '—')}</div>
+          <div><b>Tipo de atendimento</b>${E((rec.tipoManutencao || []).join(', ') || '—')}</div>
+          <div><b>Chegada / saída</b>${E(rec.horaChegada || '—')} / ${E(rec.horaSaida || '—')}</div>
+        </div>
+        ${secao('Equipamentos instalados', equip)}
+        ${secao('Rotinas de manutenção', rot)}
+        ${secao('Testes de circuitos', tst)}
+        ${rec.observacoes ? secao('Observações gerais', `<div class="obs-box">${E(rec.observacoes)}</div>`) : ''}
+        ${fotos}
+        <div class="btn-row">
+          ${currentUser && currentUser.canEditReports ? '<button class="btn-primary" id="modal-edit">Editar</button>' : ''}
+          <button class="btn-primary" id="modal-pdf">Exportar PDF</button>
+          ${currentUser && currentUser.canDeleteReports ? '<button class="btn-ghost" id="modal-delete">Excluir</button>' : ''}
+        </div>`;
+      document.getElementById('overlay').classList.add('active');
+      document.getElementById('modal-close').addEventListener('click', closeModal);
+      const editBtn = document.getElementById('modal-edit');
+      if (editBtn) editBtn.addEventListener('click', () => { closeModal(); loadIntoForm(rec); });
+      const delBtn = document.getElementById('modal-delete');
+      if (delBtn) delBtn.addEventListener('click', () => deleteReport(rec.id));
+      document.getElementById('modal-pdf').addEventListener('click', () => exportReportPDF(rec));
+    }
+
+    function exportPrevPDF(rec) {
+      const ex = rec.extras || {};
+      const E = escapeHtml;
+      const rotinas = ex.rotinas || [], testes = ex.testes || [], fotos = rec.fotos || [];
+      const POR_PAGINA = 4;
+      const total = 1 + rotinas.length + testes.length + Math.ceil(fotos.length / POR_PAGINA);
+      let n = 0;
+      const pagina = (inner) => {
+        n++;
+        return `<div class="parecer-page">
+          <img class="header-img" src="img/parecer-header.png" alt="" crossorigin="anonymous">
+          <div class="parecer-body">${inner}</div>
+          <div class="pv-pageno">Página <b>${n}</b> de <b>${total}</b></div>
+          <img class="footer-img" src="img/parecer-footer.png" alt="" crossorigin="anonymous">
+        </div>`;
+      };
+      const X = (marcado) => marcado ? '<b>X</b>' : '&nbsp;&nbsp;';
+      const sel = rec.tipoManutencao || [];
+      const caixa = `<table class="pv-box">
+        <tr><td colspan="3"><b>${E(ex.obra || '')}</b>${ex.endereco ? '<br>' + E(ex.endereco) : ''}</td></tr>
+        <tr><td colspan="3" class="pv-tipos">${TIPOS_PREV.map(([v, l]) => `<span>[${X(sel.includes(v))}] ${E(l)}</span>`).join('')}</td></tr>
+        <tr><td>Data: <b>${fmtDate(rec.data)}</b></td><td>Hora de chegada: <b>${E(rec.horaChegada || '')}</b></td><td>Hora de saída: <b>${E(rec.horaSaida || '')}</b></td></tr>
+        <tr><td colspan="3">Responsável técnico da visita: <b>${E(rec.tecnico || '')}</b></td></tr>
+      </table>`;
+      const assin = `<div class="pv-sign"><div><b>${E(rec.vistoTecnico || '')}</b>Visto do Responsável</div><div><b>${E(rec.vistoCliente || '')}</b>Visto do Cliente</div></div>`;
+
+      const paginas = [];
+      paginas.push(pagina(`
+        <div class="pv-cover-title">CONTRATO DE MANUTENÇÃO PREVENTIVA</div>
+        ${rec.contrato ? `<div class="pv-sub">Contrato nº ${E(rec.contrato)}</div>` : ''}
+        <div class="pv-cover-l">CLIENTE: ${E(ex.contratante || '')}</div>
+        <div class="pv-cover-l">OBRA: ${E(ex.obra || '')}</div>
+        <div class="pv-cover-s">RELAÇÃO DE EQUIPAMENTOS INSTALADOS</div>
+        <table class="pv-table"><thead><tr><th class="n">ITEM</th><th>DESCRIÇÃO</th><th class="q">QTE</th></tr></thead><tbody>
+          ${(ex.equipamentos || []).map((e, i) => `<tr><td class="n">${pvNum(i)}</td><td>${E(e.descricao)}</td><td class="q">${E(e.qtd)}</td></tr>`).join('')}
+        </tbody></table>
+        ${rec.observacoes ? `<div class="pv-grp" style="text-align:left;">Observações gerais</div><div class="pv-obs">${E(rec.observacoes)}</div>` : ''}`));
+
+      rotinas.forEach((r) => {
+        const nome = E((r.nome || '').toUpperCase());
+        paginas.push(pagina(`
+          <div class="pv-title">ROTINA DE MANUTENÇÃO DOS SISTEMAS (${nome})</div>
+          <div class="pv-sub">RELATÓRIO DE VISITA</div>
+          ${caixa}
+          <div class="pv-sys">SISTEMA: ${nome}</div>
+          <table class="pv-table"><tbody>
+            ${(r.itens || []).map((it, j) => `<tr><td class="n">${pvNum(j)}</td><td>${E(it.descricao)}</td><td class="st">[${X(it.status === 'OK')}] OK</td><td class="st">FALHA [${X(it.status === 'FALHA')}]</td></tr>`).join('')}
+          </tbody></table>
+          <div class="pv-obs"><b>Observações</b><br>${E(r.observacoes || '')}</div>
+          ${assin}`));
+      });
+
+      testes.forEach((t) => {
+        paginas.push(pagina(`
+          <div class="pv-title">${E((t.titulo || '').toUpperCase())}</div>
+          ${caixa}
+          ${(t.grupos || []).map(g => `
+            <div class="pv-grp">${E(g.nome || '')}</div>
+            <table class="pv-table"><thead><tr><th>CIRCUITO</th><th>SETOR</th><th>VALOR MEDIDO</th><th style="width:150px;">&nbsp;</th></tr></thead><tbody>
+              ${(g.linhas || []).map(l => `<tr><td>${E(l.circuito)}</td><td>${E(l.setor)}</td><td>${E(t.unidade || '')} <span class="pv-line">${E(l.valor || '')}</span></td><td style="white-space:nowrap;">[${X(l.status === 'OK')}] OK &nbsp; FALHA [${X(l.status === 'FALHA')}]</td></tr>`).join('')}
+            </tbody></table>`).join('')}
+          ${t.observacoes ? `<div class="pv-obs"><b>Observações</b><br>${E(t.observacoes)}</div>` : ''}
+          ${assin}`));
+      });
+
+      for (let i = 0; i < fotos.length; i += POR_PAGINA) {
+        const grupo = fotos.slice(i, i + POR_PAGINA);
+        paginas.push(pagina(`
+          <div class="parecer-subtitle">ANEXO — REGISTRO FOTOGRÁFICO</div>
+          <div class="parecer-fotos">
+            ${grupo.map((f, k) => `
+              <div class="parecer-foto">
+                <div class="imgbox"><img src="${f.url}" alt="" crossorigin="anonymous"></div>
+                <div class="cap">Foto ${i + k + 1}${f.legenda ? ' — ' + E(f.legenda) : ''}</div>
+              </div>`).join('')}
+          </div>`));
+      }
+
+      gerarPDFDireto(
+        paginas,
+        `preventiva-${rec.data || 'relatorio'}-${E(ex.obra || '')}`.replace(/[^a-zA-Z0-9-_]/g, '_'),
+        'portrait',
+        true
+      );
+    }
+
+    aplicarTipoRel();
+    pvRender();
 
     initAuth();
 
@@ -3040,10 +4104,11 @@
     state.items = [...PRESETS['AP-PMV01'].items];
     state.locais = [...PRESETS['AP-PMV01'].locais];
     state.photoFolderId = crypto.randomUUID();
+    ptState.photoFolderId = crypto.randomUUID();
     renderChips();
     renderTable();
   </script>
-<h6>@2026 Desenvolvido por; Ruberlandio Oliveira. E-mail: ruberlandio.oliveira2@gmail.com</h6>
+  <h6>@2026 Desenvolvido por; Ruberlandio Oliveira. E-mail: ruberlandio.oliveira2@gmail.com</h6>
 </body>
 
 </html>
