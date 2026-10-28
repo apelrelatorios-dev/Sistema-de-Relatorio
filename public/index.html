@@ -12,1558 +12,15 @@
   <link
     href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap"
     rel="stylesheet">
-  <style>
-    :root {
-      --ink: #0a39a0;
-      --ink-2: #181761;
-      --bg: #EEF2F6;
-      --card: #FFFFFF;
-      --line: #DCE3EA;
-      --text: #1B2430;
-      --muted: #000000;
-      --cyan: #15a328;
-      --cyan-dark: #0C6E76;
-      --ok: #036420;
-      --ok-bg: #62b376;
-      --nok: #C6303E;
-      --nok-bg: #FCE8E9;
-      --amber: #B8790C;
-      --amber-bg: #FBF1DE;
-      --radius: 10px;
-    }
+  <link rel="stylesheet" href="style.css">
 
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      background-image: url('img/WhatsApp%20Image%202026-01-09%20at%2015.01.00.jpeg');
-      /* background: var(--bg);*/
-      color: var(--text);
-      font-family: 'Inter', system-ui, sans-serif;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    .mono {
-      font-family: 'IBM Plex Mono', monospace;
-    }
-
-    /* ---------- header / led band ---------- */
-    .ledband {
-      background:
-        radial-gradient(circle, rgba(21, 154, 163, 0.35) 1px, transparent 1.4px) 0 0/14px 14px,
-        linear-gradient(120deg, #0A1E36 0%, var(--ink) 55%, #0A2A3E 100%);
-      color: #EAF6F7;
-      padding: 22px 28px 20px;
-      border: 2px solid rgb(255, 255, 255);
-    }
-
-    .ledband .top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    #app-logo {
-      height: 42px;
-      max-width: 120px;
-      object-fit: contain;
-      border-radius: 4px;
-    }
-
-    .userbox {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-left: 16px;
-      font-size: 13px;
-      color: #cfe9ec;
-    }
-
-    .userbox button {
-      font-size: 12px;
-      padding: 6px 10px;
-    }
-
-    .auth-overlay {
-      position: fixed;
-      inset: 0;
-      background:
-        radial-gradient(circle, rgba(21, 154, 163, 0.35) 1px, transparent 1.4px) 0 0/14px 14px,
-        linear-gradient(160deg, #0A1E36 0%, var(--ink-2) 45%, #0A2A3E 100%);
-      z-index: 999;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .auth-card {
-      width: 100%;
-      max-width: 360px;
-      background: #0a0a7c;
-      border: 1px solid rgb(255, 255, 255);
-      border-radius: 10px;
-      padding: 28px;
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-    }
-
-    .auth-card h2 {
-      margin: 0 0 6px;
-      font-size: 18px;
-      color: #ffffff;
-      text-align: center;
-    }
-
-    h6 {
-      color: #ffffff;
-      text-align: center;
-      margin-bottom: 25px;
-      font-size: 16px;
-      letter-spacing: 1px;
-    }
-
-    .auth-card p.sub {
-      margin: 0 0 18px;
-      font-size: 13px;
-      color: #ffffff;
-      text-align: center;
-    }
-
-    .auth-card label {
-      display: block;
-      font-size: 12px;
-      color: #ffffff;
-      margin: 12px 0 4px;
-    }
-
-    .auth-card input {
-      width: 100%;
-      padding: 10px 12px;
-      border-radius: 6px;
-      border: 1px solid rgb(247, 244, 244);
-      background: #252c2c;
-      color: #fff;
-      font-size: 14px;
-      box-sizing: border-box;
-    }
-
-    .auth-card .err {
-      color: #ff8080;
-      font-size: 13px;
-      margin-top: 10px;
-      min-height: 16px;
-    }
-
-    .auth-card button.submit {
-      margin-top: 18px;
-      width: 100%;
-      padding: 11px;
-      border-radius: 6px;
-      border: none;
-      background: #105525
-        /*var(--cyan)*/
-      ;
-      color: #ffffff;
-      font-weight: 700;
-      cursor: pointer;
-      font: size 18px;
-      px;
-    }
-
-    .auth-card button.submit:hover {
-      background: #029e0a;
-    }
-
-    .userstable {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 14px;
-      font-size: 13px;
-    }
-
-    .userstable th,
-    .userstable td {
-      text-align: left;
-      padding: 8px 10px;
-      border-bottom: 1px solid rgba(37, 35, 35, 0.1);
-    }
-
-    .userstable th {
-      color: #9fc3c7;
-      font-weight: 600;
-      font-size: 12px;
-      text-transform: uppercase;
-    }
-
-    .audit-pager {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-top: 14px;
-    }
-
-    .audit-pager .btn-sm:disabled {
-      opacity: .4;
-      cursor: not-allowed;
-    }
-
-    .audit-pager .btn-sm:disabled:hover {
-      background: #fff;
-      color: var(--ink);
-    }
-
-    .badge-admin {
-      background: var(--cyan);
-      color: #08262A;
-      font-size: 11px;
-      padding: 2px 7px;
-      border-radius: 10px;
-      font-weight: 700;
-    }
-
-    .logo-preview-box {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      margin-top: 10px;
-    }
-
-    .logo-preview-box img {
-      height: 60px;
-      max-width: 160px;
-      object-fit: contain;
-      background: #fff;
-      border-radius: 6px;
-      padding: 6px;
-    }
-
-    /* Impressão / PDF (paisagem, A4) */
-    #print-area {
-      display: none;
-    }
-
-    @media print {
-      body * {
-        visibility: hidden;
-      }
-
-      #print-area,
-      #print-area * {
-        visibility: visible;
-      }
-
-      #print-area {
-        display: block;
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        background: #fff;
-        color: #111;
-      }
-
-      @page {
-        size: A4 landscape;
-        margin: 10mm;
-      }
-    }
-
-    .print-page {
-      font-family: 'Inter', Arial, sans-serif;
-      color: #111;
-      font-size: 14px;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .print-header {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      border-bottom: 2px solid #111;
-      padding-bottom: 10px;
-      margin-bottom: 12px;
-    }
-
-    .print-header img {
-      height: 56px;
-      max-width: 150px;
-      object-fit: contain;
-    }
-
-    .print-header .titles {
-      flex: 1;
-    }
-
-    .print-header .titles h1 {
-      margin: 0;
-      font-size: 21px;
-    }
-
-    .print-header .titles p {
-      margin: 3px 0 0;
-      font-size: 13.5px;
-      color: #444;
-    }
-
-    .print-header .client-logo {
-      margin-left: auto;
-    }
-
-    .print-static {
-      font-size: 12px;
-      color: #333;
-      margin-bottom: 12px;
-      line-height: 1.5;
-    }
-
-    .print-kv {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 8px 20px;
-      font-size: 14px;
-      margin-bottom: 14px;
-    }
-
-    .print-kv div b {
-      display: block;
-      font-size: 10.5px;
-      text-transform: uppercase;
-      color: #555;
-      font-weight: 700;
-      margin-bottom: 1px;
-    }
-
-    .print-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 13.5px;
-      margin-bottom: 14px;
-    }
-
-    .print-table th,
-    .print-table td {
-      border: 1px solid #999;
-      padding: 8px 8px;
-      text-align: center;
-    }
-
-    .print-table th {
-      background: #eee;
-      font-size: 13px;
-    }
-
-    .print-table td.itemcell {
-      text-align: left;
-    }
-
-    .print-obs {
-      font-size: 13px;
-      border: 1px solid #999;
-      border-radius: 4px;
-      padding: 10px 12px;
-      margin-bottom: 0;
-      min-height: 50px;
-      white-space: pre-wrap;
-    }
-
-    .print-spacer {
-      flex: 1 1 auto;
-    }
-
-    .print-signatures {
-      display: flex;
-      justify-content: space-between;
-      gap: 60px;
-      margin-top: 85px;
-      padding-bottom: 6px;
-    }
-
-    .print-signatures .sig {
-      flex: 1;
-      text-align: center;
-      font-size: 13px;
-    }
-
-    .print-signatures .sig .line {
-      border-top: 1px solid #111;
-      margin-bottom: 6px;
-      padding-top: 8px;
-    }
-
-    .parecer-page {
-      font-family: 'Inter', Arial, sans-serif;
-      color: #111;
-      font-size: 13px;
-      line-height: 1.5;
-      position: relative;
-      min-height: 1120px;
-      padding-bottom: 96px;
-      box-sizing: border-box;
-    }
-
-    .parecer-page .header-img {
-      display: block;
-      width: 100%;
-      margin: 0 0 4px;
-    }
-
-    .parecer-page .parecer-body {
-      padding: 0 54px;
-    }
-
-    .parecer-page .footer-img {
-      display: block;
-      width: 100%;
-      position: absolute;
-      left: 0;
-      bottom: 0;
-    }
-
-    .parecer-fotos {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-      margin-top: 6px;
-    }
-
-    .parecer-foto .imgbox {
-      height: 300px;
-      background: #f2f2f2;
-      border: 1px solid #ccc;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-    }
-
-    .parecer-foto .imgbox img {
-      max-width: 100%;
-      max-height: 100%;
-      object-fit: contain;
-    }
-
-    .parecer-foto .cap {
-      font-size: 11.5px;
-      text-align: center;
-      margin-top: 4px;
-      color: #333;
-    }
-
-    .parecer-title {
-      text-align: center;
-      font-weight: 700;
-      font-size: 14px;
-      margin-bottom: 18px;
-    }
-
-    .parecer-subtitle {
-      text-align: center;
-      font-weight: 700;
-      font-size: 16px;
-      margin-bottom: 20px;
-    }
-
-    .parecer-dest {
-      text-align: center;
-      font-size: 13px;
-      margin-bottom: 22px;
-    }
-
-    .parecer-section {
-      margin-bottom: 16px;
-      padding: 0 8px;
-    }
-
-    .parecer-section b {
-      display: block;
-      font-size: 14px;
-      margin-bottom: 6px;
-    }
-
-    .parecer-section p {
-      margin: 4px 0 8px;
-    }
-
-    .parecer-section>div {
-      margin: 2px 0;
-    }
-
-    .parecer-sign {
-      text-align: center;
-      margin-top: 40px;
-      font-size: 13.5px;
-    }
-
-    /* .brand-mark{
-    font-family:'IBM Plex Mono',monospace; font-weight:700; letter-spacing:2px;
-    background:#b11d1d; color:#ffffff; padding:6px 10px; border-radius:4px;
-    font-size:13px; border:1px solid #1d752c;
-    text-shadow:0 0 6px rgba(63,224,122,0.7);
-  }*/
-    /* .ledband h1{
-    margin:0; font-size:19px; font-weight:700; letter-spacing:0.3px;
-  }*/
-    .ledband p {
-      margin: 2px 0 0;
-      font-size: 12.5px;
-      color: #ffffff;
-    }
-
-    .tabs {
-      display: flex;
-      gap: 8px;
-    }
-
-    .tab-btn {
-      appearance: none;
-      border: 1px solid rgb(255, 255, 255);
-      background: rgba(255, 255, 255, 0.06);
-      color: #DCEEF0;
-      padding: 9px 16px;
-      border-radius: 8px;
-      font-size: 13.5px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: .15s;
-    }
-
-    .tab-btn:hover {
-      background: rgb(3, 139, 55);
-    }
-
-    .tab-btn.active {
-      background: rgb(3, 78, 139);
-      ;
-      border-color: rgb(254, 255, 255);
-      color: #ffffff;
-    }
-
-    .tab-btn.active:hover {
-      background: rgb(3, 139, 55);
-    }
-
-    main {
-      max-width: 1180px;
-      margin: 0 auto;
-      padding: 24px 20px 64px;
-    }
-
-    .panel {
-      display: none;
-    }
-
-    .panel.active {
-      display: block;
-    }
-
-    .card {
-      background: var(--card);
-      border: 3px solid #a1a1a1;
-      /*var(--line)*/
-      ;
-      border-radius: var(--radius);
-      padding: 20px 22px;
-      margin-bottom: 18px;
-    }
-
-    .card h2 {
-      margin: 0 0 14px;
-      font-size: 18px;
-      letter-spacing: .4px;
-      color: var(--ink);
-      text-transform: uppercase;
-    }
-
-    .card h2 .num {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 20px;
-      height: 20px;
-      background: var(--ink);
-      color: #fff;
-      border-radius: 5px;
-      font-size: 11px;
-      margin-right: 8px;
-      font-family: 'IBM Plex Mono', monospace;
-      border: 1px solid #000000;
-    }
-
-
-    .grid2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-
-    }
-
-    .grid3 {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 14px;
-    }
-
-    @media(max-width:720px) {
-
-      .grid2,
-      .grid3 {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    /* ================= Responsivo (celular) ================= */
-    @media (max-width: 640px) {
-      html {
-        -webkit-text-size-adjust: 100%;
-      }
-
-      body {
-        overflow-x: hidden;
-      }
-
-      input[type=text],
-      input[type=date],
-      input[type=time],
-      select,
-      textarea {
-        font-size: 16px;
-        /* evita zoom automático no iOS ao focar */
-      }
-
-      .ledband {
-        padding: 14px 14px 12px;
-      }
-
-      .ledband .top {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 10px;
-      }
-
-      .brand {
-        gap: 10px;
-      }
-
-      .brand h1 {
-        font-size: 15px;
-      }
-
-      .brand p {
-        font-size: 11px;
-      }
-
-      #app-logo,
-      #brand-mark {
-        height: 34px;
-      }
-
-      .tabs {
-        gap: 6px;
-      }
-
-      .tab-btn {
-        flex: 1;
-        padding: 9px 6px;
-        font-size: 12px;
-        text-align: center;
-      }
-
-      .userbox {
-        margin-left: 0;
-        justify-content: space-between;
-      }
-
-      main {
-        padding: 14px 10px 48px;
-      }
-
-      .card {
-        padding: 14px 14px;
-        margin-bottom: 12px;
-      }
-
-      .card h2 {
-        font-size: 13px;
-      }
-
-      .btn-row {
-        gap: 8px;
-      }
-
-      .btn-primary,
-      .btn-ghost {
-        flex: 1;
-        min-width: 120px;
-        padding: 11px 10px;
-        font-size: 13px;
-        text-align: center;
-      }
-
-      .searchbar {
-        gap: 8px;
-      }
-
-      .searchbar .field {
-        min-width: 100%;
-      }
-
-      .rcard {
-        padding: 11px 12px;
-      }
-
-      .rcard .right {
-        width: 100%;
-        justify-content: flex-start;
-      }
-
-      .overlay {
-        padding: 0;
-        align-items: stretch;
-      }
-
-      .modal {
-        max-width: 100%;
-        min-height: 100%;
-        border-radius: 0;
-        padding: 18px 14px 26px;
-      }
-
-      .modal .close {
-        top: 12px;
-        right: 12px;
-        font-size: 24px;
-        padding: 4px 8px;
-      }
-
-      .modal h3 {
-        font-size: 16px;
-        padding-right: 30px;
-      }
-
-      .kv {
-        grid-template-columns: 1fr;
-        gap: 10px;
-      }
-
-      .auth-card {
-        max-width: 100%;
-        padding: 22px 18px;
-      }
-
-      .userstable {
-        min-width: 480px;
-      }
-
-      .userstable-wrap {
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-      }
-
-      .logo-preview-box {
-        flex-wrap: wrap;
-      }
-
-      .add-user-form.grid3,
-      #add-user-form {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    label {
-      display: block;
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--muted);
-      margin-bottom: 5px;
-      text-transform: uppercase;
-      letter-spacing: .3px;
-
-    }
-
-    input[type=text],
-    input[type=date],
-    input[type=time],
-    select,
-    textarea {
-      width: 100%;
-      padding: 9px 11px;
-      border: 1px solid var(--line);
-      border-radius: 7px;
-      font-size: 14px;
-      font-family: 'Inter', sans-serif;
-      color: var(--text);
-      background: #FCFDFE;
-    }
-
-    textarea {
-      resize: vertical;
-      min-height: 70px;
-      font-family: 'Inter', sans-serif;
-    }
-
-    input:focus,
-    select:focus,
-    textarea:focus {
-      outline: 2px solid var(--cyan);
-      outline-offset: 1px;
-      border-color: var(--cyan);
-    }
-
-    .field {
-      margin-bottom: 14px;
-    }
-
-    .checkrow {
-      display: flex;
-      gap: 18px;
-      flex-wrap: wrap;
-    }
-
-    .checkitem {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 13.5px;
-    }
-
-    .staticinfo {
-      font-size: 13px;
-      color: var(--muted);
-      line-height: 1.6;
-      background: #F7F9FB;
-      border: 1px dashed var(--line);
-      border-radius: 8px;
-      padding: 10px 12px;
-    }
-
-    .staticinfo b {
-      color: var(--text);
-    }
-
-    /* chips */
-    .chiprow {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 8px;
-    }
-
-    .chip {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      background: #eaecec;
-      color: var(--cyan-dark);
-      border: 1px solid #f0e3e3;
-      padding: 5px 8px 5px 12px;
-      border-radius: 20px;
-      font-size: 13px;
-    }
-
-    .chip button {
-      background: none;
-      border: none;
-      color: var(--cyan-dark);
-      cursor: pointer;
-      font-size: 14px;
-      line-height: 1;
-      padding: 2px 4px;
-      border-radius: 50%;
-    }
-
-    .chip button:hover {
-      background: #CFE6E8;
-    }
-
-    .addrow {
-      display: flex;
-      gap: 8px;
-      margin-top: 6px;
-    }
-
-    .addrow input {
-      flex: 1;
-    }
-
-    .btn-sm {
-      padding: 9px 14px;
-      border-radius: 7px;
-      border: 1px solid var(--line);
-      background: #fff;
-      cursor: pointer;
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--ink);
-      white-space: nowrap;
-    }
-
-    .btn-sm:hover {
-      background: #29af08;
-      color: #fff
-    }
-
-    /* checklist table */
-    .table-wrap {
-      overflow-x: auto;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-    }
-
-    table.chk {
-      border-collapse: collapse;
-      width: 100%;
-      min-width: 560px;
-    }
-
-    table.chk th,
-    table.chk td {
-      border-bottom: 1px solid var(--line);
-      border-right: 1px solid var(--line);
-      padding: 0;
-    }
-
-    table.chk th:last-child,
-    table.chk td:last-child {
-      border-right: none;
-    }
-
-    table.chk thead th {
-      background: var(--ink);
-      color: #fff;
-      font-size: 12px;
-      font-weight: 600;
-      padding: 9px 10px;
-      text-align: left;
-      position: sticky;
-      top: 0;
-    }
-
-    table.chk thead th.itemcol {
-      min-width: 260px;
-    }
-
-    table.chk tbody td.itemcell {
-      padding: 9px 10px;
-      font-size: 13px;
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 6px;
-      background: #FBFCFD;
-    }
-
-    table.chk tbody td.itemcell .rm {
-      background: none;
-      border: none;
-      color: #B7C0C8;
-      cursor: pointer;
-      font-size: 14px;
-      flex-shrink: 0;
-    }
-
-    table.chk tbody td.itemcell .rm:hover {
-      color: var(--nok);
-    }
-
-    .statuscell {
-      width: 96px;
-      text-align: center;
-    }
-
-    .statusbtn {
-      width: 100%;
-      height: 100%;
-      min-height: 38px;
-      border: none;
-      cursor: pointer;
-      font-size: 12px;
-      font-weight: 700;
-      font-family: 'IBM Plex Mono', monospace;
-      letter-spacing: .5px;
-      background: #fff;
-      color: #B7C0C8;
-      padding: 9px 4px;
-    }
-
-    .statusbtn.ok {
-      background: var(--ok-bg);
-      color: var(--ok);
-    }
-
-    .statusbtn.nok {
-      background: var(--nok-bg);
-      color: var(--nok);
-    }
-
-    .statusbtn:hover {
-      filter: brightness(0.97);
-    }
-
-    .btn-row {
-      display: flex;
-      gap: 10px;
-      margin-top: 18px;
-      flex-wrap: wrap;
-      align-items: center;
-    }
-
-    .btn-primary {
-      background: rgb(162, 183, 241);
-      ;
-      color: #000000;
-      border: 1px solid #0c0c0c;
-      padding: 11px 22px;
-      border-radius: 8px;
-      font-weight: 700;
-      font-size: 14px;
-      cursor: pointer;
-    }
-
-    .btn-primary:hover {
-      background: rgb(3, 139, 55);
-      ;
-      color: #fff;
-    }
-
-    .btn-ghost {
-      background: color(srgb 255 255 255);
-      border: 1px solid var(--line);
-      padding: 11px 18px;
-      border-radius: 8px;
-      font-weight: 600;
-      font-size: 14px;
-      cursor: pointer;
-      color: var(--muted);
-    }
-
-    .btn-ghost:hover {
-      background: #cf1212;
-      color: #ffff
-    }
-
-    .hint {
-      font-size: 12.5px;
-      color: var(--muted);
-      margin-top: 4px;
-    }
-
-    /* ---- fotos das avarias ---- */
-    .photos-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-      gap: 12px;
-      margin-top: 14px;
-    }
-
-    .photo-card {
-      position: relative;
-      background: #06181a;
-      border: 1px solid #14383c;
-      border-radius: 8px;
-      overflow: hidden;
-    }
-
-    .photo-card img {
-      width: 100%;
-      height: 110px;
-      object-fit: cover;
-      display: block;
-      cursor: pointer;
-    }
-
-    .photo-card input {
-      width: 100%;
-      border: none;
-      background: transparent;
-      color: #cfe9ec;
-      font-size: 12px;
-      padding: 6px 8px;
-      box-sizing: border-box;
-    }
-
-    .photo-card .remove-photo {
-      position: absolute;
-      top: 4px;
-      right: 4px;
-      background: rgba(0, 0, 0, .65);
-      color: #fff;
-      border: none;
-      border-radius: 50%;
-      width: 22px;
-      height: 22px;
-      cursor: pointer;
-      font-size: 13px;
-      line-height: 1;
-    }
-
-    .print-photos-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-      margin-top: 8px;
-    }
-
-    .print-photos-grid img {
-      width: 100%;
-      height: 120px;
-      object-fit: cover;
-      border-radius: 4px;
-      border: 1px solid #ccc;
-    }
-
-    .print-photos-grid .cap {
-      font-size: 10px;
-      color: #444;
-      text-align: center;
-      margin-top: 2px;
-    }
-
-    /* ---- search / list ---- */
-    .searchbar {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      align-items: flex-end;
-    }
-
-    .searchbar .field {
-      margin-bottom: 0;
-      flex: 1;
-      min-width: 150px;
-    }
-
-    .reportlist {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-top: 16px;
-    }
-
-    .rcard {
-      border: 1px solid #0c0c0c;
-      border-radius: 9px;
-      padding: 13px 16px;
-      background: #fff;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 14px;
-      flex-wrap: wrap;
-      cursor: pointer;
-      transition: .12s;
-    }
-
-    .rcard:hover {
-      border-color:
-        /*var(--cyan)*/
-        #0fdb20;
-      box-shadow: 0 1px 6px rgba(21, 154, 163, 0.12);
-    }
-
-    .rcard .left {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .rcard .title {
-      font-weight: 700;
-      font-size: 14.5px;
-      color: var(--ink);
-    }
-
-    .rcard .sub {
-      font-size: 12.5px;
-      color: var(--muted);
-    }
-
-    .badge {
-      font-size: 11px;
-      font-weight: 700;
-      padding: 4px 9px;
-      border-radius: 20px;
-      font-family: 'IBM Plex Mono', monospace;
-    }
-
-    .badge.ok {
-      background: var(--ok-bg);
-      color: var(--ok);
-    }
-
-    .badge.nok {
-      background: var(--nok-bg);
-      color: var(--nok);
-    }
-
-    .badge.tipo {
-      background: #EAF0FE;
-      color: #2A4CAE;
-    }
-
-    .rcard .right {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-    }
-
-    .empty {
-      text-align: center;
-      padding: 40px 20px;
-      color: var(--muted);
-      font-size: 14px;
-    }
-
-    /* modal detail */
-    .overlay {
-      position: fixed;
-      inset: 0;
-      background: rgb(245, 241, 241);
-      display: none;
-      align-items: flex-start;
-      justify-content: center;
-      padding: 40px 16px;
-      overflow-y: auto;
-      z-index: 50;
-    }
-
-    .overlay.active {
-      display: flex;
-    }
-
-    .modal {
-      background: #ebe8e8;
-      border-radius: 12px;
-      max-width: 820px;
-      width: 100%;
-      padding: 26px 28px;
-      position: relative;
-    }
-
-    .modal .close {
-      position: absolute;
-      top: 16px;
-      right: 18px;
-      background: none;
-      border: none;
-      font-size: 20px;
-      cursor: pointer;
-      color: var(--muted);
-    }
-
-    .modal h3 {
-      margin: 0 0 4px;
-      color: var(--ink);
-      font-size: 18px;
-    }
-
-    .modal .meta {
-      font-size: 12.5px;
-      color: var(--muted);
-      margin-bottom: 16px;
-    }
-
-    .kv {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px 20px;
-      font-size: 13.5px;
-      margin-bottom: 16px;
-    }
-
-    .kv div b {
-      display: block;
-      font-size: 11px;
-      text-transform: uppercase;
-      color: var(--muted);
-      font-weight: 600;
-      margin-bottom: 2px;
-    }
-
-    .obs-box {
-      background: #F7F9FB;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      padding: 10px 12px;
-      font-size: 13.5px;
-      white-space: pre-wrap;
-      margin-bottom: 16px;
-    }
-
-    /* ---------- Relatório preventivo: formulário ---------- */
-    .pv-h {
-      margin: 24px 0 8px;
-      font-size: 14px;
-      color: var(--ink);
-      text-transform: uppercase;
-      letter-spacing: .3px;
-    }
-
-    .pv-block {
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      padding: 12px;
-      margin: 10px 0;
-      background: #fcfdfe;
-    }
-
-    .pv-grp-box {
-      border: 1px dashed var(--line);
-      border-radius: 8px;
-      padding: 10px;
-      margin: 10px 0;
-      background: #fff;
-    }
-
-    .pv-row {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-      margin: 5px 0;
-    }
-
-    .pv-row input[type=text] {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .pv-row input.pv-sm {
-      flex: none;
-      width: 130px;
-    }
-
-    .pv-row .pv-n {
-      flex: none;
-      width: 26px;
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 12px;
-      color: var(--muted);
-    }
-
-    .pv-row .statusbtn {
-      flex: none;
-      width: 82px;
-      min-height: 36px;
-      border: 1px solid var(--line);
-      border-radius: 6px;
-    }
-
-    .pv-row .rm {
-      flex: none;
-      background: none;
-      border: none;
-      color: #B7C0C8;
-      cursor: pointer;
-      font-size: 20px;
-      line-height: 1;
-      padding: 0 4px;
-    }
-
-    .pv-row .rm:hover {
-      color: var(--nok);
-    }
-
-    @media (max-width: 640px) {
-      .pv-row {
-        flex-wrap: wrap;
-      }
-
-      .pv-row input.pv-sm {
-        width: 100px;
-      }
-    }
-
-    /* ---------- Relatório preventivo: páginas do PDF ---------- */
-    .pv-pageno {
-      position: absolute;
-      right: 54px;
-      bottom: 92px;
-      font-size: 11.5px;
-      color: #333;
-    }
-
-    .pv-title {
-      text-align: center;
-      font-weight: 700;
-      font-size: 14px;
-      margin: 12px 0 4px;
-    }
-
-    .pv-sub {
-      text-align: center;
-      font-weight: 700;
-      font-size: 12.5px;
-      margin-bottom: 10px;
-    }
-
-    .pv-cover-title {
-      text-align: center;
-      font-weight: 700;
-      font-size: 16px;
-      margin: 40px 0 30px;
-    }
-
-    .pv-cover-l {
-      text-align: center;
-      font-weight: 700;
-      font-size: 14px;
-      margin-bottom: 18px;
-    }
-
-    .pv-cover-s {
-      text-align: center;
-      font-weight: 700;
-      font-size: 14px;
-      margin: 34px 0 24px;
-    }
-
-    .pv-box {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 12px;
-      margin-bottom: 8px;
-    }
-
-    .pv-box td {
-      border: 1px solid #444;
-      padding: 5px 8px;
-    }
-
-    .pv-tipos span {
-      margin-right: 14px;
-      white-space: nowrap;
-    }
-
-    .pv-sys {
-      font-size: 12.5px;
-      font-weight: 700;
-      margin: 6px 0;
-    }
-
-    .pv-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 12px;
-      margin-bottom: 8px;
-    }
-
-    .pv-table th,
-    .pv-table td {
-      border: 1px solid #444;
-      padding: 3.5px 8px;
-    }
-
-    .pv-table th {
-      background: #eee;
-    }
-
-    .pv-table .n {
-      width: 46px;
-      text-align: center;
-    }
-
-    .pv-table .q {
-      width: 56px;
-      text-align: center;
-    }
-
-    .pv-table .st {
-      width: 76px;
-      white-space: nowrap;
-    }
-
-    .pv-grp {
-      text-align: center;
-      font-weight: 700;
-      font-size: 12.5px;
-      margin: 8px 0 3px;
-    }
-
-    .pv-line {
-      display: inline-block;
-      min-width: 62px;
-      border-bottom: 1px solid #111;
-      text-align: center;
-      font-weight: 700;
-    }
-
-    .pv-obs {
-      border: 1px solid #444;
-      min-height: 64px;
-      padding: 6px 8px;
-      font-size: 12px;
-      white-space: pre-wrap;
-      margin-bottom: 8px;
-    }
-
-    .pv-sign {
-      display: flex;
-      border: 1px solid #444;
-      margin-top: 6px;
-    }
-
-    .pv-sign div {
-      flex: 1;
-      text-align: center;
-      padding: 40px 8px 6px;
-      font-size: 12px;
-    }
-
-    .pv-sign div+div {
-      border-left: 1px solid #444;
-    }
-
-    .pv-sign div b {
-      display: block;
-      font-weight: 400;
-      font-size: 13px;
-      margin-bottom: 4px;
-    }
-
-    .toast {
-      position: fixed;
-      bottom: 22px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: var(--ink);
-      color: #fff;
-      padding: 11px 20px;
-      border-radius: 8px;
-      font-size: 13.5px;
-      z-index: 100;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity .25s;
-    }
-
-    .toast.show {
-      opacity: 1;
-
-      .titulo {
-        color: #ffffff;
-
-      }
-    }
-  </style>
 </head>
 
 <body>
 
   <div id="auth-overlay" class="auth-overlay" style="display:flex;">
     <div class="auth-card">
-      <h2 id="auth-title">SISTEMA DE RELATÓRIOS.</h2>
+      <h2 id="auth-title">Entrar</h2>
       <p class="sub" id="auth-sub">Acesse com seu e-mail e senha.</p>
       <form id="auth-form">
         <label>E-mail</label>
@@ -1614,7 +71,8 @@
                 <option value="paineis">Checklist por pontos (painéis)</option>
                 <option value="preventiva">Preventiva: equipamentos, rotinas e testes</option>
               </select>
-              <div class="hint">Cada tipo tem seu formulário. Monte a estrutura e use "Salvar estrutura como modelo" para reaproveitar depois.</div>
+              <div class="hint">Cada tipo tem seu formulário. Monte a estrutura e use "Salvar estrutura como modelo"
+                para reaproveitar depois.</div>
             </div>
           </div>
         </div>
@@ -1631,7 +89,8 @@
               <input type="text" id="f-contratada" placeholder="Nome da empresa contratada — CNPJ">
             </div>
           </div>
-          <div class="hint">Altere aqui para fazer o relatório de outro contrato. O padrão vem de Configurações → Identificação do contrato.</div>
+          <div class="hint">Altere aqui para fazer o relatório de outro contrato. O padrão vem de Configurações →
+            Identificação do contrato.</div>
           <div class="grid3" style="margin-top:14px;">
             <div class="field">
               <label>Contrato nº</label>
@@ -1666,56 +125,59 @@
         </div>
 
         <div id="grp-paineis">
-        <div class="card">
-          <h2><span class="num">2</span>Sistema de painéis</h2>
-          <div class="grid2">
-            <div class="field">
-              <label>Modelo / sistema</label>
-              <select id="f-sistema">
-                <option value="AP-PMV01">AP-PMV01 — Modelo P4, 192 x 32 pixels</option>
-                <option value="AP-PMV05">AP-PMV05 — Modelo P4, 320 x 64 pixels (integração)</option>
-                <option value="P10">Modelo P10, 160 x 64 pixels</option>
-                <option value="custom">Personalizado</option>
-              </select>
-              <div class="hint">Selecionar um modelo carrega os itens de checklist e pontos padrão — ambos podem ser
-                ajustados abaixo.</div>
-              <div class="btn-row" style="margin-top:8px;">
-                <button type="button" class="btn-sm" id="modelo-save-btn">Salvar estrutura como modelo</button>
-                <button type="button" class="btn-sm" id="modelo-del-btn" style="display:none;">Excluir este modelo</button>
+          <div class="card">
+            <h2><span class="num">2</span>Sistema de painéis</h2>
+            <div class="grid2">
+              <div class="field">
+                <label>Modelo / sistema</label>
+                <select id="f-sistema">
+                  <option value="AP-PMV01">AP-PMV01 — Modelo P4, 192 x 32 pixels</option>
+                  <option value="AP-PMV05">AP-PMV05 — Modelo P4, 320 x 64 pixels (integração)</option>
+                  <option value="P10">Modelo P10, 160 x 64 pixels</option>
+                  <option value="custom">Personalizado</option>
+                </select>
+                <div class="hint">Selecionar um modelo carrega os itens de checklist e pontos padrão — ambos podem ser
+                  ajustados abaixo.</div>
+                <div class="btn-row" style="margin-top:8px;">
+                  <button type="button" class="btn-sm" id="modelo-save-btn">Salvar estrutura como modelo</button>
+                  <button type="button" class="btn-sm" id="modelo-del-btn" style="display:none;">Excluir este
+                    modelo</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="field" style="margin-top:4px;">
+              <label>Pontos com painéis instalados (colunas do checklist)</label>
+              <div class="chiprow" id="local-chips"></div>
+              <div class="addrow">
+                <input type="text" id="local-input" placeholder="Adicionar ponto/local...">
+                <button class="btn-sm" id="local-add">Adicionar</button>
               </div>
             </div>
           </div>
 
-          <div class="field" style="margin-top:4px;">
-            <label>Pontos com painéis instalados (colunas do checklist)</label>
-            <div class="chiprow" id="local-chips"></div>
-            <div class="addrow">
-              <input type="text" id="local-input" placeholder="Adicionar ponto/local...">
-              <button class="btn-sm" id="local-add">Adicionar</button>
+          <div class="card">
+            <h2><span class="num">3</span>Checklist</h2>
+            <div class="field" style="margin-bottom:12px;">
+              <div class="addrow" style="max-width:520px;">
+                <input type="text" id="item-input" placeholder="Adicionar item de verificação...">
+                <button class="btn-sm" id="item-add">Adicionar item</button>
+              </div>
             </div>
-          </div>
-        </div>
-
-        <div class="card">
-          <h2><span class="num">3</span>Checklist</h2>
-          <div class="field" style="margin-bottom:12px;">
-            <div class="addrow" style="max-width:520px;">
-              <input type="text" id="item-input" placeholder="Adicionar item de verificação...">
-              <button class="btn-sm" id="item-add">Adicionar item</button>
+            <div class="table-wrap">
+              <table class="chk" id="chk-table"></table>
             </div>
+            <div class="hint">Clique na célula para alternar entre — · OK · NOK.</div>
           </div>
-          <div class="table-wrap">
-            <table class="chk" id="chk-table"></table>
-          </div>
-          <div class="hint">Clique na célula para alternar entre — · OK · NOK.</div>
-        </div>
 
         </div>
 
         <div id="grp-prev" style="display:none;">
           <div class="card">
             <h2><span class="num">2</span>Estrutura da preventiva</h2>
-            <div class="hint">Monte o relatório: relação de equipamentos, rotinas de visita (OK / FALHA) e testes de circuitos. Depois de montar, use "Salvar estrutura como modelo" para reaproveitar em outros relatórios ou contratos.</div>
+            <div class="hint">Monte o relatório: relação de equipamentos, rotinas de visita (OK / FALHA) e testes de
+              circuitos. Depois de montar, use "Salvar estrutura como modelo" para reaproveitar em outros relatórios ou
+              contratos.</div>
 
             <div class="grid2" style="margin-top:14px;">
               <div class="field">
@@ -1726,7 +188,8 @@
                 </select>
                 <div class="btn-row" style="margin-top:8px;">
                   <button type="button" class="btn-sm" id="pv-modelo-save-btn">Salvar estrutura como modelo</button>
-                  <button type="button" class="btn-sm" id="pv-modelo-del-btn" style="display:none;">Excluir este modelo</button>
+                  <button type="button" class="btn-sm" id="pv-modelo-del-btn" style="display:none;">Excluir este
+                    modelo</button>
                 </div>
               </div>
               <div class="field">
@@ -1745,11 +208,13 @@
             <h3 class="pv-h">Rotinas de manutenção (relatório de visita)</h3>
             <div class="hint">Clique no botão de cada item para alternar entre — · OK · FALHA.</div>
             <div id="pv-rotinas"></div>
-            <button type="button" class="btn-sm" data-act="add" data-kind="rotina" data-path="rotinas">+ Adicionar rotina</button>
+            <button type="button" class="btn-sm" data-act="add" data-kind="rotina" data-path="rotinas">+ Adicionar
+              rotina</button>
 
             <h3 class="pv-h">Testes de circuitos (impedância, pressão sonora...)</h3>
             <div id="pv-testes"></div>
-            <button type="button" class="btn-sm" data-act="add" data-kind="teste" data-path="testes">+ Adicionar teste</button>
+            <button type="button" class="btn-sm" data-act="add" data-kind="teste" data-path="testes">+ Adicionar
+              teste</button>
           </div>
         </div>
 
@@ -1918,7 +383,8 @@
 
           <div class="field">
             <label>5. Fotos (opcional)</label>
-            <div class="hint">Anexe fotos do equipamento, peças trocadas, defeitos etc. Elas saem em páginas de anexo no final do PDF. As fotos são reduzidas automaticamente antes de enviar, para economizar espaço.</div>
+            <div class="hint">Anexe fotos do equipamento, peças trocadas, defeitos etc. Elas saem em páginas de anexo no
+              final do PDF. As fotos são reduzidas automaticamente antes de enviar, para economizar espaço.</div>
             <input type="file" id="pt-photos-input" accept="image/*" multiple style="margin-top:8px;">
             <div id="pt-photos-status" class="hint" style="display:none;"></div>
             <div id="pt-photos-grid" class="photos-grid"></div>
@@ -2698,6 +1164,46 @@
         .then(() => new Promise((r) => setTimeout(r, 120)));
     }
 
+    // Páginas "folha inteira" (parecer/preventiva): se o texto for maior que a folha A4,
+    // encolhe só o miolo (.parecer-body) para caber entre cabeçalho e rodapé, em vez de
+    // encolher a página toda (o que deixava margens brancas nas laterais).
+    function ajustarPaginaAoA4(area, w, h) {
+      const page = area.querySelector('.parecer-page');
+      if (!page) return;
+      const body = page.querySelector('.parecer-body');
+      const head = page.querySelector('.header-img');
+      if (!body || !head) return;
+      if (area.scrollHeight <= h + 1) return;              // já cabe numa folha
+      const padBottom = parseFloat(getComputedStyle(page).paddingBottom) || 0;
+      const disponivel = h - padBottom - head.offsetHeight - 8 - (page.querySelector('.pv-pageno') ? 22 : 0);
+      body.style.boxSizing = 'border-box';
+      body.style.transformOrigin = 'top left';
+      // quanto menor a escala, mais larga fica a área de texto (e mais baixa).
+      // Procura (bisseção) a maior escala em que o texto ainda cabe entre cabeçalho e rodapé.
+      const cabe = (esc) => {
+        body.style.width = (w / esc) + 'px';
+        body.style.padding = `0 ${54 / esc}px`;
+        body.style.height = 'auto';
+        return body.offsetHeight * esc <= disponivel;
+      };
+      let lo = 0.6, hi = 1;
+      if (!cabe(lo)) {                                     // muito grande: mantém o comportamento antigo
+        body.style.cssText = '';
+        return;
+      }
+      for (let i = 0; i < 14; i++) {
+        const mid = (lo + hi) / 2;
+        if (cabe(mid)) lo = mid; else hi = mid;
+      }
+      const esc = lo;
+      cabe(esc);
+      body.style.transform = `scale(${esc})`;
+      body.style.height = (disponivel / esc) + 'px';
+      page.style.height = h + 'px';
+      page.style.minHeight = '0';
+      page.style.overflow = 'hidden';
+    }
+
     // html pode ser um texto (1 página) ou uma lista de textos (várias páginas)
     async function gerarPDFDireto(html, filename, orientation, fullBleed) {
       orientation = orientation || 'landscape';
@@ -2722,6 +1228,7 @@
           printArea.innerHTML = pages[i];
           printArea.style.cssText = areaCss;
           await aguardarImagens(printArea);
+          if (fullBleed) ajustarPaginaAoA4(printArea, w, h);
 
           const canvas = await html2canvas(printArea, {
             scale: 2,
@@ -3782,19 +2289,23 @@
         ['Mixer Dig. X-air Xr16 Ios/pc/android, 16in/6out', '1'],
       ].map(([descricao, qtd]) => ({ descricao, qtd })),
       rotinas: [
-        { nome: 'SOM GERAL', observacoes: '', itens: pvItens([
-          'Inspeção Visual (Sala Técnica)', 'Inspeção Visual (Áreas Sonorizadas/Sonofletores)',
-          'Difusão de Música Ambiente (Fonte Geradora)', 'Difusão de Emissão de Gongo e Avisos (Microfone)',
-          'Rede Elétrica 220 Volts +,- 10 %', 'Níveis de sinais de áudio (Verificar níveis configurados)',
-          'Inteligibilidade Sonora (Equalização)', 'Verificar Comunicação entre matriz e microfones',
-          'Amplificadores (Verificar funcionamento)', 'Matriz de Áudio (Verificar Comunicação)',
-          'Equalizadores (Verificar funcionamento)', 'Fiação']) },
-        { nome: 'AUDITÓRIO', observacoes: '', itens: pvItens([
-          'Inspeção Visual (Sala Técnica)', 'Rede Elétrica 220 Volts +,- 10 %', 'Difusão de Música Ambiente',
-          'Teste dos microfones', 'Níveis de sinais de áudio (Verificar níveis configurados)',
-          'Inteligibilidade Sonora (Equalização)', 'Microfones (Verificar funcionamento)',
-          'Mesa de som (Verificar funcionamento)', 'Caixas acústicas (Verificar funcionamento)',
-          'Amplificadores (Verificar funcionamento)', 'Fiação']) },
+        {
+          nome: 'SOM GERAL', observacoes: '', itens: pvItens([
+            'Inspeção Visual (Sala Técnica)', 'Inspeção Visual (Áreas Sonorizadas/Sonofletores)',
+            'Difusão de Música Ambiente (Fonte Geradora)', 'Difusão de Emissão de Gongo e Avisos (Microfone)',
+            'Rede Elétrica 220 Volts +,- 10 %', 'Níveis de sinais de áudio (Verificar níveis configurados)',
+            'Inteligibilidade Sonora (Equalização)', 'Verificar Comunicação entre matriz e microfones',
+            'Amplificadores (Verificar funcionamento)', 'Matriz de Áudio (Verificar Comunicação)',
+            'Equalizadores (Verificar funcionamento)', 'Fiação'])
+        },
+        {
+          nome: 'AUDITÓRIO', observacoes: '', itens: pvItens([
+            'Inspeção Visual (Sala Técnica)', 'Rede Elétrica 220 Volts +,- 10 %', 'Difusão de Música Ambiente',
+            'Teste dos microfones', 'Níveis de sinais de áudio (Verificar níveis configurados)',
+            'Inteligibilidade Sonora (Equalização)', 'Microfones (Verificar funcionamento)',
+            'Mesa de som (Verificar funcionamento)', 'Caixas acústicas (Verificar funcionamento)',
+            'Amplificadores (Verificar funcionamento)', 'Fiação'])
+        },
       ],
       testes: [
         { titulo: 'TESTE DE IMPEDÂNCIA DOS CIRCUITOS', unidade: 'Ohms (Ω)', grupos: pvGrupos('CIRCUITOS'), observacoes: '' },
@@ -4065,7 +2576,7 @@
           ${(t.grupos || []).map(g => `
             <div class="pv-grp">${E(g.nome || '')}</div>
             <table class="pv-table"><thead><tr><th>CIRCUITO</th><th>SETOR</th><th>VALOR MEDIDO</th><th style="width:150px;">&nbsp;</th></tr></thead><tbody>
-              ${(g.linhas || []).map(l => `<tr><td>${E(l.circuito)}</td><td>${E(l.setor)}</td><td>${E(t.unidade || '')} <span class="pv-line">${E(l.valor || '')}</span></td><td style="white-space:nowrap;">[${X(l.status === 'OK')}] OK &nbsp; FALHA [${X(l.status === 'FALHA')}]</td></tr>`).join('')}
+              ${(g.linhas || []).map(l => `<tr><td>${E(l.circuito)}</td><td>${E(l.setor)}</td><td><span class="pv-line">${E(l.valor || '')}</span> ${E(t.unidade || '')}</td><td style="white-space:nowrap;">[${X(l.status === 'OK')}] OK &nbsp; FALHA [${X(l.status === 'FALHA')}]</td></tr>`).join('')}
             </tbody></table>`).join('')}
           ${t.observacoes ? `<div class="pv-obs"><b>Observações</b><br>${E(t.observacoes)}</div>` : ''}
           ${assin}`));
