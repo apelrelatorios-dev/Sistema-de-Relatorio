@@ -41,7 +41,7 @@
           <img id="app-logo" src="" alt="Logo" style="display:none;">
           <div>
             <h1>Sistema de Controle de Relatórios de Manutenção.</h1>
-            <p>== Campina Grande/PB ==</p>
+            <p>==Campina Grande/PB==</p>
           </div>
         </div>
         <div class="tabs">
@@ -480,6 +480,7 @@
                   <th>Pode editar relatórios</th>
                   <th>Pode excluir relatórios</th>
                   <th>Pode mexer em Configurações</th>
+                  <th>Pode usar</th>
                   <th>Criado em</th>
                 </tr>
               </thead>
@@ -949,7 +950,7 @@
           .order('data', { ascending: false })
           .order('created_at', { ascending: false });
         if (error) throw error;
-        idx = (data || []).map(dbRowToRec).map(summaryFromRecord);
+        idx = (data || []).map(dbRowToRec).map(summaryFromRecord).filter((r) => podeTipo(isPrev(r) ? 'preventiva' : 'paineis'));
       } catch (e) { console.error(e); toast('Erro ao carregar relatórios: ' + (e.message || e)); }
       applyFiltersAndRender(idx);
     }
@@ -1341,6 +1342,8 @@
         canEditSettings: !!(profile && (profile.is_admin || profile.can_edit_settings)),
         canEditReports: !!(profile && (profile.is_admin || profile.can_edit_reports)),
         canCreateReports: !!(profile && (profile.is_admin || profile.can_create_reports)),
+        // tipos de estrutura liberados (admin e perfis sem restrição: todos)
+        tipos: (profile && !profile.is_admin && Array.isArray(profile.acesso_tipos)) ? profile.acesso_tipos : ['paineis', 'preventiva', 'parecer'],
       };
     }
 
@@ -1399,6 +1402,7 @@
       loadClientLogo();
       loadIdentificacao();
       loadModelos();
+      aplicarAcessoTipos();
     }
 
     /* ------------------------------------------------------------------ */
@@ -1415,6 +1419,8 @@
       document.getElementById('f-contratante').value = identificacao.contratante;
       document.getElementById('f-contratada').value = identificacao.contratada;
       document.getElementById('f-contrato').value = identificacao.contratoPadrao;
+      // na preventiva, o contratante/contrato vêm do modelo escolhido
+      if (currentTipoRel() === 'preventiva' && !pvTemDados()) aplicarIdentModelo(pvResolverModelo(pvEl('pv-modelo').value).est);
     }
 
     async function loadIdentificacao() {
@@ -1579,6 +1585,13 @@
             <input type="checkbox" class="perm-checkbox" data-uid="${u.id}" data-perm="can_edit_settings"
               ${u.can_edit_settings ? 'checked' : ''} ${editable ? '' : 'disabled'}>
           </td>
+          <td>
+            ${TIPOS_ACESSO.map(([k, l]) => `
+              <label class="checkitem" style="text-transform:none;font-weight:400;font-size:12.5px;color:inherit;margin:0 0 2px;white-space:nowrap;">
+                <input type="checkbox" class="tipo-checkbox" data-uid="${u.id}" data-tipo="${k}"
+                  ${tiposDoPerfil(u).includes(k) ? 'checked' : ''} ${editable ? '' : 'disabled'}> ${l}
+              </label>`).join('')}
+          </td>
           <td>${u.created_at ? new Date(u.created_at).toLocaleDateString('pt-BR') : '—'}</td>
         </tr>`;
       }).join('');
@@ -1594,6 +1607,22 @@
             return;
           }
           toast('Permissão atualizada.');
+        });
+      });
+
+      tbody.querySelectorAll('.tipo-checkbox').forEach((box) => {
+        box.addEventListener('change', async () => {
+          const uid = box.dataset.uid;
+          const marcados = Array.from(tbody.querySelectorAll(`.tipo-checkbox[data-uid="${uid}"]:checked`)).map((c) => c.dataset.tipo);
+          // tudo marcado = acesso total (guarda "null", assim novos tipos futuros já ficam liberados)
+          const valor = marcados.length === TIPOS_ACESSO.length ? null : marcados;
+          const { error: tipoErr } = await sb.from('profiles').update({ acesso_tipos: valor }).eq('id', uid);
+          if (tipoErr) {
+            toast('Erro ao atualizar o acesso. Rode o SQL "acesso-por-tipo" no Supabase.');
+            box.checked = !box.checked;
+            return;
+          }
+          toast('Acesso atualizado.');
         });
       });
     }
@@ -2605,6 +2634,39 @@
 
     aplicarTipoRel();
     pvRender();
+
+    /* ---------------- acesso por tipo de estrutura ---------------- */
+    const TIPOS_ACESSO = [['paineis', 'Painéis'], ['preventiva', 'Preventiva'], ['parecer', 'Parecer técnico']];
+    const tiposDoPerfil = (u) => (!u.is_admin && Array.isArray(u.acesso_tipos)) ? u.acesso_tipos : TIPOS_ACESSO.map(([k]) => k);
+    const podeTipo = (t) => !currentUser || !currentUser.tipos || currentUser.tipos.includes(t);
+
+    function aplicarAcessoTipos() {
+      const temRelatorios = podeTipo('paineis') || podeTipo('preventiva');
+      const mostrar = (tab, ok) => {
+        const b = document.querySelector(`.tab-btn[data-tab="${tab}"]`);
+        if (b) b.style.display = ok ? '' : 'none';
+      };
+      mostrar('novo', temRelatorios && currentUser.canCreateReports);
+      mostrar('consulta', temRelatorios);
+      mostrar('parecer', podeTipo('parecer'));
+
+      // seletor "Tipo de relatório": só os liberados; some quando sobra apenas um
+      const sel = document.getElementById('f-tipo-rel');
+      Array.from(sel.options).forEach((o) => { const ok = podeTipo(o.value); o.disabled = !ok; o.hidden = !ok; });
+      const liberados = Array.from(sel.options).filter((o) => !o.disabled);
+      sel.closest('.card').style.display = liberados.length > 1 ? '' : 'none';
+      if (liberados.length && sel.options[sel.selectedIndex].disabled) {
+        sel.value = liberados[0].value;
+        sel.dispatchEvent(new Event('change'));
+      }
+
+      // se a aba aberta ficou escondida, abre a primeira disponível
+      const ativa = document.querySelector('.tab-btn.active');
+      if (!ativa || ativa.style.display === 'none') {
+        const primeira = Array.from(document.querySelectorAll('.tab-btn')).find((b) => b.style.display !== 'none');
+        if (primeira) primeira.click();
+      }
+    }
 
     initAuth();
 
