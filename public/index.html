@@ -493,6 +493,17 @@
           <h2><span class="num">C</span>Histórico de alterações</h2>
           <div class="hint">Edições e exclusões de relatórios, registradas automaticamente pelo banco de dados.
             Mostrando as mais recentes primeiro.</div>
+          <div class="audit-clean">
+            <label for="audit-keep">Manter os últimos</label>
+            <select id="audit-keep">
+              <option value="30">30 dias</option>
+              <option value="60">60 dias</option>
+              <option value="90" selected>90 dias</option>
+              <option value="180">180 dias</option>
+              <option value="365">1 ano</option>
+            </select>
+            <button type="button" class="btn-sm" id="audit-clean-btn">Limpar histórico antigo</button>
+          </div>
           <div class="userstable-wrap">
             <table class="userstable">
               <thead>
@@ -1687,6 +1698,33 @@
       document.getElementById('audit-next').disabled = auditPage >= totalPages;
       document.getElementById('audit-last').disabled = auditPage >= totalPages;
     }
+
+    // Limpa do histórico os registros mais antigos que X dias (só administrador; precisa do SQL log-auditoria-limpar.sql)
+    document.getElementById('audit-clean-btn').addEventListener('click', async () => {
+      const btn = document.getElementById('audit-clean-btn');
+      const dias = parseInt(document.getElementById('audit-keep').value, 10) || 90;
+      const corte = new Date(Date.now() - dias * 24 * 60 * 60 * 1000).toISOString();
+      btn.disabled = true;
+      try {
+        const { count, error: eCount } = await sb.from('report_audit_log')
+          .select('id', { count: 'exact', head: true }).lt('changed_at', corte);
+        if (eCount) { toast('Erro ao consultar o histórico.'); return; }
+        if (!count) { toast(`Não há registros com mais de ${dias} dias.`); return; }
+        if (!confirm(`Apagar ${count} registro(s) do histórico com mais de ${dias} dias?\nEsta ação não pode ser desfeita.`)) return;
+        const { data: apagados, error } = await sb.from('report_audit_log')
+          .delete().lt('changed_at', corte).select('id');
+        if (error) { toast('Erro ao limpar o histórico.'); return; }
+        if (!apagados || !apagados.length) {
+          toast('Sem permissão para apagar. Rode o SQL "log-auditoria-limpar.sql" no Supabase.');
+          return;
+        }
+        toast(`${apagados.length} registro(s) apagado(s) do histórico.`);
+        auditPage = 1;
+        loadAuditLog();
+      } finally {
+        btn.disabled = false;
+      }
+    });
 
     document.getElementById('audit-first').addEventListener('click', () => loadAuditLog(1));
     document.getElementById('audit-prev').addEventListener('click', () => loadAuditLog(auditPage - 1));
