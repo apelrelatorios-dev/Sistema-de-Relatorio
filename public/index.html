@@ -174,7 +174,7 @@
 
         <div id="grp-prev" style="display:none;">
           <div class="card">
-            <h2><span class="num">2</span>Estrutura da preventiva</h2>
+            <h2><span class="num">2</span>Estrutura de Relatórios de João Pessoa.</h2>
             <div class="hint">Monte o relatório: relação de equipamentos, rotinas de visita (OK / FALHA) e testes de
               circuitos. Depois de montar, use "Salvar estrutura como modelo" para reaproveitar em outros relatórios ou
               contratos.</div>
@@ -523,6 +523,17 @@
             <span id="audit-info" class="hint"></span>
             <button class="btn-sm" id="audit-next">Próxima ›</button>
             <button class="btn-sm" id="audit-last" title="Última página">Última »</button>
+          </div>
+        </div>
+
+        <div class="card" id="backup-card" style="margin-top:14px; display:none;">
+          <h2><span class="num">D</span>Backup dos dados</h2>
+          <div class="hint">Baixa um arquivo com todos os relatórios, pareceres técnicos, modelos e configurações.
+            As fotos continuam guardadas no Supabase (o arquivo guarda os links delas). Guarde o arquivo em um local
+            seguro.</div>
+          <div class="audit-clean">
+            <button type="button" class="btn-sm" id="backup-btn">Baixar backup (.json)</button>
+            <span class="hint" id="backup-status"></span>
           </div>
         </div>
       </div>
@@ -888,9 +899,13 @@
       for (const file of files) {
         statusBox.textContent = `Enviando ${file.name}...`;
         try {
+          // reduz a foto (máx. 1600 px, JPEG) antes de enviar, para economizar espaço no Storage
+          const blob = await compressImage(file);
+          const isJpeg = blob.type === 'image/jpeg';
           const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
-          const path = `${state.photoFolderId}/${Date.now()}-${safeName}`;
-          const { error: upErr } = await sb.storage.from(PHOTOS_BUCKET).upload(path, file, { upsert: false });
+          const finalName = isJpeg ? safeName.replace(/\.[^.]+$/, '') + '.jpg' : safeName;
+          const path = `${state.photoFolderId}/${Date.now()}-${finalName}`;
+          const { error: upErr } = await sb.storage.from(PHOTOS_BUCKET).upload(path, blob, { upsert: false, contentType: blob.type || file.type });
           if (upErr) throw upErr;
           const { data: pub } = sb.storage.from(PHOTOS_BUCKET).getPublicUrl(path);
           state.photos.push({ path, url: pub.publicUrl, legenda: '' });
@@ -1176,9 +1191,88 @@
         .then(() => new Promise((r) => setTimeout(r, 120)));
     }
 
-    // Páginas "folha inteira" (parecer/preventiva): se o texto for maior que a folha A4,
-    // encolhe só o miolo (.parecer-body) para caber entre cabeçalho e rodapé, em vez de
-    // encolher a página toda (o que deixava margens brancas nas laterais).
+    // Páginas "folha inteira" (parecer/preventiva).
+    // Calcula a maior escala (0.6 a 1) em que o miolo (.parecer-body) cabe entre cabeçalho e rodapé.
+    // Quanto menor a escala, mais larga fica a área de texto (e mais baixa). Devolve null se não couber.
+    function escalaDoMiolo(page, w, h) {
+      const body = page.querySelector('.parecer-body');
+      const head = page.querySelector('.header-img');
+      const padBottom = parseFloat(getComputedStyle(page).paddingBottom) || 0;
+      const disponivel = h - padBottom - head.offsetHeight - 8 - (page.querySelector('.pv-pageno') ? 22 : 0);
+      body.style.boxSizing = 'border-box';
+      body.style.transformOrigin = 'top left';
+      const cabe = (esc) => {
+        body.style.width = (w / esc) + 'px';
+        body.style.padding = `0 ${54 / esc}px`;
+        body.style.height = 'auto';
+        return body.offsetHeight * esc <= disponivel;
+      };
+      let resultado = null;
+      if (cabe(1)) resultado = 1;
+      else if (cabe(0.6)) {
+        let lo = 0.6, hi = 1;
+        for (let i = 0; i < 14; i++) {
+          const mid = (lo + hi) / 2;
+          if (cabe(mid)) lo = mid; else hi = mid;
+        }
+        resultado = lo;
+      }
+      return { esc: resultado, disponivel };
+    }
+
+    // Se o texto é grande demais para uma folha (precisaria encolher muito), divide o miolo em
+    // várias folhas, cada uma com cabeçalho e rodapé. Devolve a lista de páginas (HTML) ou null.
+    function dividirEmPaginas(area, w, h) {
+      const page = area.querySelector('.parecer-page');
+      if (!page || area.scrollHeight <= h + 1) return null;
+      const body = page.querySelector('.parecer-body');
+      const head = page.querySelector('.header-img');
+      if (!body || !head) return null;
+      const r = escalaDoMiolo(page, w, h);
+      body.style.cssText = '';
+      if (r.esc && r.esc >= 0.85) return null;             // com pouca redução já cabe: não divide
+      const kids = Array.from(body.children);
+      if (kids.length < 2) return null;
+      const alt = (el) => {
+        const cs = getComputedStyle(el);
+        return el.offsetHeight + (parseFloat(cs.marginTop) || 0) + (parseFloat(cs.marginBottom) || 0);
+      };
+      const disp = r.disponivel - 6;
+      const grupos = [[]];
+      let usado = 0;
+      kids.forEach((el) => {
+        const a = alt(el);
+        if (usado + a > disp && grupos[grupos.length - 1].length) { grupos.push([]); usado = 0; }
+        grupos[grupos.length - 1].push(el);
+        usado += a;
+      });
+      if (grupos.length < 2) return null;
+      return grupos.map((g) => {
+        const c = page.cloneNode(true);
+        const cb = c.querySelector('.parecer-body');
+        cb.innerHTML = '';
+        g.forEach((el) => cb.appendChild(el.cloneNode(true)));
+        return c.outerHTML;
+      });
+    }
+
+    // Aplica a divisão em todas as páginas e renumera "Página X de Y" (preventiva).
+    async function expandirPaginas(pages, areaCss, printArea, w, h) {
+      const saida = [];
+      for (const html of pages) {
+        printArea.innerHTML = html;
+        printArea.style.cssText = areaCss;
+        await aguardarImagens(printArea);
+        const partes = dividirEmPaginas(printArea, w, h);
+        if (partes) saida.push(...partes); else saida.push(html);
+      }
+      const total = saida.length;
+      return saida.map((html, i) =>
+        html.replace(/Página <b>\d+<\/b> de <b>\d+<\/b>/, `Página <b>${i + 1}</b> de <b>${total}</b>`));
+    }
+
+    // Folha inteira: se o texto for um pouco maior que a folha, encolhe só o miolo para caber entre
+    // cabeçalho e rodapé (em vez de encolher a página toda, o que deixava margens brancas).
     function ajustarPaginaAoA4(area, w, h) {
       const page = area.querySelector('.parecer-page');
       if (!page) return;
@@ -1186,31 +1280,11 @@
       const head = page.querySelector('.header-img');
       if (!body || !head) return;
       if (area.scrollHeight <= h + 1) return;              // já cabe numa folha
-      const padBottom = parseFloat(getComputedStyle(page).paddingBottom) || 0;
-      const disponivel = h - padBottom - head.offsetHeight - 8 - (page.querySelector('.pv-pageno') ? 22 : 0);
-      body.style.boxSizing = 'border-box';
-      body.style.transformOrigin = 'top left';
-      // quanto menor a escala, mais larga fica a área de texto (e mais baixa).
-      // Procura (bisseção) a maior escala em que o texto ainda cabe entre cabeçalho e rodapé.
-      const cabe = (esc) => {
-        body.style.width = (w / esc) + 'px';
-        body.style.padding = `0 ${54 / esc}px`;
-        body.style.height = 'auto';
-        return body.offsetHeight * esc <= disponivel;
-      };
-      let lo = 0.6, hi = 1;
-      if (!cabe(lo)) {                                     // muito grande: mantém o comportamento antigo
-        body.style.cssText = '';
-        return;
-      }
-      for (let i = 0; i < 14; i++) {
-        const mid = (lo + hi) / 2;
-        if (cabe(mid)) lo = mid; else hi = mid;
-      }
-      const esc = lo;
-      cabe(esc);
+      const r = escalaDoMiolo(page, w, h);
+      if (!r.esc) { body.style.cssText = ''; return; }     // muito grande: mantém o comportamento antigo
+      const esc = r.esc;
       body.style.transform = `scale(${esc})`;
-      body.style.height = (disponivel / esc) + 'px';
+      body.style.height = (r.disponivel / esc) + 'px';
       page.style.height = h + 'px';
       page.style.minHeight = '0';
       page.style.overflow = 'hidden';
@@ -1219,7 +1293,7 @@
     // html pode ser um texto (1 página) ou uma lista de textos (várias páginas)
     async function gerarPDFDireto(html, filename, orientation, fullBleed) {
       orientation = orientation || 'landscape';
-      const pages = Array.isArray(html) ? html : [html];
+      let pages = Array.isArray(html) ? html : [html];
       const btn = document.querySelector('#modal-pdf, #pt-modal-pdf');
       const originalText = btn ? btn.textContent : null;
       if (btn) { btn.textContent = 'Gerando PDF...'; btn.disabled = true; }
@@ -1232,6 +1306,7 @@
 
       try {
         const { jsPDF } = window.jspdf;
+        if (fullBleed) pages = await expandirPaginas(pages, areaCss, printArea, w, h);
         const pdf = new jsPDF({ orientation, unit: 'mm', format: 'a4' });
         const pageWidth = pdf.internal.pageSize.getWidth();
         const pageHeight = pdf.internal.pageSize.getHeight();
@@ -1401,6 +1476,8 @@
       document.getElementById('users-card').style.display = currentUser.isAdmin ? '' : 'none';
       const auditCard = document.getElementById('audit-card');
       if (auditCard) auditCard.style.display = currentUser.isAdmin ? '' : 'none';
+      const backupCard = document.getElementById('backup-card');
+      if (backupCard) backupCard.style.display = currentUser.isAdmin ? '' : 'none';
       if (currentUser.isAdmin) loadAuditLog();
       const novoTabBtn = document.getElementById('tab-novo-btn');
       if (!currentUser.canCreateReports) {
@@ -1721,6 +1798,50 @@
         toast(`${apagados.length} registro(s) apagado(s) do histórico.`);
         auditPage = 1;
         loadAuditLog();
+      } finally {
+        btn.disabled = false;
+      }
+    });
+
+    // Backup: baixa todas as tabelas de dados em um único arquivo JSON (só administrador)
+    async function lerTabelaCompleta(tabela) {
+      const TAM = 500;
+      let todos = [];
+      for (let ini = 0; ; ini += TAM) {
+        const { data, error } = await sb.from(tabela).select('*').range(ini, ini + TAM - 1);
+        if (error) throw new Error(tabela + ': ' + error.message);
+        todos = todos.concat(data || []);
+        if (!data || data.length < TAM) break;
+      }
+      return todos;
+    }
+
+    document.getElementById('backup-btn').addEventListener('click', async () => {
+      const btn = document.getElementById('backup-btn');
+      const st = document.getElementById('backup-status');
+      btn.disabled = true;
+      try {
+        const tabelas = ['reports', 'pareceres_tecnicos', 'modelos_relatorio', 'settings'];
+        const dados = { gerado_em: new Date().toISOString(), tabelas: {} };
+        for (const t of tabelas) {
+          st.textContent = `Lendo ${t}...`;
+          dados.tabelas[t] = await lerTabelaCompleta(t);
+        }
+        const blob = new Blob([JSON.stringify(dados, null, 2)], { type: 'application/json' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `backup-sttp-${new Date().toISOString().slice(0, 10)}.json`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+        const resumo = tabelas.map((t) => `${dados.tabelas[t].length} ${t}`).join(', ');
+        st.textContent = 'Backup baixado: ' + resumo + '.';
+        toast('Backup baixado com sucesso.');
+      } catch (err) {
+        console.error(err);
+        st.textContent = '';
+        toast('Erro ao gerar o backup. Tente novamente.');
       } finally {
         btn.disabled = false;
       }
