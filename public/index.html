@@ -269,7 +269,7 @@
                 <option value="AP-PMV01">AP-PMV01</option>
                 <option value="AP-PMV05">AP-PMV05</option>
                 <option value="P10">P10</option>
-                <option value="preventiva">Preventiva</option>
+                <option value="preventiva">Relatórios João Pessoa</option>
                 <option value="custom">Personalizado</option>
               </select>
             </div>
@@ -294,6 +294,7 @@
 
         <div id="report-count" class="hint" style="margin:4px 2px 0;"></div>
         <div class="reportlist" id="report-list"></div>
+        <div class="list-pager" id="report-pager"></div>
       </div>
 
       <!-- ======= PANEL: PARECER TÉCNICO ========= -->
@@ -402,6 +403,7 @@
           <h2><span class="num">L</span>Pareceres salvos</h2>
           <div id="pt-count" class="hint"></div>
           <div class="reportlist" id="pt-list"></div>
+          <div class="list-pager" id="pt-pager"></div>
         </div>
       </div>
 
@@ -965,6 +967,52 @@
     });
 
     /* ------------------------------------------------------------------ */
+    /* Paginação das listas (relatórios e pareceres)                       */
+    /* ------------------------------------------------------------------ */
+    const pagRel = { pag: 1, tam: 10 };
+    const pagPt = { pag: 1, tam: 10 };
+    let relCache = null;   // relatórios já baixados (filtrar/paginar não precisa baixar de novo)
+    let ptCache = null;    // pareceres já baixados
+
+    // devolve só os itens da página atual (e corrige a página se ela deixou de existir)
+    function fatiarPagina(lista, estado) {
+      const paginas = Math.max(1, Math.ceil(lista.length / estado.tam));
+      if (estado.pag > paginas) estado.pag = paginas;
+      if (estado.pag < 1) estado.pag = 1;
+      const ini = (estado.pag - 1) * estado.tam;
+      return { itens: lista.slice(ini, ini + estado.tam), ini, paginas };
+    }
+
+    function desenharPaginador(elId, estado, total, aoMudar) {
+      const el = document.getElementById(elId);
+      const paginas = Math.max(1, Math.ceil(total / estado.tam));
+      if (total <= 10) { el.innerHTML = ''; return; }   // 10 é o menor tamanho: cabe tudo numa página
+      el.innerHTML = `
+        <button type="button" class="btn-sm" data-p="first" ${estado.pag <= 1 ? 'disabled' : ''}>« Primeira</button>
+        <button type="button" class="btn-sm" data-p="prev" ${estado.pag <= 1 ? 'disabled' : ''}>‹ Anterior</button>
+        <span class="hint">Página ${estado.pag} de ${paginas}</span>
+        <button type="button" class="btn-sm" data-p="next" ${estado.pag >= paginas ? 'disabled' : ''}>Próxima ›</button>
+        <button type="button" class="btn-sm" data-p="last" ${estado.pag >= paginas ? 'disabled' : ''}>Última »</button>
+        <label class="pager-size">Por página
+          <select data-p="size">${[5, 10, 20, 50].map((n) => `<option value="${n}" ${n === estado.tam ? 'selected' : ''}>${n}</option>`).join('')}</select>
+        </label>`;
+      el.querySelectorAll('button[data-p]').forEach((b) => b.addEventListener('click', () => {
+        const a = b.dataset.p;
+        if (a === 'first') estado.pag = 1;
+        else if (a === 'prev') estado.pag -= 1;
+        else if (a === 'next') estado.pag += 1;
+        else if (a === 'last') estado.pag = paginas;
+        aoMudar();
+        el.scrollIntoView({ block: 'nearest' });
+      }));
+      el.querySelector('select[data-p="size"]').addEventListener('change', (e) => {
+        estado.tam = parseInt(e.target.value, 10) || 10;
+        estado.pag = 1;
+        aoMudar();
+      });
+    }
+
+    /* ------------------------------------------------------------------ */
     /* Consulta / listagem                                                 */
     /* ------------------------------------------------------------------ */
     async function loadAndRenderList() {
@@ -978,6 +1026,7 @@
         if (error) throw error;
         idx = (data || []).map(dbRowToRec).map(summaryFromRecord).filter((r) => podeTipo(isPrev(r) ? 'preventiva' : 'paineis'));
       } catch (e) { console.error(e); toast('Erro ao carregar relatórios: ' + (e.message || e)); }
+      relCache = idx;
       applyFiltersAndRender(idx);
     }
 
@@ -1003,15 +1052,19 @@
 
       const list = document.getElementById('report-list');
       const count = document.getElementById('report-count');
-      count.textContent = `${filtered.length} relatório(s) encontrado(s)`;
+      const pg = fatiarPagina(filtered, pagRel);
+      count.textContent = `${filtered.length} relatório(s) encontrado(s)` +
+        (filtered.length > pagRel.tam ? ` · mostrando ${pg.ini + 1}–${pg.ini + pg.itens.length}` : '');
 
       if (filtered.length === 0) {
         list.innerHTML = `<div class="empty">Nenhum relatório encontrado para os filtros aplicados.</div>`;
+        desenharPaginador('report-pager', pagRel, 0, () => { });
         return;
       }
 
       list.innerHTML = '';
-      filtered.forEach(r => {
+      desenharPaginador('report-pager', pagRel, filtered.length, () => applyFiltersAndRender(idx));
+      pg.itens.forEach(r => {
         const card = document.createElement('div');
         card.className = 'rcard';
         card.innerHTML = `
@@ -1030,8 +1083,12 @@
     }
 
     ['q-text', 'q-sistema', 'q-de', 'q-ate', 'q-status'].forEach(id => {
-      document.getElementById(id).addEventListener('input', loadAndRenderList);
-      document.getElementById(id).addEventListener('change', loadAndRenderList);
+      const refiltrar = () => {
+        pagRel.pag = 1;
+        if (relCache) applyFiltersAndRender(relCache); else loadAndRenderList();
+      };
+      document.getElementById(id).addEventListener('input', refiltrar);
+      document.getElementById(id).addEventListener('change', refiltrar);
     });
 
     /* ------------------------------------------------------------------ */
@@ -2094,11 +2151,26 @@
         data = res.data || [];
       } catch (e) { console.error(e); toast('Erro ao carregar pareceres: ' + (e.message || e)); }
 
-      count.textContent = `${data.length} parecer(es) salvo(s)`;
-      if (data.length === 0) { list.innerHTML = '<div class="empty">Nenhum parecer salvo ainda.</div>'; return; }
+      ptCache = data;
+      renderPareceresPagina();
+    }
+
+    function renderPareceresPagina() {
+      const list = document.getElementById('pt-list');
+      const count = document.getElementById('pt-count');
+      const data = ptCache || [];
+      const pg = fatiarPagina(data, pagPt);
+      count.textContent = `${data.length} parecer(es) salvo(s)` +
+        (data.length > pagPt.tam ? ` · mostrando ${pg.ini + 1}–${pg.ini + pg.itens.length}` : '');
+      if (data.length === 0) {
+        list.innerHTML = '<div class="empty">Nenhum parecer salvo ainda.</div>';
+        desenharPaginador('pt-pager', pagPt, 0, () => { });
+        return;
+      }
 
       list.innerHTML = '';
-      data.forEach((r) => {
+      desenharPaginador('pt-pager', pagPt, data.length, renderPareceresPagina);
+      pg.itens.forEach((r) => {
         const card = document.createElement('div');
         card.className = 'rcard';
         card.innerHTML = `
@@ -2795,7 +2867,7 @@
     pvRender();
 
     /* ---------------- acesso por tipo de estrutura ---------------- */
-    const TIPOS_ACESSO = [['paineis', 'Painéis'], ['preventiva', 'Relatórios João pessoa.'], ['parecer', 'Parecer técnico']];
+    const TIPOS_ACESSO = [['paineis', 'Painéis'], ['preventiva', 'Relatórios João pessoa'], ['parecer', 'Parecer técnico']];
     const tiposDoPerfil = (u) => (!u.is_admin && Array.isArray(u.acesso_tipos)) ? u.acesso_tipos : TIPOS_ACESSO.map(([k]) => k);
     const podeTipo = (t) => !currentUser || !currentUser.tipos || currentUser.tipos.includes(t);
 
