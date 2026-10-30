@@ -2795,7 +2795,7 @@
     pvRender();
 
     /* ---------------- acesso por tipo de estrutura ---------------- */
-    const TIPOS_ACESSO = [['paineis', 'Painéis'], ['preventiva', 'Preventiva'], ['parecer', 'Parecer técnico']];
+    const TIPOS_ACESSO = [['paineis', 'Painéis'], ['preventiva', 'Relatórios João pessoa.'], ['parecer', 'Parecer técnico']];
     const tiposDoPerfil = (u) => (!u.is_admin && Array.isArray(u.acesso_tipos)) ? u.acesso_tipos : TIPOS_ACESSO.map(([k]) => k);
     const podeTipo = (t) => !currentUser || !currentUser.tipos || currentUser.tipos.includes(t);
 
