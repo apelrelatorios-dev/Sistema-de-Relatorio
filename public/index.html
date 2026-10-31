@@ -603,21 +603,21 @@
         visto_cliente: d.vistoCliente || '',
         fotos: d.fotos || [],
         // "extras" só é enviado quando existe (contrato alterado ou relatório preventivo)
-        ...(d.extras ? { extras: d.extras } : {}),
+        ...(d.extras ? {extras: d.extras} : {}),
       };
     }
 
     function summaryFromRecord(rec) {
       if (isPrev(rec)) {
         let okCount = 0, nokCount = 0;
-        const conta = (st) => { if (st === 'OK') okCount++; else if (st === 'FALHA') nokCount++; };
+        const conta = (st) => {if (st === 'OK') okCount++; else if (st === 'FALHA') nokCount++;};
         (rec.extras.rotinas || []).forEach(r => (r.itens || []).forEach(i => conta(i.status)));
         (rec.extras.testes || []).forEach(t => (t.grupos || []).forEach(g => (g.linhas || []).forEach(l => conta(l.status))));
-        return { ...rec, okCount, nokCount };
+        return {...rec, okCount, nokCount};
       }
       const okCount = Object.values(rec.checklist || {}).filter(v => v === 'OK').length;
       const nokCount = Object.values(rec.checklist || {}).filter(v => v === 'NOK').length;
-      return { ...rec, okCount, nokCount };
+      return {...rec, okCount, nokCount};
     }
 
     /* ------------------ */
@@ -661,15 +661,15 @@
         ],
         locais: ['Avenida Brasília', 'Rua José do Patrocínio']
       },
-      'custom': { label: 'Personalizado', items: [], locais: [] }
+      'custom': {label: 'Personalizado', items: [], locais: []}
     };
 
-    let state = { items: [], locais: [], checklist: {}, editingId: null, photos: [], photoFolderId: null };
+    let state = {items: [], locais: [], checklist: {}, editingId: null, photos: [], photoFolderId: null};
 
     /* ----------------- */
     /* Helpers            */
     /* ------------------- */
-    function uid() { return 'r' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
+    function uid() {return 'r' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7);}
     function toast(msg) {
       const t = document.getElementById('toast');
       t.textContent = msg; t.classList.add('show');
@@ -693,7 +693,7 @@
         document.getElementById('panel-' + btn.dataset.tab).classList.add('active');
         if (btn.dataset.tab === 'consulta') loadAndRenderList();
         if (btn.dataset.tab === 'parecer') loadAndRenderPareceres();
-        if (btn.dataset.tab === 'config') { loadUsers(); loadLogoIntoConfig(); loadIdentificacaoIntoConfig(); }
+        if (btn.dataset.tab === 'config') {loadUsers(); loadLogoIntoConfig(); loadIdentificacaoIntoConfig();}
       });
     });
 
@@ -726,7 +726,7 @@
       }
     });
     document.getElementById('local-input').addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') { e.preventDefault(); document.getElementById('local-add').click(); }
+      if (e.key === 'Enter') {e.preventDefault(); document.getElementById('local-add').click();}
     });
 
     document.getElementById('item-add').addEventListener('click', () => {
@@ -739,7 +739,7 @@
       }
     });
     document.getElementById('item-input').addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') { e.preventDefault(); document.getElementById('item-add').click(); }
+      if (e.key === 'Enter') {e.preventDefault(); document.getElementById('item-add').click();}
     });
 
     /* ------------------------------------------------------------------ */
@@ -800,7 +800,7 @@
     }
 
     function escapeHtml(s) {
-      return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+      return String(s).replace(/[&<>"']/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[c]));
     }
 
     /* init empty table */
@@ -825,7 +825,7 @@
         sistemaLabel: modeloSel ? modeloSel.nome : (PRESETS[sistemaKey] ? PRESETS[sistemaKey].label : sistemaKey),
         items: [...state.items],
         locais: [...state.locais],
-        checklist: { ...state.checklist },
+        checklist: {...state.checklist},
         observacoes: document.getElementById('f-obs').value.trim(),
         vistoTecnico: document.getElementById('f-visto-tec').value.trim(),
         vistoCliente: document.getElementById('f-visto-cli').value.trim(),
@@ -844,7 +844,7 @@
       document.getElementById('f-obs').value = '';
       document.getElementById('f-visto-tec').value = '';
       document.getElementById('f-visto-cli').value = '';
-      state = { items: [...PRESETS['AP-PMV01'].items], locais: [...PRESETS['AP-PMV01'].locais], checklist: {}, editingId: null, photos: [], photoFolderId: crypto.randomUUID() };
+      state = {items: [...PRESETS['AP-PMV01'].items], locais: [...PRESETS['AP-PMV01'].locais], checklist: {}, editingId: null, photos: [], photoFolderId: crypto.randomUUID()};
       document.getElementById('edit-flag').style.display = 'none';
       formExtras = null;
       document.getElementById('f-tipo-rel').disabled = false;
@@ -877,7 +877,7 @@
           state.photos.splice(i, 1);
           renderPhotos();
           if (photo && photo.path) {
-            try { await sb.storage.from(PHOTOS_BUCKET).remove([photo.path]); } catch (e) { /* órfã, sem problema */ }
+            try {await sb.storage.from(PHOTOS_BUCKET).remove([photo.path]);} catch (e) { /* órfã, sem problema */}
           }
         });
       });
@@ -907,10 +907,10 @@
           const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
           const finalName = isJpeg ? safeName.replace(/\.[^.]+$/, '') + '.jpg' : safeName;
           const path = `${state.photoFolderId}/${Date.now()}-${finalName}`;
-          const { error: upErr } = await sb.storage.from(PHOTOS_BUCKET).upload(path, blob, { upsert: false, contentType: blob.type || file.type });
+          const {error: upErr} = await sb.storage.from(PHOTOS_BUCKET).upload(path, blob, {upsert: false, contentType: blob.type || file.type});
           if (upErr) throw upErr;
-          const { data: pub } = sb.storage.from(PHOTOS_BUCKET).getPublicUrl(path);
-          state.photos.push({ path, url: pub.publicUrl, legenda: '' });
+          const {data: pub} = sb.storage.from(PHOTOS_BUCKET).getPublicUrl(path);
+          state.photos.push({path, url: pub.publicUrl, legenda: ''});
           renderPhotos();
         } catch (err) {
           console.error(err);
@@ -924,10 +924,10 @@
     document.getElementById('save-btn').addEventListener('click', async () => {
       const isPv = currentTipoRel() === 'preventiva';
       const data = collectForm();
-      if (!data.tecnico) { toast('Informe o responsável técnico da visita.'); return; }
-      if (!data.data) { toast('Informe a data da visita.'); return; }
+      if (!data.tecnico) {toast('Informe o responsável técnico da visita.'); return;}
+      if (!data.data) {toast('Informe a data da visita.'); return;}
       if (isPv) {
-        if (!pvState.rotinas.length && !pvState.testes.length && !pvState.equipamentos.length) { toast('Adicione equipamentos, rotinas ou testes.'); return; }
+        if (!pvState.rotinas.length && !pvState.testes.length && !pvState.equipamentos.length) {toast('Adicione equipamentos, rotinas ou testes.'); return;}
         data.sistemaKey = 'preventiva';
         data.sistemaLabel = pvNomeModelo || 'Manutenção preventiva';
         data.items = []; data.locais = []; data.checklist = {};
@@ -940,18 +940,18 @@
         const editing = !!state.editingId;
         const payload = recToDbPayload(data);
         if (!editing) {
-          const { data: { user } } = await sb.auth.getUser();
+          const {data: {user}} = await sb.auth.getUser();
           payload.created_by = user ? user.id : null;
         }
         const gravar = (p) => editing
           ? sb.from('reports').update(p).eq('id', state.editingId)
           : sb.from('reports').insert(p);
-        let { error } = await gravar(payload);
+        let {error} = await gravar(payload);
         let aviso = '';
         const faltaColuna = error && /extras|PGRST204|schema cache/i.test(`${error.code || ''} ${error.message || ''}`);
         if (faltaColuna && !isPv && payload.extras) {
           delete payload.extras;
-          ({ error } = await gravar(payload));
+          ({error} = await gravar(payload));
           aviso = 'Relatório salvo, mas o contratante/contratada alterados não foram guardados: rode o SQL de atualização no Supabase.';
         } else if (faltaColuna && isPv) {
           toast('Para salvar relatórios preventivos, rode o SQL de atualização no Supabase.');
@@ -969,8 +969,8 @@
     /* ------------------------------------------------------------------ */
     /* Paginação das listas (relatórios e pareceres)                       */
     /* ------------------------------------------------------------------ */
-    const pagRel = { pag: 1, tam: 10 };
-    const pagPt = { pag: 1, tam: 10 };
+    const pagRel = {pag: 1, tam: 10};
+    const pagPt = {pag: 1, tam: 10};
     let relCache = null;   // relatórios já baixados (filtrar/paginar não precisa baixar de novo)
     let ptCache = null;    // pareceres já baixados
 
@@ -980,13 +980,13 @@
       if (estado.pag > paginas) estado.pag = paginas;
       if (estado.pag < 1) estado.pag = 1;
       const ini = (estado.pag - 1) * estado.tam;
-      return { itens: lista.slice(ini, ini + estado.tam), ini, paginas };
+      return {itens: lista.slice(ini, ini + estado.tam), ini, paginas};
     }
 
     function desenharPaginador(elId, estado, total, aoMudar) {
       const el = document.getElementById(elId);
       const paginas = Math.max(1, Math.ceil(total / estado.tam));
-      if (total <= 10) { el.innerHTML = ''; return; }   // 10 é o menor tamanho: cabe tudo numa página
+      if (total <= 10) {el.innerHTML = ''; return;}   // 10 é o menor tamanho: cabe tudo numa página
       el.innerHTML = `
         <button type="button" class="btn-sm" data-p="first" ${estado.pag <= 1 ? 'disabled' : ''}>« Primeira</button>
         <button type="button" class="btn-sm" data-p="prev" ${estado.pag <= 1 ? 'disabled' : ''}>‹ Anterior</button>
@@ -1003,7 +1003,7 @@
         else if (a === 'next') estado.pag += 1;
         else if (a === 'last') estado.pag = paginas;
         aoMudar();
-        el.scrollIntoView({ block: 'nearest' });
+        el.scrollIntoView({block: 'nearest'});
       }));
       el.querySelector('select[data-p="size"]').addEventListener('change', (e) => {
         estado.tam = parseInt(e.target.value, 10) || 10;
@@ -1018,14 +1018,14 @@
     async function loadAndRenderList() {
       let idx = [];
       try {
-        const { data, error } = await sb
+        const {data, error} = await sb
           .from('reports')
           .select('*')
-          .order('data', { ascending: false })
-          .order('created_at', { ascending: false });
+          .order('data', {ascending: false})
+          .order('created_at', {ascending: false});
         if (error) throw error;
         idx = (data || []).map(dbRowToRec).map(summaryFromRecord).filter((r) => podeTipo(isPrev(r) ? 'preventiva' : 'paineis'));
-      } catch (e) { console.error(e); toast('Erro ao carregar relatórios: ' + (e.message || e)); }
+      } catch (e) {console.error(e); toast('Erro ao carregar relatórios: ' + (e.message || e));}
       relCache = idx;
       applyFiltersAndRender(idx);
     }
@@ -1097,11 +1097,11 @@
     async function openDetail(id) {
       let rec;
       try {
-        const { data, error } = await sb.from('reports').select('*').eq('id', id).single();
+        const {data, error} = await sb.from('reports').select('*').eq('id', id).single();
         rec = error ? null : dbRowToRec(data);
-      } catch (e) { rec = null; }
-      if (!rec) { toast('Não foi possível carregar o relatório.'); return; }
-      if (isPrev(rec)) { openPrevDetail(rec); return; }
+      } catch (e) {rec = null;}
+      if (!rec) {toast('Não foi possível carregar o relatório.'); return;}
+      if (isPrev(rec)) {openPrevDetail(rec); return;}
 
       let tableHtml = '<div class="table-wrap"><table class="chk"><thead><tr><th class="itemcol">Item</th>';
       rec.locais.forEach(loc => tableHtml += `<th>${escapeHtml(loc)}</th>`);
@@ -1156,20 +1156,20 @@
       document.getElementById('overlay').classList.add('active');
       document.getElementById('modal-close').addEventListener('click', closeModal);
       const editBtn = document.getElementById('modal-edit');
-      if (editBtn) editBtn.addEventListener('click', () => { closeModal(); loadIntoForm(rec); });
+      if (editBtn) editBtn.addEventListener('click', () => {closeModal(); loadIntoForm(rec);});
       const delBtn = document.getElementById('modal-delete');
       if (delBtn) delBtn.addEventListener('click', () => deleteReport(rec.id));
       document.getElementById('modal-pdf').addEventListener('click', () => exportReportPDF(rec));
     }
 
-    function closeModal() { document.getElementById('overlay').classList.remove('active'); }
-    document.getElementById('overlay').addEventListener('click', (e) => { if (e.target.id === 'overlay') closeModal(); });
+    function closeModal() {document.getElementById('overlay').classList.remove('active');}
+    document.getElementById('overlay').addEventListener('click', (e) => {if (e.target.id === 'overlay') closeModal();});
 
     /* ------------------------------------------------------------------ */
     /* Exportar PDF (impressão paisagem A4)                                */
     /* ------------------------------------------------------------------ */
     function exportReportPDF(rec) {
-      if (isPrev(rec)) { exportPrevPDF(rec); return; }
+      if (isPrev(rec)) {exportPrevPDF(rec); return;}
       let tableHtml = '<table class="print-table"><thead><tr><th style="text-align:left;">Item</th>';
       rec.locais.forEach((loc) => tableHtml += `<th>${escapeHtml(loc)}</th>`);
       tableHtml += '</tr></thead><tbody>';
@@ -1243,7 +1243,7 @@
     function aguardarImagens(root, timeout) {
       const imgs = Array.from(root.querySelectorAll('img'));
       const todas = Promise.all(imgs.map((im) => im.complete ? Promise.resolve()
-        : new Promise((r) => { im.onload = im.onerror = r; })));
+        : new Promise((r) => {im.onload = im.onerror = r;})));
       return Promise.race([todas, new Promise((r) => setTimeout(r, timeout || 10000))])
         .then(() => new Promise((r) => setTimeout(r, 120)));
     }
@@ -1274,7 +1274,7 @@
         }
         resultado = lo;
       }
-      return { esc: resultado, disponivel };
+      return {esc: resultado, disponivel};
     }
 
     // Se o texto é grande demais para uma folha (precisaria encolher muito), divide o miolo em
@@ -1299,7 +1299,7 @@
       let usado = 0;
       kids.forEach((el) => {
         const a = alt(el);
-        if (usado + a > disp && grupos[grupos.length - 1].length) { grupos.push([]); usado = 0; }
+        if (usado + a > disp && grupos[grupos.length - 1].length) {grupos.push([]); usado = 0;}
         grupos[grupos.length - 1].push(el);
         usado += a;
       });
@@ -1338,7 +1338,7 @@
       if (!body || !head) return;
       if (area.scrollHeight <= h + 1) return;              // já cabe numa folha
       const r = escalaDoMiolo(page, w, h);
-      if (!r.esc) { body.style.cssText = ''; return; }     // muito grande: mantém o comportamento antigo
+      if (!r.esc) {body.style.cssText = ''; return;}     // muito grande: mantém o comportamento antigo
       const esc = r.esc;
       body.style.transform = `scale(${esc})`;
       body.style.height = (r.disponivel / esc) + 'px';
@@ -1353,7 +1353,7 @@
       let pages = Array.isArray(html) ? html : [html];
       const btn = document.querySelector('#modal-pdf, #pt-modal-pdf');
       const originalText = btn ? btn.textContent : null;
-      if (btn) { btn.textContent = 'Gerando PDF...'; btn.disabled = true; }
+      if (btn) {btn.textContent = 'Gerando PDF...'; btn.disabled = true;}
 
       const printArea = document.getElementById('print-area');
       // Renderiza fora da tela, mas em tamanho real (px equivalente a A4 a 96dpi)
@@ -1362,9 +1362,9 @@
       const areaCss = `display:block; position:fixed; top:0; left:-99999px; width:${w}px; min-height:${h}px; box-sizing:border-box; background:#ffffff; padding:${fullBleed ? 0 : 26}px; overflow:hidden;`;
 
       try {
-        const { jsPDF } = window.jspdf;
+        const {jsPDF} = window.jspdf;
         if (fullBleed) pages = await expandirPaginas(pages, areaCss, printArea, w, h);
-        const pdf = new jsPDF({ orientation, unit: 'mm', format: 'a4' });
+        const pdf = new jsPDF({orientation, unit: 'mm', format: 'a4'});
         const pageWidth = pdf.internal.pageSize.getWidth();
         const pageHeight = pdf.internal.pageSize.getHeight();
 
@@ -1403,7 +1403,7 @@
       } finally {
         printArea.style.cssText = '';
         printArea.innerHTML = '';
-        if (btn) { btn.textContent = originalText; btn.disabled = false; }
+        if (btn) {btn.textContent = originalText; btn.disabled = false;}
       }
     }
 
@@ -1422,13 +1422,13 @@
       document.getElementById('f-chegada').value = rec.horaChegada || '';
       document.getElementById('f-saida').value = rec.horaSaida || '';
       document.getElementById('f-tecnico').value = rec.tecnico || '';
-      document.querySelectorAll('#f-tipo input').forEach(c => { c.checked = (rec.tipoManutencao || []).includes(c.value); });
+      document.querySelectorAll('#f-tipo input').forEach(c => {c.checked = (rec.tipoManutencao || []).includes(c.value);});
       const modeloDoRel = (rec.sistemaKey === 'custom') ? modelos.find(m => m.tipo === 'paineis' && m.nome === rec.sistemaLabel) : null;
       document.getElementById('f-sistema').value = modeloDoRel ? 'modelo:' + modeloDoRel.id : (rec.sistemaKey || 'custom');
       document.getElementById('f-obs').value = rec.observacoes || '';
       document.getElementById('f-visto-tec').value = rec.vistoTecnico || '';
       document.getElementById('f-visto-cli').value = rec.vistoCliente || '';
-      state = { items: [...rec.items], locais: [...rec.locais], checklist: { ...rec.checklist }, editingId: rec.id, photos: [...(rec.fotos || [])], photoFolderId: rec.id };
+      state = {items: [...rec.items], locais: [...rec.locais], checklist: {...rec.checklist}, editingId: rec.id, photos: [...(rec.fotos || [])], photoFolderId: rec.id};
       document.getElementById('edit-flag').style.display = 'inline';
       renderChips(); renderTable(); renderPhotos();
       toast('Relatório carregado para edição.');
@@ -1437,12 +1437,12 @@
     async function deleteReport(id) {
       if (!confirm('Excluir este relatório definitivamente?')) return;
       try {
-        const { data: rec } = await sb.from('reports').select('fotos').eq('id', id).single();
+        const {data: rec} = await sb.from('reports').select('fotos').eq('id', id).single();
         const paths = ((rec && rec.fotos) || []).map(p => p.path).filter(Boolean);
         if (paths.length) {
-          try { await sb.storage.from(PHOTOS_BUCKET).remove(paths); } catch (e) { /* segue mesmo se falhar */ }
+          try {await sb.storage.from(PHOTOS_BUCKET).remove(paths);} catch (e) { /* segue mesmo se falhar */}
         }
-        const { error } = await sb.from('reports').delete().eq('id', id);
+        const {error} = await sb.from('reports').delete().eq('id', id);
         if (error) throw error;
         closeModal();
         toast('Relatório excluído.');
@@ -1459,7 +1459,7 @@
 
     async function initAuth() {
       try {
-        const { data: { session }, error } = await sb.auth.getSession();
+        const {data: {session}, error} = await sb.auth.getSession();
         if (error || !session) {
           showAuthScreen();
           return;
@@ -1475,7 +1475,7 @@
     }
 
     async function loadCurrentUserProfile(authUser) {
-      const { data: profile } = await sb.from('profiles').select('*').eq('id', authUser.id).single();
+      const {data: profile} = await sb.from('profiles').select('*').eq('id', authUser.id).single();
       currentUser = {
         id: authUser.id,
         username: (profile && profile.username) || authUser.email,
@@ -1509,8 +1509,8 @@
       const btn = document.getElementById('auth-submit-btn');
       btn.disabled = true;
       try {
-        const { data, error } = await sb.auth.signInWithPassword({ email, password });
-        if (error || !data.session) { errBox.textContent = 'E-mail ou senha inválidos.'; return; }
+        const {data, error} = await sb.auth.signInWithPassword({email, password});
+        if (error || !data.session) {errBox.textContent = 'E-mail ou senha inválidos.'; return;}
         await loadCurrentUserProfile(data.user);
         document.getElementById('auth-overlay').style.display = 'none';
         document.getElementById('app-shell').style.display = '';
@@ -1570,9 +1570,9 @@
 
     async function loadIdentificacao() {
       try {
-        const { data } = await sb.from('settings').select('value').eq('key', 'identificacao').maybeSingle();
-        if (data && data.value) identificacao = { ...identificacao, ...JSON.parse(data.value) };
-      } catch (e) { /* usa os valores padrão */ }
+        const {data} = await sb.from('settings').select('value').eq('key', 'identificacao').maybeSingle();
+        if (data && data.value) identificacao = {...identificacao, ...JSON.parse(data.value)};
+      } catch (e) { /* usa os valores padrão */}
       applyIdentificacaoToForm();
     }
 
@@ -1588,8 +1588,8 @@
         contratada: document.getElementById('cfg-contratada').value.trim(),
         contratoPadrao: document.getElementById('cfg-contrato-padrao').value.trim(),
       };
-      const { error } = await sb.from('settings').upsert({ key: 'identificacao', value: JSON.stringify(novo) });
-      if (error) { toast('Erro ao salvar identificação.'); return; }
+      const {error} = await sb.from('settings').upsert({key: 'identificacao', value: JSON.stringify(novo)});
+      if (error) {toast('Erro ao salvar identificação.'); return;}
       identificacao = novo;
       applyIdentificacaoToForm();
       toast('Identificação do contrato salva.');
@@ -1602,14 +1602,14 @@
 
     async function loadClientLogo() {
       try {
-        const { data } = await sb.from('settings').select('value').eq('key', 'logoCliente').maybeSingle();
+        const {data} = await sb.from('settings').select('value').eq('key', 'logoCliente').maybeSingle();
         clientLogoDataUrl = (data && data.value) || null;
-      } catch (e) { clientLogoDataUrl = null; }
+      } catch (e) {clientLogoDataUrl = null;}
     }
 
     async function loadHeaderLogo() {
       try {
-        const { data } = await sb.from('settings').select('value').eq('key', 'logo').maybeSingle();
+        const {data} = await sb.from('settings').select('value').eq('key', 'logo').maybeSingle();
         const img = document.getElementById('app-logo');
         const mark = document.getElementById('brand-mark');
         if (data && data.value) {
@@ -1620,7 +1620,7 @@
           img.style.display = 'none';
           mark.style.display = '';
         }
-      } catch (e) { /* silencioso */ }
+      } catch (e) { /* silencioso */}
     }
 
     function loadLogoIntoConfig() {
@@ -1656,9 +1656,9 @@
 
     document.getElementById('save-logo-btn').addEventListener('click', async () => {
       const preview = document.getElementById('logo-preview');
-      if (!preview.src || preview.style.display === 'none') { toast('Escolha uma imagem primeiro.'); return; }
-      const { error } = await sb.from('settings').upsert({ key: 'logo', value: preview.src });
-      if (error) { toast('Erro ao salvar logo.'); return; }
+      if (!preview.src || preview.style.display === 'none') {toast('Escolha uma imagem primeiro.'); return;}
+      const {error} = await sb.from('settings').upsert({key: 'logo', value: preview.src});
+      if (error) {toast('Erro ao salvar logo.'); return;}
       toast('Logo salva.');
       loadHeaderLogo();
     });
@@ -1685,9 +1685,9 @@
 
     document.getElementById('save-logo-cliente-btn').addEventListener('click', async () => {
       const preview = document.getElementById('logo-cliente-preview');
-      if (!preview.src || preview.style.display === 'none') { toast('Escolha uma imagem primeiro.'); return; }
-      const { error } = await sb.from('settings').upsert({ key: 'logoCliente', value: preview.src });
-      if (error) { toast('Erro ao salvar logo do cliente.'); return; }
+      if (!preview.src || preview.style.display === 'none') {toast('Escolha uma imagem primeiro.'); return;}
+      const {error} = await sb.from('settings').upsert({key: 'logoCliente', value: preview.src});
+      if (error) {toast('Erro ao salvar logo do cliente.'); return;}
       toast('Logo do cliente salva.');
       loadClientLogo();
     });
@@ -1704,7 +1704,7 @@
     /* Usuários e permissões                                               */
     /* ------------------------------------------------------------------ */
     async function loadUsers() {
-      const { data: users, error } = await sb.from('profiles').select('*').order('created_at');
+      const {data: users, error} = await sb.from('profiles').select('*').order('created_at');
       if (error) return;
       const tbody = document.getElementById('users-tbody');
       const isAdminViewer = currentUser && currentUser.isAdmin;
@@ -1745,7 +1745,7 @@
         box.addEventListener('change', async () => {
           const uid = box.dataset.uid;
           const perm = box.dataset.perm;
-          const { error: permErr } = await sb.from('profiles').update({ [perm]: box.checked }).eq('id', uid);
+          const {error: permErr} = await sb.from('profiles').update({[perm]: box.checked}).eq('id', uid);
           if (permErr) {
             toast('Erro ao atualizar permissão.');
             box.checked = !box.checked;
@@ -1761,7 +1761,7 @@
           const marcados = Array.from(tbody.querySelectorAll(`.tipo-checkbox[data-uid="${uid}"]:checked`)).map((c) => c.dataset.tipo);
           // tudo marcado = acesso total (guarda "null", assim novos tipos futuros já ficam liberados)
           const valor = marcados.length === TIPOS_ACESSO.length ? null : marcados;
-          const { error: tipoErr } = await sb.from('profiles').update({ acesso_tipos: valor }).eq('id', uid);
+          const {error: tipoErr} = await sb.from('profiles').update({acesso_tipos: valor}).eq('id', uid);
           if (tipoErr) {
             toast('Erro ao atualizar o acesso. Rode o SQL "acesso-por-tipo" no Supabase.');
             box.checked = !box.checked;
@@ -1786,10 +1786,10 @@
 
       const from = (auditPage - 1) * AUDIT_PAGE_SIZE;
       const to = from + AUDIT_PAGE_SIZE - 1;
-      const { data: logs, error, count } = await sb
+      const {data: logs, error, count} = await sb
         .from('report_audit_log')
-        .select('*', { count: 'exact' })
-        .order('changed_at', { ascending: false })
+        .select('*', {count: 'exact'})
+        .order('changed_at', {ascending: false})
         .range(from, to);
 
       const pager = document.getElementById('audit-pager');
@@ -1803,7 +1803,7 @@
       const totalPages = Math.max(1, Math.ceil(auditTotal / AUDIT_PAGE_SIZE));
 
       // se a página atual ficou além do fim (ex.: registros apagados), volta para a última
-      if (auditPage > totalPages) { auditPage = totalPages; return loadAuditLog(); }
+      if (auditPage > totalPages) {auditPage = totalPages; return loadAuditLog();}
 
       if (!logs || logs.length === 0) {
         tbody.innerHTML = '<tr><td colspan="4">Nenhuma alteração registrada ainda.</td></tr>';
@@ -1840,14 +1840,14 @@
       const corte = new Date(Date.now() - dias * 24 * 60 * 60 * 1000).toISOString();
       btn.disabled = true;
       try {
-        const { count, error: eCount } = await sb.from('report_audit_log')
-          .select('id', { count: 'exact', head: true }).lt('changed_at', corte);
-        if (eCount) { toast('Erro ao consultar o histórico.'); return; }
-        if (!count) { toast(`Não há registros com mais de ${dias} dias.`); return; }
+        const {count, error: eCount} = await sb.from('report_audit_log')
+          .select('id', {count: 'exact', head: true}).lt('changed_at', corte);
+        if (eCount) {toast('Erro ao consultar o histórico.'); return;}
+        if (!count) {toast(`Não há registros com mais de ${dias} dias.`); return;}
         if (!confirm(`Apagar ${count} registro(s) do histórico com mais de ${dias} dias?\nEsta ação não pode ser desfeita.`)) return;
-        const { data: apagados, error } = await sb.from('report_audit_log')
+        const {data: apagados, error} = await sb.from('report_audit_log')
           .delete().lt('changed_at', corte).select('id');
-        if (error) { toast('Erro ao limpar o histórico.'); return; }
+        if (error) {toast('Erro ao limpar o histórico.'); return;}
         if (!apagados || !apagados.length) {
           toast('Sem permissão para apagar. Rode o SQL "log-auditoria-limpar.sql" no Supabase.');
           return;
@@ -1865,7 +1865,7 @@
       const TAM = 500;
       let todos = [];
       for (let ini = 0; ; ini += TAM) {
-        const { data, error } = await sb.from(tabela).select('*').range(ini, ini + TAM - 1);
+        const {data, error} = await sb.from(tabela).select('*').range(ini, ini + TAM - 1);
         if (error) throw new Error(tabela + ': ' + error.message);
         todos = todos.concat(data || []);
         if (!data || data.length < TAM) break;
@@ -1879,12 +1879,12 @@
       btn.disabled = true;
       try {
         const tabelas = ['reports', 'pareceres_tecnicos', 'modelos_relatorio', 'settings'];
-        const dados = { gerado_em: new Date().toISOString(), tabelas: {} };
+        const dados = {gerado_em: new Date().toISOString(), tabelas: {}};
         for (const t of tabelas) {
           st.textContent = `Lendo ${t}...`;
           dados.tabelas[t] = await lerTabelaCompleta(t);
         }
-        const blob = new Blob([JSON.stringify(dados, null, 2)], { type: 'application/json' });
+        const blob = new Blob([JSON.stringify(dados, null, 2)], {type: 'application/json'});
         const a = document.createElement('a');
         a.href = URL.createObjectURL(blob);
         a.download = `backup-sttp-${new Date().toISOString().slice(0, 10)}.json`;
@@ -1912,11 +1912,11 @@
     /* ------------------------------------------------------------------ */
     /* Parecer Técnico                                                     */
     /* ------------------------------------------------------------------ */
-    const ptState = { editingId: null, testes: [], componentes: [], observacoes: [], fotos: [], photoFolderId: null, savedPaths: new Set(), removedPaths: [], hadFotos: false };
+    const ptState = {editingId: null, testes: [], componentes: [], observacoes: [], fotos: [], photoFolderId: null, savedPaths: new Set(), removedPaths: [], hadFotos: false};
 
     function renderPtTestes() {
       const box = document.getElementById('pt-testes-list');
-      if (ptState.testes.length === 0) { box.innerHTML = '<div class="hint">Nenhum teste adicionado ainda.</div>'; return; }
+      if (ptState.testes.length === 0) {box.innerHTML = '<div class="hint">Nenhum teste adicionado ainda.</div>'; return;}
       box.innerHTML = ptState.testes.map((t, i) => `
         <div class="chiprow" style="justify-content:space-between; padding:6px 10px;">
           <span><b>${String.fromCharCode(65 + i)}.</b> ${escapeHtml(t.descricao)}: <b>${escapeHtml(t.resultado)}</b></span>
@@ -1927,7 +1927,7 @@
 
     function renderPtComponentes() {
       const box = document.getElementById('pt-componentes-list');
-      if (ptState.componentes.length === 0) { box.innerHTML = '<div class="hint">Nenhum componente adicionado ainda.</div>'; return; }
+      if (ptState.componentes.length === 0) {box.innerHTML = '<div class="hint">Nenhum componente adicionado ainda.</div>'; return;}
       box.innerHTML = ptState.componentes.map((c, i) => `
         <div class="chiprow" style="justify-content:space-between; padding:6px 10px;">
           <span>${String(i + 1).padStart(2, '0')} — ${escapeHtml(c.descricao)}</span>
@@ -1938,7 +1938,7 @@
 
     function renderPtObservacoes() {
       const box = document.getElementById('pt-observacoes-list');
-      if (ptState.observacoes.length === 0) { box.innerHTML = '<div class="hint">Nenhum item adicionado ainda.</div>'; return; }
+      if (ptState.observacoes.length === 0) {box.innerHTML = '<div class="hint">Nenhum item adicionado ainda.</div>'; return;}
       box.innerHTML = ptState.observacoes.map((o, i) => `
         <div class="chiprow" style="justify-content:space-between; padding:6px 10px;">
           <span>${escapeHtml(o)}</span>
@@ -1951,14 +1951,14 @@
       const input = document.getElementById('pt-teste-input');
       const resultado = document.getElementById('pt-teste-resultado').value;
       if (!input.value.trim()) return;
-      ptState.testes.push({ descricao: input.value.trim(), resultado });
+      ptState.testes.push({descricao: input.value.trim(), resultado});
       input.value = '';
       renderPtTestes();
     });
     document.getElementById('pt-componente-add').addEventListener('click', () => {
       const input = document.getElementById('pt-componente-input');
       if (!input.value.trim()) return;
-      ptState.componentes.push({ descricao: input.value.trim() });
+      ptState.componentes.push({descricao: input.value.trim()});
       input.value = '';
       renderPtComponentes();
     });
@@ -1971,13 +1971,13 @@
     });
 
     document.getElementById('pt-testes-list').addEventListener('click', (e) => {
-      if (e.target.dataset.list === 'testes') { ptState.testes.splice(+e.target.dataset.idx, 1); renderPtTestes(); }
+      if (e.target.dataset.list === 'testes') {ptState.testes.splice(+e.target.dataset.idx, 1); renderPtTestes();}
     });
     document.getElementById('pt-componentes-list').addEventListener('click', (e) => {
-      if (e.target.dataset.list === 'componentes') { ptState.componentes.splice(+e.target.dataset.idx, 1); renderPtComponentes(); }
+      if (e.target.dataset.list === 'componentes') {ptState.componentes.splice(+e.target.dataset.idx, 1); renderPtComponentes();}
     });
     document.getElementById('pt-observacoes-list').addEventListener('click', (e) => {
-      if (e.target.dataset.list === 'observacoes') { ptState.observacoes.splice(+e.target.dataset.idx, 1); renderPtObservacoes(); }
+      if (e.target.dataset.list === 'observacoes') {ptState.observacoes.splice(+e.target.dataset.idx, 1); renderPtObservacoes();}
     });
 
     function collectPtForm() {
@@ -1996,7 +1996,7 @@
         observacao_itens: ptState.observacoes,
         responsavel_tecnico: document.getElementById('pt-responsavel').value.trim(),
         // só envia "fotos" quando há fotos (ou havia antes), assim nada quebra se a coluna ainda não existir
-        ...((ptState.fotos.length > 0 || ptState.hadFotos) ? { fotos: ptState.fotos } : {}),
+        ...((ptState.fotos.length > 0 || ptState.hadFotos) ? {fotos: ptState.fotos} : {}),
       };
     }
 
@@ -2020,9 +2020,9 @@
               URL.revokeObjectURL(url);
               resolve(blob && blob.size < file.size ? blob : file);
             }, 'image/jpeg', quality);
-          } catch (e) { URL.revokeObjectURL(url); resolve(file); }
+          } catch (e) {URL.revokeObjectURL(url); resolve(file);}
         };
-        img.onerror = () => { URL.revokeObjectURL(url); resolve(file); };
+        img.onerror = () => {URL.revokeObjectURL(url); resolve(file);};
         img.src = url;
       });
     }
@@ -2048,7 +2048,7 @@
               // já estava salva no parecer: só apaga do Storage depois que salvar
               ptState.removedPaths.push(photo.path);
             } else {
-              try { await sb.storage.from(PHOTOS_BUCKET).remove([photo.path]); } catch (e) { /* órfã, sem problema */ }
+              try {await sb.storage.from(PHOTOS_BUCKET).remove([photo.path]);} catch (e) { /* órfã, sem problema */}
             }
           }
         });
@@ -2078,10 +2078,10 @@
           const baseName = file.name.replace(/\.[^.]+$/, '').replace(/[^a-zA-Z0-9._-]/g, '_') || 'foto';
           const ext = isJpeg ? 'jpg' : ((file.name.split('.').pop() || 'jpg').replace(/[^a-zA-Z0-9]/g, '') || 'jpg');
           const path = `pareceres/${ptState.photoFolderId}/${Date.now()}-${baseName}.${ext}`;
-          const { error: upErr } = await sb.storage.from(PHOTOS_BUCKET).upload(path, blob, { upsert: false, contentType: blob.type || file.type });
+          const {error: upErr} = await sb.storage.from(PHOTOS_BUCKET).upload(path, blob, {upsert: false, contentType: blob.type || file.type});
           if (upErr) throw upErr;
-          const { data: pub } = sb.storage.from(PHOTOS_BUCKET).getPublicUrl(path);
-          ptState.fotos.push({ path, url: pub.publicUrl, legenda: '' });
+          const {data: pub} = sb.storage.from(PHOTOS_BUCKET).getPublicUrl(path);
+          ptState.fotos.push({path, url: pub.publicUrl, legenda: ''});
           renderPtPhotos();
         } catch (err) {
           console.error(err);
@@ -2113,22 +2113,22 @@
 
     document.getElementById('pt-save-btn').addEventListener('click', async () => {
       const data = collectPtForm();
-      if (!data.cliente_nome) { toast('Informe o cliente.'); return; }
-      if (!data.data_documento) { toast('Informe a data do parecer.'); return; }
+      if (!data.cliente_nome) {toast('Informe o cliente.'); return;}
+      if (!data.data_documento) {toast('Informe a data do parecer.'); return;}
       try {
         const editing = !!ptState.editingId;
         let error;
         if (editing) {
           data.updated_at = new Date().toISOString();
-          ({ error } = await sb.from('pareceres_tecnicos').update(data).eq('id', ptState.editingId));
+          ({error} = await sb.from('pareceres_tecnicos').update(data).eq('id', ptState.editingId));
         } else {
-          const { data: { user } } = await sb.auth.getUser();
+          const {data: {user}} = await sb.auth.getUser();
           data.created_by = user ? user.id : null;
-          ({ error } = await sb.from('pareceres_tecnicos').insert(data));
+          ({error} = await sb.from('pareceres_tecnicos').insert(data));
         }
         if (error) throw error;
         if (ptState.removedPaths.length) {
-          try { await sb.storage.from(PHOTOS_BUCKET).remove(ptState.removedPaths); } catch (e) { /* órfãs, sem problema */ }
+          try {await sb.storage.from(PHOTOS_BUCKET).remove(ptState.removedPaths);} catch (e) { /* órfãs, sem problema */}
         }
         toast(editing ? 'Parecer atualizado.' : 'Parecer salvo.');
         clearPtForm();
@@ -2145,11 +2145,11 @@
       let data = [];
       try {
         const res = await sb.from('pareceres_tecnicos').select('*')
-          .order('data_documento', { ascending: false })
-          .order('created_at', { ascending: false });
+          .order('data_documento', {ascending: false})
+          .order('created_at', {ascending: false});
         if (res.error) throw res.error;
         data = res.data || [];
-      } catch (e) { console.error(e); toast('Erro ao carregar pareceres: ' + (e.message || e)); }
+      } catch (e) {console.error(e); toast('Erro ao carregar pareceres: ' + (e.message || e));}
 
       ptCache = data;
       renderPareceresPagina();
@@ -2190,11 +2190,11 @@
     async function openPtDetail(id) {
       let rec;
       try {
-        const { data, error } = await sb.from('pareceres_tecnicos').select('*').eq('id', id).single();
+        const {data, error} = await sb.from('pareceres_tecnicos').select('*').eq('id', id).single();
         if (error) throw error;
         rec = data;
-      } catch (e) { rec = null; }
-      if (!rec) { toast('Não foi possível carregar o parecer.'); return; }
+      } catch (e) {rec = null;}
+      if (!rec) {toast('Não foi possível carregar o parecer.'); return;}
 
       const testesHtml = (rec.procedimento_testes || []).map((t, i) => `<div>${String.fromCharCode(65 + i)}. ${escapeHtml(t.descricao)}: <b>${escapeHtml(t.resultado)}</b></div>`).join('') || '<div>—</div>';
       const componentesHtml = (rec.componentes || []).map((c, i) => `<div>${String(i + 1).padStart(2, '0')} — ${escapeHtml(c.descricao)}</div>`).join('') || '<div>—</div>';
@@ -2235,7 +2235,7 @@
       document.getElementById('overlay').classList.add('active');
       document.getElementById('modal-close').addEventListener('click', closeModal);
       const editBtn = document.getElementById('pt-modal-edit');
-      if (editBtn) editBtn.addEventListener('click', () => { closeModal(); loadIntoPtForm(rec); });
+      if (editBtn) editBtn.addEventListener('click', () => {closeModal(); loadIntoPtForm(rec);});
       document.getElementById('pt-modal-pdf').addEventListener('click', () => exportParecerPDF(rec));
       const delBtn = document.getElementById('pt-modal-delete');
       if (delBtn) delBtn.addEventListener('click', () => deleteParecer(rec.id));
@@ -2256,7 +2256,7 @@
       ptState.testes = [...(rec.procedimento_testes || [])];
       ptState.componentes = [...(rec.componentes || [])];
       ptState.observacoes = [...(rec.observacao_itens || [])];
-      ptState.fotos = (rec.fotos || []).map((f) => ({ ...f }));
+      ptState.fotos = (rec.fotos || []).map((f) => ({...f}));
       ptState.savedPaths = new Set(ptState.fotos.map((f) => f.path).filter(Boolean));
       ptState.removedPaths = [];
       ptState.hadFotos = ptState.fotos.length > 0;
@@ -2270,12 +2270,12 @@
     async function deleteParecer(id) {
       if (!confirm('Tem certeza que deseja excluir este parecer? Esta ação não pode ser desfeita.')) return;
       try {
-        const { data: prev } = await sb.from('pareceres_tecnicos').select('fotos').eq('id', id).maybeSingle();
+        const {data: prev} = await sb.from('pareceres_tecnicos').select('fotos').eq('id', id).maybeSingle();
         const paths = ((prev && prev.fotos) || []).map((f) => f.path).filter(Boolean);
         if (paths.length) {
-          try { await sb.storage.from(PHOTOS_BUCKET).remove(paths); } catch (e) { /* segue mesmo se falhar */ }
+          try {await sb.storage.from(PHOTOS_BUCKET).remove(paths);} catch (e) { /* segue mesmo se falhar */}
         }
-        const { error } = await sb.from('pareceres_tecnicos').delete().eq('id', id);
+        const {error} = await sb.from('pareceres_tecnicos').delete().eq('id', id);
         if (error) throw error;
         toast('Parecer excluído.');
         closeModal();
@@ -2405,10 +2405,10 @@
     /* ---------------- modelos salvos ---------------- */
     async function loadModelos() {
       try {
-        const { data, error } = await sb.from('modelos_relatorio').select('*').order('nome');
+        const {data, error} = await sb.from('modelos_relatorio').select('*').order('nome');
         if (error) throw error;
         modelos = data || [];
-      } catch (e) { modelos = []; }
+      } catch (e) {modelos = [];}
       renderModeloOptions();
     }
 
@@ -2459,16 +2459,16 @@
       if (existente && !confirm(`Já existe o modelo "${existente.nome}". Substituir a estrutura dele?`)) return;
       let error, id;
       if (existente) {
-        ({ error } = await sb.from('modelos_relatorio').update({ estrutura }).eq('id', existente.id));
+        ({error} = await sb.from('modelos_relatorio').update({estrutura}).eq('id', existente.id));
         id = existente.id;
       } else {
-        const { data: { user } } = await sb.auth.getUser();
-        const res = await sb.from('modelos_relatorio').insert({ nome, tipo, estrutura, created_by: user ? user.id : null }).select().single();
+        const {data: {user}} = await sb.auth.getUser();
+        const res = await sb.from('modelos_relatorio').insert({nome, tipo, estrutura, created_by: user ? user.id : null}).select().single();
         error = res.error; id = res.data && res.data.id;
       }
-      if (error) { toast('Erro ao salvar o modelo. Rode o SQL de atualização no Supabase.'); console.error(error); return; }
+      if (error) {toast('Erro ao salvar o modelo. Rode o SQL de atualização no Supabase.'); console.error(error); return;}
       await loadModelos();
-      if (id) { sel.value = 'modelo:' + id; atualizarBotaoExcluirModelo(); }
+      if (id) {sel.value = 'modelo:' + id; atualizarBotaoExcluirModelo();}
       toast('Modelo salvo. Ele aparece em "Modelos salvos".');
     }
 
@@ -2477,8 +2477,8 @@
       const m = modelos.find(x => 'modelo:' + x.id === sel.value);
       if (!m) return;
       if (!confirm(`Excluir o modelo "${m.nome}"? Os relatórios já feitos com ele não são afetados.`)) return;
-      const { error } = await sb.from('modelos_relatorio').delete().eq('id', m.id);
-      if (error) { toast('Erro ao excluir o modelo.'); return; }
+      const {error} = await sb.from('modelos_relatorio').delete().eq('id', m.id);
+      if (error) {toast('Erro ao excluir o modelo.'); return;}
       await loadModelos();
       sel.value = valorPadrao;
       atualizarBotaoExcluirModelo();
@@ -2504,7 +2504,7 @@
     });
 
     document.getElementById('modelo-save-btn').addEventListener('click', () => {
-      if (!state.items.length || !state.locais.length) { toast('Monte os itens e os pontos antes de salvar o modelo.'); return; }
+      if (!state.items.length || !state.locais.length) {toast('Monte os itens e os pontos antes de salvar o modelo.'); return;}
       salvarModelo('paineis', {
         items: [...state.items], locais: [...state.locais],
         contratante: fval('f-contratante'), contratada: fval('f-contratada'), contrato: fval('f-contrato'),
@@ -2514,7 +2514,7 @@
     document.getElementById('pv-modelo-del-btn').addEventListener('click', () => excluirModelo('pv-modelo', 'branco'));
 
     /* ---------------- preventiva: estrutura ---------------- */
-    const pvState = { equipamentos: [], rotinas: [], testes: [] };
+    const pvState = {equipamentos: [], rotinas: [], testes: []};
 
     const PV_CIRCUITOS = [
       ['Circuito 01', 'SS/ CIRCULAÇÃO'], ['Circuito 02', 'TÉRREO'], ['Circuito 03', 'TÉRREO'], ['Circuito 04', 'TÉRREO'],
@@ -2523,12 +2523,12 @@
       ['Circuito 11', '3º PAVIMENTO'], ['Circuito 12', '4º PAVIMENTO'], ['Circuito 13', '4º PAVIMENTO'],
       ['Circuito 14', '2º PAV/ ACADEMIA'],
     ];
-    const pvLinhas = (arr) => arr.map(([circuito, setor]) => ({ circuito, setor, valor: '', status: '' }));
+    const pvLinhas = (arr) => arr.map(([circuito, setor]) => ({circuito, setor, valor: '', status: ''}));
     const pvGrupos = (prefixo) => [
-      { nome: prefixo + ' SOM GERAL', linhas: pvLinhas(PV_CIRCUITOS) },
-      { nome: prefixo + ' SOM AUDITÓRIO', linhas: pvLinhas([['Circuito 01', 'ESQUERDO'], ['Circuito 02', 'DIREITO']]) },
+      {nome: prefixo + ' SOM GERAL', linhas: pvLinhas(PV_CIRCUITOS)},
+      {nome: prefixo + ' SOM AUDITÓRIO', linhas: pvLinhas([['Circuito 01', 'ESQUERDO'], ['Circuito 02', 'DIREITO']])},
     ];
-    const pvItens = (arr) => arr.map((descricao) => ({ descricao, status: '' }));
+    const pvItens = (arr) => arr.map((descricao) => ({descricao, status: ''}));
 
     const PV_PF = () => ({
       obra: 'SEDE DA POLICIA FEDERAL DA PARAIBA',
@@ -2547,7 +2547,7 @@
         ['Microfone com Fio de Mão Padrão Dinâmico Cardióide (voz)', '4'],
         ['Microfone sem Fio, Shure', '3'],
         ['Mixer Dig. X-air Xr16 Ios/pc/android, 16in/6out', '1'],
-      ].map(([descricao, qtd]) => ({ descricao, qtd })),
+      ].map(([descricao, qtd]) => ({descricao, qtd})),
       rotinas: [
         {
           nome: 'SOM GERAL', observacoes: '', itens: pvItens([
@@ -2568,22 +2568,22 @@
         },
       ],
       testes: [
-        { titulo: 'TESTE DE IMPEDÂNCIA DOS CIRCUITOS', unidade: 'Ohms (Ω)', grupos: pvGrupos('CIRCUITOS'), observacoes: '' },
-        { titulo: 'TESTE DE PRESSÃO SONORA (SPL)', unidade: '(dB)', grupos: pvGrupos('NÍVEL DE PRESSÃO SONORA'), observacoes: '' },
+        {titulo: 'TESTE DE IMPEDÂNCIA DOS CIRCUITOS', unidade: 'Ohms (Ω)', grupos: pvGrupos('CIRCUITOS'), observacoes: ''},
+        {titulo: 'TESTE DE PRESSÃO SONORA (SPL)', unidade: '(dB)', grupos: pvGrupos('NÍVEL DE PRESSÃO SONORA'), observacoes: ''},
       ],
     });
 
     function pvResolverModelo(v) {
       if (v.startsWith('modelo:')) {
         const m = modelos.find(x => x.id === v.slice(7));
-        if (m) return { nome: m.nome, est: pvClone(m.estrutura || {}) };
+        if (m) return {nome: m.nome, est: pvClone(m.estrutura || {})};
       }
-      if (v === 'pf') return { nome: 'Sonorização — Polícia Federal PB', est: PV_PF() };
-      return { nome: 'Manutenção preventiva', est: {} };
+      if (v === 'pf') return {nome: 'Sonorização — Polícia Federal PB', est: PV_PF()};
+      return {nome: 'Manutenção preventiva', est: {}};
     }
 
     function pvLoadModelo(v) {
-      const { nome, est } = pvResolverModelo(v);
+      const {nome, est} = pvResolverModelo(v);
       pvNomeModelo = nome;
       pvState.equipamentos = est.equipamentos || [];
       pvState.rotinas = est.rotinas || [];
@@ -2609,10 +2609,10 @@
     });
 
     pvEl('pv-modelo-save-btn').addEventListener('click', () => {
-      if (!pvState.rotinas.length && !pvState.testes.length && !pvState.equipamentos.length) { toast('Monte a estrutura antes de salvar o modelo.'); return; }
-      const c = pvClone({ equipamentos: pvState.equipamentos, rotinas: pvState.rotinas, testes: pvState.testes });
-      c.rotinas.forEach(r => { r.observacoes = ''; r.itens.forEach(i => { i.status = ''; }); });
-      c.testes.forEach(t => { t.observacoes = ''; t.grupos.forEach(g => g.linhas.forEach(l => { l.valor = ''; l.status = ''; })); });
+      if (!pvState.rotinas.length && !pvState.testes.length && !pvState.equipamentos.length) {toast('Monte a estrutura antes de salvar o modelo.'); return;}
+      const c = pvClone({equipamentos: pvState.equipamentos, rotinas: pvState.rotinas, testes: pvState.testes});
+      c.rotinas.forEach(r => {r.observacoes = ''; r.itens.forEach(i => {i.status = '';});});
+      c.testes.forEach(t => {t.observacoes = ''; t.grupos.forEach(g => g.linhas.forEach(l => {l.valor = ''; l.status = '';}));});
       salvarModelo('preventiva', {
         ...c, obra: fval('pv-obra'), endereco: fval('pv-endereco'),
         contratante: fval('f-contratante'), contratada: fval('f-contratada'), contrato: fval('f-contrato'),
@@ -2633,7 +2633,7 @@
       const ct = fval('f-contratante'), cd = fval('f-contratada');
       const mudou = ct !== identificacao.contratante || cd !== identificacao.contratada;
       if (!mudou && !formExtras) return null;
-      return { ...(formExtras || {}), contratante: ct, contratada: cd };
+      return {...(formExtras || {}), contratante: ct, contratada: cd};
     }
 
     /* ---------------- preventiva: formulário (edição em lista) ---------------- */
@@ -2689,15 +2689,15 @@
     }
 
     const PV_NOVO = {
-      equip: () => ({ descricao: '', qtd: '' }),
-      rotina: () => ({ nome: '', itens: [], observacoes: '' }),
-      item: () => ({ descricao: '', status: '' }),
-      teste: () => ({ titulo: '', unidade: '', grupos: [], observacoes: '' }),
-      grupo: () => ({ nome: '', linhas: [] }),
-      linha: () => ({ circuito: '', setor: '', valor: '', status: '' }),
+      equip: () => ({descricao: '', qtd: ''}),
+      rotina: () => ({nome: '', itens: [], observacoes: ''}),
+      item: () => ({descricao: '', status: ''}),
+      teste: () => ({titulo: '', unidade: '', grupos: [], observacoes: ''}),
+      grupo: () => ({nome: '', linhas: []}),
+      linha: () => ({circuito: '', setor: '', valor: '', status: ''}),
     };
     const pvGet = (path) => path.split('.').reduce((o, k) => o[k], pvState);
-    const pvSet = (path, val) => { const ks = path.split('.'); const last = ks.pop(); ks.reduce((o, k) => o[k], pvState)[last] = val; };
+    const pvSet = (path, val) => {const ks = path.split('.'); const last = ks.pop(); ks.reduce((o, k) => o[k], pvState)[last] = val;};
 
     const pvRoot = pvEl('grp-prev');
     pvRoot.addEventListener('input', (e) => {
@@ -2707,10 +2707,10 @@
     pvRoot.addEventListener('click', (e) => {
       const b = e.target.closest('[data-act]');
       if (!b) return;
-      const { act, path, kind, i } = b.dataset;
-      if (act === 'cycle') { const cur = pvGet(path); pvSet(path, cur === '' ? 'OK' : cur === 'OK' ? 'FALHA' : ''); }
-      else if (act === 'del') { pvGet(path).splice(Number(i), 1); }
-      else if (act === 'add') { pvGet(path).push(PV_NOVO[kind]()); }
+      const {act, path, kind, i} = b.dataset;
+      if (act === 'cycle') {const cur = pvGet(path); pvSet(path, cur === '' ? 'OK' : cur === 'OK' ? 'FALHA' : '');}
+      else if (act === 'del') {pvGet(path).splice(Number(i), 1);}
+      else if (act === 'add') {pvGet(path).push(PV_NOVO[kind]());}
       pvRender();
     });
 
@@ -2771,7 +2771,7 @@
       document.getElementById('overlay').classList.add('active');
       document.getElementById('modal-close').addEventListener('click', closeModal);
       const editBtn = document.getElementById('modal-edit');
-      if (editBtn) editBtn.addEventListener('click', () => { closeModal(); loadIntoForm(rec); });
+      if (editBtn) editBtn.addEventListener('click', () => {closeModal(); loadIntoForm(rec);});
       const delBtn = document.getElementById('modal-delete');
       if (delBtn) delBtn.addEventListener('click', () => deleteReport(rec.id));
       document.getElementById('modal-pdf').addEventListener('click', () => exportReportPDF(rec));
@@ -2788,7 +2788,7 @@
         n++;
         return `<div class="parecer-page">
           <img class="header-img" src="img/parecer-header.png" alt="" crossorigin="anonymous">
-          <div class="parecer-body">${inner}</div>
+          <div class="parecer-body">${inner}<!--FECHO--></div>
           <div class="pv-pageno">Página <b>${n}</b> de <b>${total}</b></div>
           <img class="footer-img" src="img/parecer-footer.png" alt="" crossorigin="anonymous">
         </div>`;
@@ -2855,6 +2855,14 @@
           </div>`));
       }
 
+      // Fechamento da última folha: local/data para preencher à mão e assinatura do diretor
+      const FECHAMENTO = {local: 'João Pessoa - PB', nome: 'José Clovis Moroni Vidal', cargo: 'DIRETOR SUPERINTENDENTE'};
+      const fechamento = `<div class="pv-fecho">
+        <div class="pv-fecho-data">${E(FECHAMENTO.local)} ____/____/______.</div>
+        <div class="pv-fecho-ass"><div class="pv-fecho-linha"></div><b>${E(FECHAMENTO.nome)}</b><span>${E(FECHAMENTO.cargo)}</span></div>
+      </div>`;
+      paginas.forEach((pg, i) => {paginas[i] = pg.replace('<!--FECHO-->', i === paginas.length - 1 ? fechamento : '') });
+
       gerarPDFDireto(
         paginas,
         `preventiva-${rec.data || 'relatorio'}-${E(ex.obra || '')}`.replace(/[^a-zA-Z0-9-_]/g, '_'),
@@ -2883,7 +2891,7 @@
 
       // seletor "Tipo de relatório": só os liberados; some quando sobra apenas um
       const sel = document.getElementById('f-tipo-rel');
-      Array.from(sel.options).forEach((o) => { const ok = podeTipo(o.value); o.disabled = !ok; o.hidden = !ok; });
+      Array.from(sel.options).forEach((o) => {const ok = podeTipo(o.value); o.disabled = !ok; o.hidden = !ok;});
       const liberados = Array.from(sel.options).filter((o) => !o.disabled);
       sel.closest('.card').style.display = liberados.length > 1 ? '' : 'none';
       if (liberados.length && sel.options[sel.selectedIndex].disabled) {
