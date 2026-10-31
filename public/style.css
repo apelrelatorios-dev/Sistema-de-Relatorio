@@ -164,7 +164,7 @@
  }
 
  .auth-card button.submit:hover {
-     background: #029e0a;
+     background: #1c9e02;
  }
 
  .userstable {
@@ -206,7 +206,7 @@
 
  .audit-pager .btn-sm:disabled:hover,
  .list-pager .btn-sm:disabled:hover {
-     background: #fff;
+     background: #f8f5f5;
      color: var(--ink);
  }
 
@@ -558,7 +558,7 @@
 
  .card {
      background: var(--card);
-     border: 3px solid #a1a1a1;
+     border: 3px solid #6e6e6e;
      /*var(--line)*/
      ;
      border-radius: var(--radius);
@@ -872,7 +872,7 @@
  }
 
  .chip button:hover {
-     background: #CFE6E8;
+     background: #088b4e;
  }
 
  .addrow {
@@ -963,6 +963,7 @@
 
  table.chk tbody td.itemcell .rm:hover {
      color: var(--nok);
+
  }
 
  .statuscell {
@@ -997,6 +998,7 @@
 
  .statusbtn:hover {
      filter: brightness(0.97);
+     background-color: #0b9936;
  }
 
  .btn-row {
@@ -1590,6 +1592,7 @@
      font-size: 16px;
      font-weight: 700;
  }
+
  /* fechamento da última folha do relatório preventivo */
  .pv-fecho {
      margin-top: 36px;
