@@ -1590,3 +1590,33 @@
      font-size: 16px;
      font-weight: 700;
  }
+ /* fechamento da última folha do relatório preventivo */
+ .pv-fecho {
+     margin-top: 36px;
+     font-size: 14px;
+ }
+
+ .pv-fecho-data {
+     text-align: right;
+ }
+
+ .pv-fecho-ass {
+     width: 54%;
+     margin: 52px 0 0 13%;
+     text-align: center;
+ }
+
+ .pv-fecho-linha {
+     border-top: 1px solid #111;
+     margin-bottom: 10px;
+ }
+
+ .pv-fecho-ass b,
+ .pv-fecho-ass span {
+     display: block;
+ }
+
+ .pv-fecho-ass span {
+     margin-top: 6px;
+     font-size: 13px;
+ }
